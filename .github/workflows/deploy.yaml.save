@@ -24,7 +24,5 @@ jobs:
         key: ${{ secrets.SSH_KEY }}             # Add your EC2 private SSH key as a GitHub secret
         port: ${{ secrets.PORT }}               # SSH port, usually 22
         script: |
-          cd /var/www/ParentPathApp/       # Navigate to your project directory
-          sudo git fetch --all                  # Fetches changes from remote repository
-           git reset --hard origin/main     # Hard resets to the contents of the repository
-          sudo npm install  dd
+          cd Project/xplora/                   # Navigate to your project directory
+ sudo git fetch --all                  # Fetches cha
