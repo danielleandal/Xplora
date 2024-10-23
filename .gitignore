@@ -1,1 +1,24 @@
-frontend/node_modules
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# Temporary files
+.DS_Store
+Thumbs.db
+
+# Other local configuration files
+.vscode/
+.idea/
+
+.github/
