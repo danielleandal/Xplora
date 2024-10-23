@@ -1,0 +1,117 @@
+/* src/pages/HomePage.css */
+.homepage {
+    font-family: Arial, sans-serif;
+  }
+  
+  .homepage-header {
+    background-color: #e0e8f9;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .homepage-logo {
+    height: 60px;
+  }
+  
+  .homepage-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .homepage-nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+  }
+  
+  .homepage-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+  }
+
+  
+  
+  .homepage-intro {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column; /* Aligns logo and button side by side */
+    align-items: center;  /* Aligns items vertically in the center */
+    justify-content: center; /* Centers the content horizontally */
+    gap: 20px; /* Adds space between the logo and the button */
+    padding-right: 500px;
+  }
+  
+  .get-started-button {
+    background-color: #6A0DAD;
+    color: white;
+    font-size: 20px;
+    padding: 15px 40px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .image1 {
+    position: fixed;
+    top: 200px; /* Adjust as needed */
+    right: 200px; /* Adjust as needed */
+    width: 150px;
+    left: 56%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .image2 {
+    position: fixed;
+    top: 370px; /* Adjust as needed */
+    right: 200px; /* Adjust as needed */
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .image3 {
+    position: fixed;
+    top:480px; /* Adjust as needed */
+   
+    left: 45%;
+    width: 250px;
+    height: 250px;
+    border-radius:50%;
+    object-fit: cover;
+  }
+  
+  .image4 {
+    position: fixed;
+    top: 600px; /* Adjust as needed */
+    right: 440px; /* Adjust as needed */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .image5 {
+    position: fixed;
+    top: 550px; /* Adjust as needed */
+    right: 210px; /* Adjust as needed */
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .big-logo{
+    width: 800px;
+  }
