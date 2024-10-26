@@ -25,4 +25,6 @@ jobs:
         port: ${{ secrets.PORT }}               # SSH port, usually 22
         script: |
           cd Project/xplora/                    # Navigate to your project directory
+          sudo git fetch --all                  # Fetches changes from remote repository
+          sudo git reset --hard origin/main     # Hard resets to the contents of the repository
 
