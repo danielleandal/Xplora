@@ -27,4 +27,10 @@ jobs:
           cd Project/xplora/                    # Navigate to your project directory
           git fetch --all                       # Fetches changes from remote repository
           git reset --hard origin/main          # Hard resets to the contents of the repository
-
+          cd backend/
+          npm install
+          cd ../frontend/
+          npm install
+          npm run build
+          sudo mv dist/* /var/www/html/
+          sudo pm2 restart xplora-server        # Restart the PM2 process
