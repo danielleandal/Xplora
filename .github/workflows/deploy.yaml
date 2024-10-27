@@ -32,5 +32,6 @@ jobs:
           cd ../frontend/
           npm install
           npm run build
+          sudo rm -rf /var/www/html/*
           sudo mv dist/* /var/www/html/
           sudo pm2 restart xplora-server        # Restart the PM2 process
