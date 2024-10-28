@@ -8,43 +8,15 @@
 
 }
 
-/* Header Styling */
-.homepage-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    color: #fff;
-}
 
-.homepage-logo {
-    height: 50px;
-}
-
-.homepage-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1.5rem;
-}
-
-.homepage-nav ul li a {
-
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.homepage-nav ul li a:hover {
-    text-decoration: underline;
-}
-
-.container{
+.l-container{
     margin-top: 100px;
     display: flex;
     flex-direction: row;
     gap: 80px;
     align-items: center;
     height: 100%;
+    justify-content: center;
 }
 
 /* Login Container */
@@ -72,14 +44,14 @@
     flex-direction: column;
 }
 
-.form-field {
+.login-form-field {
     margin-bottom: 1rem;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+
+
 }
 
-.input-field {
+.login-input-field {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ccc;
@@ -87,14 +59,14 @@
     font-size: 1rem;
 }
 
-.error-message {
+.login-error-message {
     color: #d9534f;
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
 
 /* Button Styling */
-.submit-button {
+.login-submit-button {
     width: 100%;
     padding: 0.75rem;
     font-size: 1rem;
@@ -107,11 +79,11 @@
     margin-top: 1rem;
 }
 
-.submit-button:hover {
+.login-submit-button:hover {
     background-color: #00509d;
 }
 
-.submit-button:disabled {
+.login-submit-button:disabled {
     background-color: #7a7a7a;
     cursor: not-allowed;
 }

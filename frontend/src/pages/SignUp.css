@@ -68,6 +68,7 @@
 }
 
 .form-field {
+    width: 100%;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;

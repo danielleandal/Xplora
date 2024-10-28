@@ -26,12 +26,12 @@ const LoginForm: React.FC = () => {
                         <li><Link to="/how-it-works">How it works</Link></li>
                         <li><Link to="/sign-up">Sign Up</Link></li>
                         <li><Link to="/login">Sign In</Link></li>
-                        <li><Link to="/language">Language</Link></li>
+                      
                     </ul>
                 </nav>
             </header>
 
-            <div className="container">
+            <div className="l-container">
                 <div className="logo-container">
                     <img src= {logo} alt="" />
                     <h1>Discover The World Your Way</h1>
@@ -50,20 +50,20 @@ const LoginForm: React.FC = () => {
                     >
                         {({ isSubmitting }) => (
                             <Form className="login-form">
-                            <div className="form-field">
+                            <div className="login-form-field">
                                 <Field type="email" name="email" placeholder="Email" className="input-field" />
-                                <ErrorMessage name="email" component="div" className="error-message" />
+                                <ErrorMessage name="email" component="div" className="login-error-message" />
                             </div>
-                            <div className="form-field">
+                            <div className="login-form-field">
                                 <Field type="password" name="password" placeholder="Password" className="input-field" />
                                 <ErrorMessage name="password" component="div" className="error-message" />
                             </div>
                             
-                            <div className="forgot-password-container">
+                            <div className="login-forgot-password-container">
                                 <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
                             </div>
                             
-                            <button type="submit" disabled={isSubmitting} className="submit-button">
+                            <button type="submit" disabled={isSubmitting} className="login-submit-button">
                                 Get Exploring!
                             </button>
                         </Form>
