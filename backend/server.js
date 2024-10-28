@@ -32,7 +32,7 @@ app.post('/api/login', async (req, res, next) => {
     try {
         const db = client.db();
 
-        const results = await db.collection('Users').findOne(
+        const results = await db.collection('users').findOne(
             { email: email, password: password }
         );
 
@@ -56,7 +56,7 @@ app.post('/api/register', async (req, res, next) => {
     try {
         const db = client.db();
 
-        const results = await db.collection('Users').findOne(
+        const results = await db.collection('users').findOne(
             { email: email, password: password }
         );
 
