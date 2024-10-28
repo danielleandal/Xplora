@@ -4,7 +4,7 @@ name: CI/CD for Node.js App
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -24,5 +24,14 @@ jobs:
         key: ${{ secrets.SSH_KEY }}             # Add your EC2 private SSH key as a GitHub secret
         port: ${{ secrets.PORT }}               # SSH port, usually 22
         script: |
-          cd Project/
-
+          cd Project/xplora/                    # Navigate to your project directory
+          git fetch --all                       # Fetches changes from remote repository
+          git reset --hard origin/main          # Hard resets to the contents of the repository
+          cd backend/
+          npm install
+          cd ../frontend/
+          npm install
+          npm run build
+          sudo rm -rf /var/www/html/*
+          sudo mv dist/* /var/www/html/
+          sudo pm2 restart xplora-server        # Restart the PM2 process

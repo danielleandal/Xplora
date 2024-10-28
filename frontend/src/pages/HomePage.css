@@ -1,107 +1,121 @@
-/* src/pages/HomePage.css */
-.homepage {
-    font-family: Arial, sans-serif;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .homepage-header {
-    display: flex;
-    justify-content: space-between; /* Align logo and nav items */
-    align-items: center;
-    padding: 20px;
-    width: 100%;  /* Ensure full width */
-    background-color: #f0f8ff;  /* Optional: Set the background */
-    box-sizing: border-box; /* Ensures padding is included in width */
-  }
-  .homepage-logo {
-    height: 60px;
-  }
-  .homepage-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;  /* Add spacing between links */
-    margin: 0;
-    padding: 0;
-  }
-  
-  .homepage-nav a {
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-  }
-  .homepage-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px;
-    position: relative;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
-  
-  
-  .homepage-intro {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column; /* Aligns logo and button side by side */
-    align-items: center;  /* Aligns items vertically in the center */
-    justify-content: center; /* Centers the content horizontally */
-    gap: 20px; /* Adds space between the logo and the button */
-    padding-right: 500px;
-  }
-  
-  .get-started-button {
-    background-color: #6A0DAD;
-    color: white;
-    font-size: 20px;
-    padding: 15px 40px;
-    border: none;
-    cursor: pointer;
-    margin-top: 20px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-  }
-  /* All images will be positioned relative to .homepage-main */
-.image1, .image2, .image3, .image4, .image5 {
-  position: absolute; /* Position images inside .homepage-main */
+.homepage {
+  font-family: Poppins, sans-serif;
+  width: 100%;
+  height: 100%;
+}
+
+.homepage-header {
+  display: flex;
+  justify-content: space-between; /* Align logo and nav items */
+  align-items: center;
+  padding: 20px;
+  width: 100%;  /* Ensure full width */
+  background-color: #f0f8ff;  /* Optional: Set the background */
+  box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+.homepage-logo {
+  height: 60px;
+}
+
+.homepage-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;  /* Add spacing between links */
+  margin: 0;
+  padding: 0;
+}
+
+.homepage-nav a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+}
+
+.homepage-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  position: relative; /* Makes this a container for absolute positioning */
+  margin-right: 100px;
+}
+
+.homepage-intro {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column; /* Aligns logo and button vertically */
+  align-items: center;  /* Aligns items vertically in the center */
+  justify-content: center; /* Centers the content horizontally */
+  gap: 20px; /* Adds space between the logo and the button */
+  position: relative; /* Make this container relative for positioning images */
+  padding-right: 350px; /* Removed unnecessary right padding */
+}
+
+.get-started-button {
+  background-color: #6A0DAD;
+  color: white;
+  font-size: 20px;
+  padding: 15px 40px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* All images will be positioned relative to .homepage-intro */
+.image1, .image2, .image3, .image4, .image5, .image6 {
+  position: absolute; /* Position images relative to .homepage-intro */
   border-radius: 50%;
   object-fit: cover;
 }
 
-/* Positioning the images within .homepage-main */
+/* Positioning the images so they don’t overlap the logo or button */
 .image1 {
-  top: 150px;
-  right: 30%; /* Adjust as needed */
+  top: 0px;  /* Adjust top position relative to the logo */
+  right: 10%; /* Move the image outwards from the logo */
   width: 300px;
   height: 300px;
 }
 
 .image2 {
-  top: 370px;
-  right: 25%;
+  top: 250px;
+  right: 30%; /* Adjust to avoid overlapping */
   width: 180px;
   height: 180px;
 }
 
 .image3 {
-  top: 480px;
-  left: 45%;
+  top: 400px;
+  left: 700px; /* Adjust left so it stays away from the button */
   width: 250px;
   height: 250px;
 }
 
 .image4 {
-  top: 600px;
-  right: 24%;
+  top: 280px;
+  right:200px; /* Adjust right position to avoid overlap */
   width: 150px;
   height: 150px;
 }
 
 .image5 {
-  top: 550px;
-  right: 10%;
-  width: 230px;
-  height: 230px;
+  top: 260px;
+  right: -40px; /* Position this image further to the right */
+  width: 250px;
+  height: 250px;
 }
-  .big-logo{
-    width: 800px;
-  }
+
+
+.image6 {
+  top: 30px;
+  right: -150px; /* Position this image further to the right */
+  width: 270px;
+  height: 270px;
+}
+/* Logo styling */
+.big-logo {
+  width: 800px;
+}
