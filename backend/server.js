@@ -2,6 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const MongoClient = require('mongodb').MongoClient;
+
+const PORT = process.env.PORT || 5000;
+
+const url = 'mongodb+srv://xplora-user:FriendersTeam10!@xplora.u95ur.mongodb.net/xplora?retryWrites=true&w=majority&appName=Xplora';
+const client = new MongoClient(url);
+client.connect();
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use((req, res, next) => {
@@ -16,4 +24,63 @@ app.use((req, res, next) => {
     );
     next();
 });
-app.listen(5000); // start Node + Express server on port 5000
+
+app.post('/api/login', async (req, res, next) => {
+    let error = '';
+    const { email, password } = req.body;
+
+    try {
+        const db = client.db();
+
+        const results = await db.collection('Users').findOne(
+            { email: email, password: password }
+        );
+
+        if (results) {
+            const { _id: id, first_name: firstName, last_name: lastName } = results[0];
+            res.status(200).json({ id, firstName, lastName, error: '' });
+        } else {
+            error = 'Invalid login or password';
+            res.status(401).json({ error });
+        }
+    } catch (err) {
+        error = 'An error occurred while accessing the database';
+        res.status(500).json({ error });
+    }
+});
+
+app.post('/api/register', async (req, res, next) => {
+    let error = '';
+    const { firstName, lastName, email, password } = req.body;
+
+    try {
+        const db = client.db();
+
+        const results = await db.collection('Users').findOne(
+            { email: email, password: password }
+        );
+
+        if (!results) {
+            const newUser = {
+                firstName,
+                lastName,
+                email,
+                password,
+            };
+
+            const result = await db.insertOne(newUser);
+            message = 'User added successfully';
+            res.status(201).json({ message: message });
+        } else {
+            error = 'Email already exists';
+            res.status(401).json({ error });
+        }
+    } catch (err) {
+        error = 'An error occurred while accessing the database';
+        res.status(500).json({ error });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
