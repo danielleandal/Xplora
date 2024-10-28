@@ -6,7 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 
 const PORT = process.env.PORT || 5000;
 
-const url = 'mongodb+srv://xplora-user:FriendersTeam10!@xplora.u95ur.mongodb.net/xplora?retryWrites=true&w=majority&appName=Xplora';
+const url = 'mongodb+srv://xplora-user:FriendersTeam10!@xplora.u95ur.mongodb.net/?retryWrites=true&w=majority&appName=Xplora';
 const client = new MongoClient(url);
 client.connect();
 
@@ -30,7 +30,7 @@ app.post('/api/login', async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        const db = client.db();
+        const db = client.db('xplora');
 
         const results = await db.collection('users').findOne(
             { email: email, password: password }
@@ -54,7 +54,7 @@ app.post('/api/register', async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
 
     try {
-        const db = client.db();
+        const db = client.db('xplora');
 
         const results = await db.collection('users').findOne(
             { email: email, password: password }
