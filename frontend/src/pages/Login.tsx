@@ -18,6 +18,7 @@ const LoginSchema = Yup.object().shape({
 const LoginForm: React.FC = () => {
     return (
         <div className="login-page">
+
             <header className="homepage-header">
                 <img src={logo} alt="Xplora Logo" className="homepage-logo" />
                 <nav className="homepage-nav">
@@ -29,20 +30,26 @@ const LoginForm: React.FC = () => {
                     </ul>
                 </nav>
             </header>
-            <div className="login-container">
-                <h1 className="login-title">XPLORA - Welcome Back!</h1>
-                <Formik
-                    initialValues={{
-                        email: '',
-                        password: '',
-                    }}
-                    validationSchema={LoginSchema}
-                    onSubmit={(values: LoginFormValues) => {
-                        console.log(values);
-                    }}
-                >
-                    {({ isSubmitting }) => (
-                        <Form className="login-form">
+
+            <div className="container">
+                <div className="logo-container">
+                    <img src= {logo} alt="" />
+                    <h1>Discover The World Your Way</h1>
+                </div>
+                <div className="login-container">
+                    <h1 className="login-title">Welcome Back!</h1>
+                    <Formik
+                        initialValues={{
+                            email: '',
+                            password: '',
+                        }}
+                        validationSchema={LoginSchema}
+                        onSubmit={(values: LoginFormValues) => {
+                            console.log(values);
+                        }}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form className="login-form">
                             <div className="form-field">
                                 <Field type="email" name="email" placeholder="Email" className="input-field" />
                                 <ErrorMessage name="email" component="div" className="error-message" />
@@ -51,14 +58,21 @@ const LoginForm: React.FC = () => {
                                 <Field type="password" name="password" placeholder="Password" className="input-field" />
                                 <ErrorMessage name="password" component="div" className="error-message" />
                             </div>
+                            
+                            <div className="forgot-password-container">
+                                <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
+                            </div>
+                            
                             <button type="submit" disabled={isSubmitting} className="submit-button">
-                                Log In
+                                Get Exploring!
                             </button>
                         </Form>
-                    )}
-                </Formik>
-                <p className="signup-link">Don't have an account? <Link to="/signup">Sign Up</Link></p>
+                        )}
+                    </Formik>
+                    <p className="signup-link">Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
+                </div>
             </div>
+           
         </div>
     );
 };
