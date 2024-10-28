@@ -16,7 +16,7 @@ const HowItWorksPage: React.FC = () => {
            
             <li><Link to="/sign-up">Sign Up</Link></li>
             <li><Link to="/login">Sign In</Link></li>
-            <li><Link to="/language">Language</Link></li>
+    
           </ul>
         </nav>
       </header>
