@@ -55,6 +55,7 @@
 }
 
 .get-started-button {
+  width: 300px;
   background-color: #6A0DAD;
   color: white;
   font-size: 20px;
