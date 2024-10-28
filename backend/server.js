@@ -68,7 +68,7 @@ app.post('/api/register', async (req, res, next) => {
                 password,
             };
 
-            const result = await db.insertOne(newUser);
+            const result = await db.collection('users').insertOne(newUser);
             message = 'User added successfully';
             res.status(201).json({ message: message });
         } else {
@@ -81,6 +81,15 @@ app.post('/api/register', async (req, res, next) => {
     }
 });
 
+
+
+
+
+
+
+// WRITE EVERYTHING ABOVE THESE LINES
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
