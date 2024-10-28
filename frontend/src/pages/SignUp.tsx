@@ -1,7 +1,9 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import './SignUp.css';
+import { Link } from 'react-router-dom';
+import './SignUp.css'; // Ensure CSS is appropriately aligned
+import logo from '../images/logo.png'; // Adjust path if needed
 
 interface SignupFormValues {
     email: string;
@@ -29,45 +31,68 @@ const SignupSchema = Yup.object().shape({
 
 const SignupForm: React.FC = () => {
     return (
-        <div>
-            <h1>XPLORA - Discover the World, Your Way</h1>
-            <Formik
-                initialValues={{
-                    email: '',
-                    firstName: '',
-                    lastName: '',
-                    password: '',
-                    confirmPassword: '',
-                }}
-                validationSchema={SignupSchema}
-                onSubmit={(values: SignupFormValues) => {
-                    console.log(values);
-                }}
-            >
-                {({ isSubmitting }) => (
-                    <Form>
-                        <Field type="email" name="email" placeholder="Email" />
-                        <ErrorMessage name="email" component="div" />
-
-                        <Field type="text" name="firstName" placeholder="First Name" />
-                        <ErrorMessage name="firstName" component="div" />
-
-                        <Field type="text" name="lastName" placeholder="Last Name" />
-                        <ErrorMessage name="lastName" component="div" />
-
-                        <Field type="password" name="password" placeholder="Password" />
-                        <ErrorMessage name="password" component="div" />
-
-                        <Field type="password" name="confirmPassword" placeholder="Verify Password" />
-                        <ErrorMessage name="confirmPassword" component="div" />
-
-                        <button type="submit" disabled={isSubmitting}>
-                            Get Exploring!
-                        </button>
-                    </Form>
-                )}
-            </Formik>
-            <p>Already have an account? <a href="/signin">Sign In</a></p>
+        <div className="signup-page">
+            <header className="homepage-header">
+                <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                <nav className="homepage-nav">
+                    <ul>
+                        <li><Link to="/how-it-works">How it works</Link></li>
+                        <li><Link to="/sign-up">Sign Up</Link></li>
+                        <li><Link to="/login">Sign In</Link></li>
+                        <li><Link to="/language">Language</Link></li>
+                    </ul>
+                </nav>
+            </header>
+            <div className="container">
+                <div className="logo-container">
+                    <img src= {logo} alt="" />
+                    <h1>Discover the World Your Way </h1>
+                </div>
+                <div className="signup-container">
+                    <Formik
+                        initialValues={{
+                            email: '',
+                            firstName: '',
+                            lastName: '',
+                            password: '',
+                            confirmPassword: '',
+                        }}
+                        validationSchema={SignupSchema}
+                        onSubmit={(values: SignupFormValues) => {
+                            console.log(values);
+                        }}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form className="signup-form">
+                                <div className="form-field">
+                                    <Field type="email" name="email" placeholder="Email" className="input-field" />
+                                    <ErrorMessage name="email" component="div" className="error-message" />
+                                </div>
+                                <div className="form-field">
+                                    <Field type="text" name="firstName" placeholder="First Name" className="input-field" />
+                                    <ErrorMessage name="firstName" component="div" className="error-message" />
+                                </div>
+                                <div className="form-field">
+                                    <Field type="text" name="lastName" placeholder="Last Name" className="input-field" />
+                                    <ErrorMessage name="lastName" component="div" className="error-message" />
+                                </div>
+                                <div className="form-field">
+                                    <Field type="password" name="password" placeholder="Password" className="input-field" />
+                                    <ErrorMessage name="password" component="div" className="error-message" />
+                                </div>
+                                <div className="form-field">
+                                    <Field type="password" name="confirmPassword" placeholder="Verify Password" className="input-field" />
+                                    <ErrorMessage name="confirmPassword" component="div" className="error-message" />
+                                </div>
+                                <button type="submit" disabled={isSubmitting} className="submit-button">
+                                    Get Exploring!
+                                </button>
+                            </Form>
+                        )}
+                    </Formik>
+                    <p className="signup-link">Already have an account? <Link to="/signup">Sign Up</Link></p>
+                </div>
+            </div> 
         </div>
     );
 };
