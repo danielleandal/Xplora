@@ -12,7 +12,7 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGetStartedClick = () => {
-    navigate('/sign-in');
+    navigate('/sign-up');
   };
 
   return (
