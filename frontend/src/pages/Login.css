@@ -5,18 +5,24 @@
     align-items: center;
     font-family: 'Poppins', sans-serif;
     color: #333;
+    height: 100vh;
 
 }
 
 
 .l-container{
-    margin-top: 150px;
+
     display: flex;
     flex-direction: row;
     gap: 80px;
     align-items: center;
-    height: 100%;
+    height: 70%;
     justify-content: center;
+}
+
+.login-logo-container{
+    position: sticky;
+
 }
 
 /* Login Container */
@@ -46,6 +52,7 @@
 
 .login-form-field {
     display: flex;
+    margin-top: 1rem;
 
 }
 
@@ -78,7 +85,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 1rem;
+    margin-top: 2rem;
 }
 
 .login-submit-button:hover {
