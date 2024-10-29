@@ -20,7 +20,9 @@ const LoginForm: React.FC = () => {
         <div className="login-page">
 
             <header className="homepage-header">
-                <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                <Link to="/">
+                    <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                </Link>
                 <nav className="homepage-nav">
                     <ul>
                         <li><Link to="/how-it-works">How it works</Link></li>
@@ -51,11 +53,16 @@ const LoginForm: React.FC = () => {
                         {({ isSubmitting }) => (
                             <Form className="login-form">
                             <div className="login-form-field">
-                                <Field type="email" name="email" placeholder="Email" className="input-field" />
-                                <ErrorMessage name="email" component="div" className="login-error-message" />
+                                <Field type="email" name="email" placeholder="Email" className="login-input-field" />
                             </div>
+                            <div className="login-error-container">
+                                 <ErrorMessage name="email" component="div" className="login-error-message" />
+                                </div>
+             
                             <div className="login-form-field">
-                                <Field type="password" name="password" placeholder="Password" className="input-field" />
+                                <Field type="password" name="password" placeholder="Password" className="login-input-field" />
+                            </div>
+                            <div className="login-error-container">
                                 <ErrorMessage name="password" component="div" className="error-message" />
                             </div>
                             
