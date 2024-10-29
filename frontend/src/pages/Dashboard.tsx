@@ -35,9 +35,9 @@ const Dashboard: React.FC = () => {
     return (
         <div className="dashboard">
             <header className="homepage-header">
-                <Link to="/">
+            
                     <img src={logo} alt="Xplora Logo" className="homepage-logo" />
-                </Link>
+               
                 <nav className="homepage-nav">
                     <ul>
                         <li><Link to="/profile">Profile</Link></li>
