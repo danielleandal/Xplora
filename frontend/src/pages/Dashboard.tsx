@@ -40,7 +40,6 @@ const Dashboard: React.FC = () => {
                 </Link>
                 <nav className="homepage-nav">
                     <ul>
-                        <li><Link to="/how-it-works">How it works</Link></li>
                         <li><Link to="/profile">Profile</Link></li>
                         <li><button onClick={handleLogout} className="logout-button">Logout</button></li>
                     </ul>
