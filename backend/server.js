@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 const url = 'mongodb+srv://xplora-user:FriendersTeam10!@xplora.u95ur.mongodb.net/?retryWrites=true&w=majority&appName=Xplora';
 const client = new MongoClient(url);
@@ -37,7 +37,7 @@ app.post('/api/login', async (req, res, next) => {
         );
 
         if (results) {
-            const { _id: id, first_name: firstName, last_name: lastName } = results[0];
+            const { _id: id, first_name: firstName, last_name: lastName } = results;
             res.status(200).json({ id, firstName, lastName, error: '' });
         } else {
             error = 'Invalid login or password';
@@ -68,7 +68,7 @@ app.post('/api/register', async (req, res, next) => {
                 password,
             };
 
-            const result = await db.insertOne(newUser);
+            const result = await db.collection('users').insertOne(newUser);
             message = 'User added successfully';
             res.status(201).json({ message: message });
         } else {
@@ -81,6 +81,15 @@ app.post('/api/register', async (req, res, next) => {
     }
 });
 
+
+
+
+
+
+
+// WRITE EVERYTHING ABOVE THESE LINES
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
