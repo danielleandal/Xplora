@@ -62,6 +62,9 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
+    background-color: #fff;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
 }
 
 .login-error-container{
