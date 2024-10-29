@@ -23,6 +23,7 @@
 .homepage-nav ul {
   list-style: none;
   display: flex;
+  align-items: center;
   gap: 20px;  /* Add spacing between links */
   margin: 0;
   padding: 0;
@@ -52,6 +53,16 @@
   gap: 20px; /* Adds space between the logo and the button */
   position: relative; /* Make this container relative for positioning images */
   padding-right: 350px; /* Removed unnecessary right padding */
+}
+
+.homepage-nav .sign-out-button {
+  display: flex;
+  align-items: center;
+  gap: 20px;  /* Add spacing between links */
+  margin-top: 20px;
+  background-color: #6A0DAD;
+  color: white;
+  cursor: pointer;
 }
 
 .get-started-button {
