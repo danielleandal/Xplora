@@ -1,7 +1,8 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import logo from '../images/logo.png'; // Replace with actual path
 
@@ -15,7 +16,21 @@ const LoginSchema = Yup.object().shape({
     password: Yup.string().required('Required')
 });
 
+const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
+
+function buildPath(route: string): string {
+    if (process.env.NODE_ENV !== 'development') {
+        return `http://${app_name}:5000/${route}`;
+    } else {
+        return `http://localhost:5000/${route}`;
+    }
+}
+
+
 const LoginForm: React.FC = () => {
+
+    const navigate = useNavigate();
+
     return (
         <div className="login-page">
             <header className="homepage-header">
@@ -45,23 +60,23 @@ const LoginForm: React.FC = () => {
                         }}
                         validationSchema={LoginSchema}
                         onSubmit={async (values: LoginFormValues, { setSubmitting, setErrors }) => {
+                            console.log("Form submitted"); 
                             try {
-                                const response = await fetch('/api/login', {
+                                const response = await fetch(buildPath('api/login'), {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
                                     },
                                     body: JSON.stringify(values),
                                 });
-
+                        
                                 const data = await response.json();
-
+                        
                                 if (response.ok) {
                                     console.log('Login successful:', data);
-                                    // Redirect user or store user data as needed
-                                    // e.g., store user in local storage, navigate to dashboard
+                                    navigate('/dashboard');
+                                    // Handle successful login here
                                 } else {
-                                    // Display error message from server
                                     setErrors({ email: data.error });
                                 }
                             } catch (error) {
