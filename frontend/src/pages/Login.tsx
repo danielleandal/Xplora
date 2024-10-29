@@ -20,7 +20,7 @@ const app_name = 'xplora.fun'; // Replace with your actual production server dom
 
 function buildPath(route: string): string {
     if (process.env.NODE_ENV !== 'development') {
-        return `http://${app_name}:5000/${route}`;
+        return `https://${app_name}:5000/${route}`;
     } else {
         return `http://localhost:5000/${route}`;
     }
