@@ -33,7 +33,7 @@ const ProfilePage: React.FC = () => {
             
             <div id="profile-sidebar" className="profile-sidebar">
                 <a href="#home">Home</a>
-                <a href="#security">Security</a>                
+                <a href="/profile-security">Security</a>                
             </div>
             
             <div className="profile-main">
@@ -66,22 +66,6 @@ const ProfilePage: React.FC = () => {
                             <div id="place">Filler</div>
                             <div id="place">Filler</div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div id="security" className="main-container">
-                        <div>
-                            <h1>Change Password</h1>
-                            <div id="Current Password">Current Password</div>
-                            <div id="New Password">New Password</div>
-                            <div id="Confirm Password">Confirm New Password</div>
-                            <button className="change-password">Change Password</button>
-                        </div>
-                        <div>
-                            <h1>Delete Account</h1>
-                            <p>By clicking Confirm, you confirm that you would like to 
-                                start the process of email verification to delete your account. You can exit the process at any time.</p>
-                            <button className="delete-account">Delete Account</button>
                         </div>
                     </div>
                 </div>
