@@ -37,25 +37,52 @@ const ProfilePage: React.FC = () => {
             </div>
             
             <div className="profile-main">
-                <div className="home-container">
+                <div className="outer-container">
                     <div id="home" className="main-container">
                         <img src={image1} alt="Profile Picture" className="profile-picture" />
                         
-                        <div>Name:
-                            <div id="Name"></div>
-                        </div>
-                        <div>Email:
-                            <div id="Email"></div>
-                        </div>
-                        <div>Age:
-                            <div id="Age"></div>
+                        <div className="main-column">
+                            <div>
+                                Name:
+                                <div id="name">Filler</div>
+                            </div>
+                            <div>
+                                Email:
+                                <div id="email">Filler</div>
+                            </div>
+                            <div>
+                                Age:
+                                <div id="age">Filler</div>
+                            </div>
                         </div>
 
-
+                        <div className="main-column">
+                            <div>
+                                Places *Filler Name* has XPLORED
+                            <div id="blue-box">.</div>
+                            <div id="place">Filler</div>
+                            <div id="place">Filler</div>
+                            <div id="place">Filler</div>
+                            <div id="place">Filler</div>
+                            <div id="place">Filler</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="main-container">
-                        <div id="security"></div>
+                    <div id="security" className="main-container">
+                        <div>
+                            <h1>Change Password</h1>
+                            <div id="Current Password">Current Password</div>
+                            <div id="New Password">New Password</div>
+                            <div id="Confirm Password">Confirm New Password</div>
+                            <button className="change-password">Change Password</button>
+                        </div>
+                        <div>
+                            <h1>Delete Account</h1>
+                            <p>By clicking Confirm, you confirm that you would like to 
+                                start the process of email verification to delete your account. You can exit the process at any time.</p>
+                            <button className="delete-account">Delete Account</button>
+                        </div>
                     </div>
                 </div>
                 
