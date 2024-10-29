@@ -60,9 +60,12 @@ const LoginForm: React.FC = () => {
                         }}
                         validationSchema={LoginSchema}
                         onSubmit={async (values: LoginFormValues, { setSubmitting, setErrors }) => {
+                            //debugger
                             console.log("Form submitted"); 
                             try {
+                                // calls the login api 
                                 const response = await fetch(buildPath('api/login'), {
+                                    // get information from database
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -74,7 +77,13 @@ const LoginForm: React.FC = () => {
                         
                                 if (response.ok) {
                                     console.log('Login successful:', data);
-                                    navigate('/dashboard');
+
+                                    // Store user data in localStorage
+                                    localStorage.setItem('userId', data.id);
+                                    localStorage.setItem('firstName', data.firstName);
+                                    localStorage.setItem('lastName', data.lastName);
+
+                                    navigate('/dashboard'); 
                                     // Handle successful login here
                                 } else {
                                     setErrors({ email: data.error });
