@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './HowItWorks.css'; // Create this CSS file for styling
 import './Profile.css';
 import logo from '../images/logo.png';
@@ -7,6 +7,28 @@ import { handleLogout } from './Dashboard';
 import { useNavigate, Link } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => { 
+    const navigate = useNavigate();
+
+    const [firstName, setFirstName] = useState<string>('');
+    const [lastName, setLastName] = useState<string>('');
+    const [email, setEmail] = useState<String>('');
+
+    useEffect(() => {
+        // Retrieve first and last names from localStorage
+        const storedFirstName = localStorage.getItem('firstName');
+        const storedLastName = localStorage.getItem('lastName');
+        const storedEmail = localStorage.getItem('email');
+
+        if (storedFirstName && storedLastName && storedEmail) {
+            setFirstName(storedFirstName);
+            setLastName(storedLastName);
+            setEmail(storedEmail)
+        } else {
+            // Redirect to login if data is missing
+            navigate('/login');
+        }
+    }, [navigate]);
+
     return (
         <div className="profile-page">
         {/* Header Section */}
@@ -35,11 +57,11 @@ const ProfilePage: React.FC = () => {
                         <div className="main-column">
                             <div>
                                 Name:
-                                <div id="name">Filler</div>
+                                <div id="name">{firstName} {lastName}</div>
                             </div>
                             <div>
                                 Email:
-                                <div id="email">Filler</div>
+                                <div id="email">{email}</div>
                             </div>
                             <div>
                                 Age:

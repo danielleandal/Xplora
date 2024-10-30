@@ -5,7 +5,7 @@ import logo from '../images/logo.png';
 
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { handleLogout } from './Dashboard'; 
 
 
@@ -34,14 +34,6 @@ const PasswordSchema = Yup.object().shape({
 // }
 
 const ProfileSecurityPage: React.FC = () => {
-    const navigate = useNavigate();
-
-    const handleSignOut = () => {
-        // clear session storage before signing out
-        sessionStorage.clear();
-        navigate('/');
-    };
-    
     return (
         <div className="profile-security-page">
         {/* Header Section */}
