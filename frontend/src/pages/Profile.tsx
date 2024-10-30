@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import './HowItWorks.css'; // Create this CSS file for styling
-import './Profile.css';
-import logo from '../images/logo.png';
-import image1 from '../images/image1.png';
 import { handleLogout } from './Dashboard'; 
 import { useNavigate, Link } from 'react-router-dom';
+// import { db } from 
+
+import './HowItWorks.css'; // Create this CSS file for styling
+import './Profile.css';
+
+import logo from '../images/logo.png';
+import image1 from '../images/image1.png';
 
 const ProfilePage: React.FC = () => { 
     const navigate = useNavigate();
@@ -28,6 +31,10 @@ const ProfilePage: React.FC = () => {
             navigate('/login');
         }
     }, [navigate]);
+
+    // useEffect(() => {
+
+    // }, [userId]);
 
     return (
         <div className="profile-page">
@@ -63,15 +70,15 @@ const ProfilePage: React.FC = () => {
                                 Email:
                                 <div id="email">{email}</div>
                             </div>
-                            <div>
+                            {/* <div>
                                 Age:
                                 <div id="age">Filler</div>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="main-column">
                             <div>
-                                Places *Filler Name* has XPLORED
+                                Places {firstName} {lastName} has XPLORED:
                             <div id="blue-box">.</div>
                             <div id="place">Filler</div>
                             <div id="place">Filler</div>
