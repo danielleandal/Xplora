@@ -3,33 +3,24 @@ import './HowItWorks.css'; // Create this CSS file for styling
 import './Profile.css';
 import logo from '../images/logo.png';
 import image1 from '../images/image1.png';
+import { handleLogout } from './Dashboard'; 
 import { useNavigate, Link } from 'react-router-dom';
 
-const ProfilePage: React.FC = () => {
-    const navigate = useNavigate();
-
-    const handleSignOut = () => {
-        // clear session storage before signing out
-        sessionStorage.clear();
-        navigate('/');
-    };
-    
+const ProfilePage: React.FC = () => { 
     return (
         <div className="profile-page">
         {/* Header Section */}
-            <header className="homepage-header">
-            <Link to="/">
-                <img src={logo} alt="Xplora Logo" className="homepage-logo" />
-                </Link>
-                <nav className="homepage-nav">
-                <ul>
-                    {/* <li><Link to="/sign-up">Sign Up</Link></li>
-                    <li><Link to="/sign-in">Sign In</Link></li> */}
-                    {/* <li><Link to="/homepage">Sign Out</Link></li> */}
-                    <button className="sign-out-button" onClick={handleSignOut}>Sign Out</button>
-                </ul>
-                </nav>
-            </header>
+        <header className="homepage-header">
+            
+            <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+       
+        <nav className="homepage-nav">
+            <ul>
+                <li><Link to="/profile">Profile</Link></li>
+                <li><button onClick={handleLogout} className="logout-button">Logout</button></li>
+            </ul>
+        </nav>
+        </header>
             
             <div id="profile-sidebar" className="profile-sidebar">
                 <a href="#home">Home</a>
