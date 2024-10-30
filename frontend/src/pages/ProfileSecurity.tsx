@@ -6,6 +6,8 @@ import logo from '../images/logo.png';
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate, Link } from 'react-router-dom';
+import { handleLogout } from './Dashboard'; 
+
 
 interface ChangePasswordFormValues {
     currentPassword: string;
@@ -43,19 +45,17 @@ const ProfileSecurityPage: React.FC = () => {
     return (
         <div className="profile-security-page">
         {/* Header Section */}
-            <header className="homepage-header">
-            <Link to="/">
-                <img src={logo} alt="Xplora Logo" className="homepage-logo" />
-                </Link>
-                <nav className="homepage-nav">
+        <header className="homepage-header">
+            
+            <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+       
+            <nav className="homepage-nav">
                 <ul>
-                    {/* <li><Link to="/sign-up">Sign Up</Link></li>
-                    <li><Link to="/sign-in">Sign In</Link></li> */}
-                    {/* <li><Link to="/homepage">Sign Out</Link></li> */}
-                    <button className="sign-out-button" onClick={handleSignOut}>Sign Out</button>
+                    <li><Link to="/profile">Profile</Link></li>
+                    <li><button onClick={handleLogout} className="logout-button">Logout</button></li>
                 </ul>
-                </nav>
-            </header>
+            </nav>
+        </header>
             
             <div id="profile-sidebar" className="profile-sidebar">
                 <a href="/profile">Home</a>
