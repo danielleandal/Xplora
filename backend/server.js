@@ -57,7 +57,7 @@ app.post('/api/register', async (req, res, next) => {
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne(
-            { email: email, password: password }
+            { email: email }
         );
 
         if (!results) {
