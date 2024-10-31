@@ -62,8 +62,8 @@ app.post('/api/register', async (req, res, next) => {
 
         if (!results) {
             const newUser = {
-                firstName,
-                lastName,
+                first_name,
+                last_name,
                 email,
                 password,
             };
