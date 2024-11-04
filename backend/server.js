@@ -53,19 +53,19 @@ app.post('/api/login', async (req, res, next) => {
 //Register API
 app.post('/api/register', async (req, res, next) => {
     let error = '';
-    const { firstName, lastName, email, password } = req.body;
+    const { first_name, last_name, email, password } = req.body;
 
     try {
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne(
-            { email: email, password: password }
+            { email: email }
         );
 
         if (!results) {
             const newUser = {
-                firstName,
-                lastName,
+                first_name,
+                last_name,
                 email,
                 password,
             };

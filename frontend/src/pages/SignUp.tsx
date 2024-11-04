@@ -33,19 +33,21 @@ const SignupForm: React.FC = () => {
     return (
         <div className="signup-page">
             <header className="homepage-header">
-                <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                <Link to="/">
+                    <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                </Link>
                 <nav className="homepage-nav">
                     <ul>
                         <li><Link to="/how-it-works">How it works</Link></li>
                         <li><Link to="/sign-up">Sign Up</Link></li>
                         <li><Link to="/login">Sign In</Link></li>
-                        <li><Link to="/language">Language</Link></li>
+                  
                     </ul>
                 </nav>
             </header>
-            <div className="container">
+            <div className="another-container">
                 <div className="logo-container">
-                    <img src= {logo} alt="" />
+                <img src={logo} alt="Xplora Logo" className='big-logo' />
                     <h1>Discover the World Your Way </h1>
                 </div>
                 <div className="signup-container">
@@ -64,33 +66,54 @@ const SignupForm: React.FC = () => {
                     >
                         {({ isSubmitting }) => (
                             <Form className="signup-form">
-                                <div className="form-field">
-                                    <Field type="email" name="email" placeholder="Email" className="input-field" />
+                                
+                                {/*  email field */}
+                                <div className="signup-form-field">
+                                    <Field type="email" name="email" placeholder="Email" className="signup-input-field" />
+                                </div>
+                                <div className="signup-error">
                                     <ErrorMessage name="email" component="div" className="error-message" />
                                 </div>
-                                <div className="form-field">
-                                    <Field type="text" name="firstName" placeholder="First Name" className="input-field" />
+
+                                {/* firstname field */}
+                                <div className="signup-form-field">
+                                    <Field type="text" name="firstName" placeholder="First Name" className="signup-input-field" />
+                                </div>
+                                <div className="signup-error">
                                     <ErrorMessage name="firstName" component="div" className="error-message" />
                                 </div>
-                                <div className="form-field">
-                                    <Field type="text" name="lastName" placeholder="Last Name" className="input-field" />
+
+                                {/* lastname field */}
+                                <div className="signup-form-field">
+                                    <Field type="text" name="lastName" placeholder="Last Name" className="signup-input-field" />
+                                </div>
+                                <div className="signup-error">
                                     <ErrorMessage name="lastName" component="div" className="error-message" />
                                 </div>
-                                <div className="form-field">
-                                    <Field type="password" name="password" placeholder="Password" className="input-field" />
+
+                                {/* password field */}
+                                <div className="signup-form-field">
+                                    <Field type="password" name="password" placeholder="Password" className="signup-input-field" />
+                                </div>
+                                <div className="signup-error">
                                     <ErrorMessage name="password" component="div" className="error-message" />
                                 </div>
-                                <div className="form-field">
-                                    <Field type="password" name="confirmPassword" placeholder="Verify Password" className="input-field" />
+
+                                {/* confirm password field */}
+                                <div className="signup-form-field">
+                                    <Field type="password" name="confirmPassword" placeholder="Verify Password" className="signup-input-field" />
+                                </div>
+                                <div className="signup-error">
                                     <ErrorMessage name="confirmPassword" component="div" className="error-message" />
                                 </div>
-                                <button type="submit" disabled={isSubmitting} className="submit-button">
+
+                                <button type="submit" disabled={isSubmitting} className="signup-submit-button">
                                     Get Exploring!
                                 </button>
                             </Form>
                         )}
                     </Formik>
-                    <p className="signup-link">Already have an account? <Link to="/signup">Sign Up</Link></p>
+                    <p className="signup-link">Already have an account? <Link to="/login">Log In</Link></p>
                 </div>
             </div> 
         </div>

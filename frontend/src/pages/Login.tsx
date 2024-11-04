@@ -1,7 +1,8 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import logo from '../images/logo.png'; // Replace with actual path
 
@@ -15,25 +16,39 @@ const LoginSchema = Yup.object().shape({
     password: Yup.string().required('Required')
 });
 
+const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
+
+function buildPath(route: string): string {
+    if (process.env.NODE_ENV !== 'development') {
+        return `https://${app_name}/${route}`;
+    } else {
+        return `http://localhost:5000/${route}`;
+    }
+}
+
+
 const LoginForm: React.FC = () => {
+
+    const navigate = useNavigate();
+
     return (
         <div className="login-page">
-
             <header className="homepage-header">
-                <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                <Link to="/">
+                    <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                </Link>
                 <nav className="homepage-nav">
                     <ul>
                         <li><Link to="/how-it-works">How it works</Link></li>
                         <li><Link to="/sign-up">Sign Up</Link></li>
                         <li><Link to="/login">Sign In</Link></li>
-                        <li><Link to="/language">Language</Link></li>
                     </ul>
                 </nav>
             </header>
 
-            <div className="container">
-                <div className="logo-container">
-                    <img src= {logo} alt="" />
+            <div className="l-container">
+                <div className="login-logo-container">
+                    <img src={logo} alt="Xplora Logo" className='big-logo' />
                     <h1>Discover The World Your Way</h1>
                 </div>
                 <div className="login-container">
@@ -44,35 +59,72 @@ const LoginForm: React.FC = () => {
                             password: '',
                         }}
                         validationSchema={LoginSchema}
-                        onSubmit={(values: LoginFormValues) => {
-                            console.log(values);
+                        onSubmit={async (values: LoginFormValues, { setSubmitting, setErrors }) => {
+                            //debugger
+                            console.log("Form submitted"); 
+                            try {
+                                // calls the login api 
+                                const response = await fetch(buildPath('api/login'), {
+                                    // get information from database
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(values),
+                                });
+                        
+                                const data = await response.json();
+                        
+                                if (response.ok) {
+                                    console.log('Login successful:', data);
+
+                                    // Store user data in localStorage
+                                    localStorage.setItem('userId', data.id);
+                                    localStorage.setItem('firstName', data.firstName);
+                                    localStorage.setItem('lastName', data.lastName);
+
+                                    navigate('/dashboard'); 
+                                    // Handle successful login here
+                                } else {
+                                    setErrors({ email: data.error });
+                                }
+                            } catch (error) {
+                                console.error('Error:', error);
+                                setErrors({ email: 'An error occurred. Please try again.' });
+                            } finally {
+                                setSubmitting(false);
+                            }
                         }}
                     >
                         {({ isSubmitting }) => (
                             <Form className="login-form">
-                            <div className="form-field">
-                                <Field type="email" name="email" placeholder="Email" className="input-field" />
-                                <ErrorMessage name="email" component="div" className="error-message" />
-                            </div>
-                            <div className="form-field">
-                                <Field type="password" name="password" placeholder="Password" className="input-field" />
-                                <ErrorMessage name="password" component="div" className="error-message" />
-                            </div>
-                            
-                            <div className="forgot-password-container">
-                                <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
-                            </div>
-                            
-                            <button type="submit" disabled={isSubmitting} className="submit-button">
-                                Get Exploring!
-                            </button>
-                        </Form>
+                                <div className="login-form-field">
+                                    <Field type="email" name="email" placeholder="Email" className="login-input-field" />
+                                </div>
+                                <div className="login-error-container">
+                                    <ErrorMessage name="email" component="div" className="login-error-message" />
+                                </div>
+
+                                <div className="login-form-field">
+                                    <Field type="password" name="password" placeholder="Password" className="login-input-field" />
+                                </div>
+                                <div className="login-error-container">
+                                    <ErrorMessage name="password" component="div" className="login-error-message" />
+                                </div>
+
+                                <div className="login-forgot-password-container">
+                                    <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
+                                </div>
+
+                                <button type="submit" disabled={isSubmitting} className="login-submit-button">
+                                    Get Exploring!
+                                </button>
+                            </Form>
                         )}
                     </Formik>
                     <p className="signup-link">Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
                 </div>
             </div>
-           
         </div>
     );
 };

@@ -7,11 +7,11 @@
     color: #333;
     width: 100%;
     height: 100vh;
-    background-color: #f4f4f8;
+    background-color: #fff;
 }
 
-.container {
-    margin-top: 50px;
+.another-container {
+    margin-top: 10px;
     display: flex;
     flex-direction: row;
     gap: 80px;
@@ -39,6 +39,10 @@
     gap: 1.5rem;
 }
 
+.logo-container h1{
+    white-space: nowrap;
+}
+
 .homepage-nav ul li a {
     color: #5c67f2;
     text-decoration: none;
@@ -57,7 +61,7 @@
     padding: 2rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #f0f8ff;
     text-align: center;
 }
 
@@ -67,46 +71,56 @@
     flex-direction: column;
 }
 
-.form-field {
-    margin-bottom: 1rem;
+.signup-form-field {
+    margin-top: 1rem;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
 }
 
-.input-field {
+.signup-error {
+    margin-top: 5px;
+}
+
+.signup-input-field {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
+    background-color: #fff;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
 }
 
 .error-message {
-    color: #d9534f;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
+    visibility: hidden;
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+input:invalid+.error-message {
+    visibility: visible;
 }
 
 /* Button Styling */
-.submit-button {
+.signup-submit-button {
     width: 100%;
     padding: 0.75rem;
     font-size: 1rem;
     font-weight: bold;
     color: #fff;
-    background-color: #5c67f2;
+    background-color: #6A0DAD;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin-top: 1rem;
 }
 
-.submit-button:hover {
-    background-color: #3a44d1;
+.signup-submit-button:hover {
+    background-color: #8750ae;
 }
 
-.submit-button:disabled {
+.signup-submit-button:disabled {
     background-color: #7a7a7a;
     cursor: not-allowed;
 }
