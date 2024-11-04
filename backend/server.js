@@ -25,6 +25,7 @@ app.use((req, res, next) => {
     next();
 });
 
+//Log In API
 app.post('/api/login', async (req, res, next) => {
     let error = '';
     const { email, password } = req.body;
@@ -49,6 +50,7 @@ app.post('/api/login', async (req, res, next) => {
     }
 });
 
+//Register API
 app.post('/api/register', async (req, res, next) => {
     let error = '';
     const { firstName, lastName, email, password } = req.body;
@@ -81,8 +83,60 @@ app.post('/api/register', async (req, res, next) => {
     }
 });
 
+//Trips API
+app.post('/api/trips', async (req, res, next) => {
+    let error = '';
+    const { name, tripName, destination, startDate, endDate, imageUrl } = req.body;
+
+    try {
+        const db = client.db('xplora');
+        const existingTrip = await db.collection('trips').findOne({ name: name });
+
+        if (existingTrip) {
+            
+            const { _id: id, tripName, destination, startDate, endDate, imageUrl } = existingTrip;
+            const message = 'Trip already exists';
+            res.status(200).json({ message, id, tripName, destination, startDate, endDate, imageUrl });
+        } else {
+
+            const newTrip = {
+                tripName,
+                destination,
+                startDate,
+                endDate,
+                description: '',
+                imageUrl,
+            };
+
+            const result = await db.collection('trips').insertOne(newTrip);
+            const message = 'Trip added successfully';
+            res.status(201).json({ message, id: result.insertedId });
+        }
+
+    } catch (err) {
+        error = 'An error occurred while accessing the database';
+        res.status(500).json({ error });
+    }
+});
+
+// Add activities API
+// app.post('/api/trips/activities', async (req, res, next) => {
+//     let error = '';
+//     const { tripId, name, date, time, location, description} = req.body;
+
+//     try{
+//         const db = client.db('xplora');
+//         const existingActivity = await db.collection('activities').findOne({ tripId: tripId, name
+//     });
+
+//     }catch (err) {
+//         error = 'An error occurred while accessing the database';
+//         res.status(500).json({ error });
+//     }
 
 
+
+// });
 
 
 
