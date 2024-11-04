@@ -92,9 +92,14 @@
 }
 
 .error-message {
-    color: #d9534f;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
+    visibility: hidden;
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+input:invalid+.error-message {
+    visibility: visible;
 }
 
 /* Button Styling */
