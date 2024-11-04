@@ -39,6 +39,10 @@
     gap: 1.5rem;
 }
 
+.logo-container h1{
+    white-space: nowrap;
+}
+
 .homepage-nav ul li a {
     color: #5c67f2;
     text-decoration: none;

@@ -48,7 +48,7 @@ const LoginForm: React.FC = () => {
 
             <div className="l-container">
                 <div className="login-logo-container">
-                    <img src={logo} alt="Xplora Logo" />
+                    <img src={logo} alt="Xplora Logo" className='big-logo' />
                     <h1>Discover The World Your Way</h1>
                 </div>
                 <div className="login-container">

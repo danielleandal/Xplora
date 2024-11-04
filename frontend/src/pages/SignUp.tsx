@@ -47,7 +47,7 @@ const SignupForm: React.FC = () => {
             </header>
             <div className="another-container">
                 <div className="logo-container">
-                    <img src= {logo} alt="" />
+                <img src={logo} alt="Xplora Logo" className='big-logo' />
                     <h1>Discover the World Your Way </h1>
                 </div>
                 <div className="signup-container">
