@@ -33,7 +33,7 @@
     padding: 2rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    background-color: #f0f8ff;
+    border: 0.1px solid #cbbaf3;
     text-align: center;
 }
 
@@ -59,7 +59,7 @@
 .login-input-field {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ccc;
+    border: 0.1px solid #cbbaf3;
     border-radius: 4px;
     font-size: 1rem;
     background-color: #fff;
@@ -84,15 +84,15 @@
     font-size: 1rem;
     font-weight: bold;
     color: #fff;
-    background-color: #6A0DAD;
+    background-color: #0558b1;
     border: none;
-    border-radius: 4px;
+    border-radius: 50px;
     cursor: pointer;
     margin-top: 2rem;
 }
 
 .login-submit-button:hover {
-    background-color: #8750ae;
+    background-color: #086bd5;
 }
 
 .login-submit-button:disabled {

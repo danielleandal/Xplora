@@ -51,6 +51,7 @@ const SignupForm: React.FC = () => {
                     <h1>Discover the World Your Way </h1>
                 </div>
                 <div className="signup-container">
+                    <h2 className="signup-title">Sign Up!</h2>
                     <Formik
                         initialValues={{
                             email: '',
