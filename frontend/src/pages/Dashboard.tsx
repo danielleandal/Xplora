@@ -43,6 +43,9 @@ const Dashboard: React.FC = () => {
         navigate('/edit-trip'); // Navigate to the EditTrip page
     };
 
+    const handleAddTrip = () => {
+        navigate('/addtrip'); // Navigates to /addtrip when button is clicked
+    };
 
     return (
         <div className="dashboard">
@@ -80,7 +83,7 @@ const Dashboard: React.FC = () => {
 
                             </div>
                         </div>
-                        <button className="add-trip-button">
+                        <button className="add-trip-button" onClick={handleAddTrip}>
                             <span className="plus-icon">+</span> Add a trip
                         </button>
                     </div>
