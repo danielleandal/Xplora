@@ -5,7 +5,7 @@ import logo from '../images/logo.png';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -34,6 +34,10 @@ const AddTrip: React.FC = () => {
         alert('Photo uploaded successfully!');
     };
 
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     return (
         <div className="addtrip-page">
             <header className="homepage-header">
@@ -49,8 +53,13 @@ const AddTrip: React.FC = () => {
                 </nav>
             </header>
 
+            {/* Back Arrow Positioned Below the Logo */}
+            <div className="back-arrow-container">
+                <FontAwesomeIcon icon={faArrowLeft} className="back-arrow" onClick={handleBack} />
+            </div>
+
             <main className="addtrip-main">
-                <h1>Add a Trip</h1>
+                <h1 className="add-trip-header">Add a Trip</h1>
                 <p className="p1">Let's make the best out of your trip together!</p>
 
                 <div className="addtrip-dashboard-i-container">
