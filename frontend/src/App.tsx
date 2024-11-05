@@ -6,6 +6,7 @@ import SignUpPage from './pages/SignUp';
 import LoginPage from './pages/Login';
 import Profile from './pages/Profile'
 import Dashboard from './pages/Dashboard';
+import AddTrip from './pages/AddTrip'
 import './App.css';
 
 const App: React.FC = () => {
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} /> 
         <Route path="/profile" element={<Profile />} />
+        <Route path="/addtrip" element={<AddTrip />} />
         {/* Protected Route */}
         <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /></ProtectedRoute>} />
       </Routes>
