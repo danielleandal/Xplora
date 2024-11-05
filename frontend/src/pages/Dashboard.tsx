@@ -4,6 +4,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import logo from '../images/logo.png';
 
+export const handleLogout = () => {
+    const navigate = useNavigate();
+    
+    localStorage.removeItem('authToken');
+     // Clear user data and navigate to login
+     localStorage.removeItem('firstName');
+     localStorage.removeItem('lastName');
+     localStorage.removeItem('authToken'); // Remove token as well, if needed
+     navigate('/login');
+};
+
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
@@ -22,15 +33,6 @@ const Dashboard: React.FC = () => {
             navigate('/login');
         }
     }, [navigate]);
-
-    const handleLogout = () => {
-        localStorage.removeItem('authToken');
-         // Clear user data and navigate to login
-         localStorage.removeItem('firstName');
-         localStorage.removeItem('lastName');
-         localStorage.removeItem('authToken'); // Remove token as well, if needed
-         navigate('/login');
-    };
 
     return (
         <div className="dashboard">
@@ -62,6 +64,8 @@ const Dashboard: React.FC = () => {
             </main>
         </div>
     );
+
+    
 };
 
 export default Dashboard;
