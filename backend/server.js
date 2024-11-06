@@ -407,6 +407,52 @@ app.delete('/api/trips/:id/flights/:flightId', async (req, res) =>{
 });
 
 
+//-------------------
+//ACCOMMODATIONS -- POST accommodations to a trip
+app.post('/api/trips/:id/accommodations', async (req, res) => {
+    const { id } = req.params;
+    const {user_id, trip_id, confirmation_num, name,address,checkin_date,checkout_date,checkout_time,checkin_time,} = req.body;
+
+
+    try{
+    const db = client.db('xplora');
+
+    const existingAccommodations = await db.collection('accommodations').findOne({
+        user_id: MongoClient.ObjectId(user_id),
+        trip_id: MongoClient.ObjectId(trip_id),
+        confirmation_num,       
+        name,       
+        address,       
+        checkin_date,    
+        checkout_date,    
+        checkout_time,        
+        checkin_time,        
+        
+    });
+    if (existingAccommodations) {
+        return res.status(409).json ({error: 'A similar accommodations already exists'});
+    }
+
+    const newAccommodations = {
+        user_id: MongoClient.ObjectId(user_id),
+        trip_id: MongoClient.ObjectId(trip_id),
+        confirmation_num,       
+        name,       
+        address,       
+        checkin_date,    
+        checkout_date,    
+        checkout_time,        
+        checkin_time,        
+        
+    };
+    
+    const result = await db.collection('accommodations').insertOne(newAccommodations);
+    res.status(201).json({ message: 'accommodations added successfully', trip_id: result.insertedId });
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while adding the accommodations' });
+    }    
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
