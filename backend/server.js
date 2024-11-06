@@ -267,6 +267,28 @@ app.put('/api/trips/:id/activities/:activityId', async (req, res) => {
     }
 });
 
+//ACTIVITY --DELETE to remove an activity
+app.delete('/api/trips/:id/activities/:activityId', async (req, res) =>{
+    const { id, activityId } = req.params;
+    try{
+        const db = client.db('xplora');
+        const result = await db.collection('activities').deleteOne(
+            {
+                user_id: MongoClient.ObjectId(id),
+                trip_id: MongoClient.ObjectId(id), 
+                _id: MongoClient.ObjectId(activityId)
+            });
+            if (result.deletedCount > 0){
+                res.status(200).json({ message: 'Activity deleted successfully' });
+            } else{
+                res.status(404).json({ error: 'Activity not found' });
+            }
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while deleting the activity' });
+    }
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
