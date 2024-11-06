@@ -335,6 +335,19 @@ app.post('/api/trips/:id/flights', async (req, res) => {
     }    
 });
 
+//FLIGHTS -- GET all flights in a trip
+app.get('/api/trips/:id/flights', async (req, res) => {
+    const { id } = req.params;
+    try{
+        const db = client.db('xplora');
+        const activities = await db.collection('flights').find({trip_id: MongoClient.ObjectId(id)}).sort({departure_date : 1}).toArray();
+        res.json(flights);
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while fetching flights' });
+        }
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
