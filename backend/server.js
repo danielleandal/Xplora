@@ -526,6 +526,53 @@ app.delete('/api/trips/:id/accommodations/:accommodationsId', async (req, res) =
     }
 });
 
+//---------
+//PASWORD RESET APIs
+
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+
+app.post('/api/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const db = client.db('xplora');
+        const user = await db.collection('users').findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const resetTokenExpiration = Date.now() + 3600000; // one hour
+
+        await db.collection('users').updateOne(
+            { _id: user._id },
+            { $set: { resetToken, resetTokenExpiration } }
+        );
+
+        const transporter = nodemailer.createTransport({
+            service: 'Proton',  
+            auth: {
+                user: 'team10poosd@proton.me',  
+                pass: 'FriendersTeam10!',  
+            },
+        });
+
+        const mailOptions = {
+            from: 'team10poosd@proton.me',
+            to: user.email,
+            subject: 'Password Reset Request',
+            text: `You requested a password reset. Click the link below to reset your password:
+            http://your-domain.com/reset-password?token=${resetToken}&id=${user._id}`
+        };
+
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Password reset email sent' });
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while requesting password reset' });
+    }
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
