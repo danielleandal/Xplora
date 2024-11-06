@@ -348,6 +348,43 @@ app.get('/api/trips/:id/flights', async (req, res) => {
         }
 });
 
+//FLIGHTS -- PUT to update a flight
+app.put('/api/trips/:id/flights/:tripId', async (req, res) => {
+    const { id, tripId } = req.params;
+    const {user_id, trip_id, confirmation_num, flight_num,departure_airport,arrival_airport,departure_time,arrival_time,departure_date,arrival_date} = req.body;
+
+    try{
+        const db = client.db('xplora');
+        const result = await db.collection('flights').updateOne(
+            {
+                user_id: MongoClient.ObjectId(id),
+                trip_id: MongoClient.ObjectId(id), 
+                _id: MongoClient.ObjectId(flightId)
+            },
+            {
+                $set: {
+                    confirmation_num,       
+                    flight_num,       
+                    departure_airport,       
+                    arrival_airport,    
+                    departure_time,    
+                    arrival_time,        
+                    departure_date,        
+                    arrival_date
+                }
+            }
+        );
+        if (result.matchedCount > 0){
+            res.status(200).json({ message: 'Flight updated successfully' });
+        }else{
+            res.status(404).json({ error: 'Flight not found' });
+        }        
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while updating the flight' });
+    }
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
