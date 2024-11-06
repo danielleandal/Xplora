@@ -453,6 +453,19 @@ app.post('/api/trips/:id/accommodations', async (req, res) => {
     }    
 });
 
+//ACCOMMODATIONS -- GET all accommodations in a trip
+app.get('/api/trips/:id/accommodations', async (req, res) => {
+    const { id } = req.params;
+    try{
+        const db = client.db('xplora');
+        const accommodations = await db.collection('accommodations').find({trip_id: MongoClient.ObjectId(id)}).sort({checkin_time : 1}).toArray();
+        res.json(accommodations);
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while fetching accommodations' });
+        }
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
