@@ -573,6 +573,37 @@ app.post('/api/forgot-password', async (req, res) => {
     }
 });
 
+app.post('/api/reset-password', async (req, res) => {
+    const { token, id, newPassword } = req.body;
+
+    try {
+        const db = client.db('xplora');
+        const user = await db.collection('users').findOne({ 
+            _id: MongoClient.ObjectId(id), 
+            resetToken: token,
+            resetTokenExpiration: { $gt: Date.now() } 
+        });
+
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid or expired token' });
+        }
+        
+        const hashedPassword = crypto.createHash('sha256').update(newPassword).digest('hex'); 
+
+        await db.collection('users').updateOne(
+            { _id: user._id },
+            { 
+                $set: { password: hashedPassword },
+                $unset: { resetToken: "", resetTokenExpiration: "" }  // Remove reset fields
+            }
+        );
+
+        res.status(200).json({ message: 'Password reset successful' });
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while resetting the password' });
+    }
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
