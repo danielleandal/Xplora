@@ -39,6 +39,7 @@
 .dropdown-header .text {
     flex: 1;
     text-align: left;
+    font-family: Poppins, sans-serif;
 }
 
 .dropdown-header .arrow {
@@ -105,9 +106,14 @@
     transition: opacity 0.3s;
     font-size: 12px;
     white-space: nowrap;
+    font-family: Poppins, sans-serif;
 }
 
 .tooltip-container:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
+}
+
+.trip-name {
+    font-family: Poppins, sans-serif;
 }
