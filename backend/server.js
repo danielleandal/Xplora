@@ -181,7 +181,113 @@ app.delete('/api/trips/:id', async (req, res) => {
 
 });
 
+//ACTIVITY -- POST an activity to a trip
+app.post('/api/trips/:id/activities', async (req, res) => {
+    const { id } = req.params;
+    const {user_id, trip_id, name, date, time, location, notes} = req.body;
 
+
+    try{
+    const db = client.db('xplora');
+
+    const existingActivity = await db.collection('activities').findOne({
+        user_id: MongoClient.ObjectId(user_id),
+        trip_id: MongoClient.ObjectId(trip_id),
+        name,
+        date,
+        time,
+        location,
+        notes
+    });
+    if (existingActivity) {
+        return res.status(409).json ({error: 'A similar activity already exists'});
+    }
+
+    const newActivity = {
+        user_id: MongoClient.ObjectId(user_id),
+        trip_id: MongoClient.ObjectId(trip_id),
+        name,
+        date,
+        time,
+        location,
+        notes
+    };
+    
+    const result = await db.collection('activities').insertOne(newActivity);
+    res.status(201).json({ message: 'Activity added successfully', trip_id: result.insertedId });
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while adding the activity' });
+    }    
+});
+
+//ACTIVITY -- GET all activities in a trip
+app.get('/api/trips/:id/activities', async (req, res) => {
+    const { id } = req.params;
+    try{
+        const db = client.db('xplora');
+        const activities = await db.collection('activities').find({trip_id: MongoClient.ObjectId(id)}).
+        sort({date: 1}).toArray();
+        res.json(activities);
+        } catch (error) {
+            res.status(500).json({ error: 'An error occurred while fetching activities' });
+        }
+});
+
+//ACTIVITY -- PUT to update an activity
+app.put('/api/trips/:id/activities/:activityId', async (req, res) => {
+    const { id, activityId } = req.params;
+    const { name, date, time, location, notes } = req.body;
+
+    try{
+        const db = client.db('xplora');
+        const result = await db.collection('activities').updateOne(
+            {
+                user_id: MongoClient.ObjectId(id),
+                trip_id: MongoClient.ObjectId(id), 
+                _id: MongoClient.ObjectId(activityId)
+            },
+            {
+                $set: {
+                    name,
+                    date,
+                    time,
+                    location,
+                    notes
+                }
+            }
+        );
+        if (result.matchedCount > 0){
+            res.status(200).json({ message: 'Activity updated successfully' });
+        }else{
+            res.status(404).json({ error: 'Activity not found' });
+        }        
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while updating the activity' });
+    }
+});
+
+//ACTIVITY --DELETE to remove an activity
+app.delete('/api/trips/:id/activities/:activityId', async (req, res) =>{
+    const { id, activityId } = req.params;
+    try{
+        const db = client.db('xplora');
+        const result = await db.collection('activities').deleteOne(
+            {
+                user_id: MongoClient.ObjectId(id),
+                trip_id: MongoClient.ObjectId(id), 
+                _id: MongoClient.ObjectId(activityId)
+            });
+            if (result.deletedCount > 0){
+                res.status(200).json({ message: 'Activity deleted successfully' });
+            } else{
+                res.status(404).json({ error: 'Activity not found' });
+            }
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while deleting the activity' });
+    }
+});
 
 
 // WRITE EVERYTHING ABOVE THESE LINES
