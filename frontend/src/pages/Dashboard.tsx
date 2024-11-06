@@ -38,13 +38,13 @@ const Dashboard: React.FC = () => {
     };
 
 
-    const handleEditTrip = () => {
-        navigate('/edit-trip'); // Navigate to the EditTrip page
-    };
+    // const handleEditTrip = () => {
+    //     navigate('/edit-trip'); // Navigate to the EditTrip page
+    // };
 
-    const handleAddTrip = () => {
-        navigate('/addtrip'); // Navigates to /addtrip when button is clicked
-    };
+    // const handleAddTrip = () => {
+    //     navigate('/addtrip'); // Navigates to /addtrip when button is clicked
+    // };
 
     const [inputValue, setInputValue] = useState('');
 
