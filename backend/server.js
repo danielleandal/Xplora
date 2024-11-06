@@ -466,6 +466,44 @@ app.get('/api/trips/:id/accommodations', async (req, res) => {
         }
 });
 
+
+//ACCOMMODATIONS -- PUT to update accommodations
+app.put('/api/trips/:id/accommodations/:tripId', async (req, res) => {
+    const { id, tripId } = req.params;
+    const {user_id, trip_id, confirmation_num, name,address,checkin_date,checkout_date,checkout_time,checkin_time,} = req.body;
+
+    try{
+        const db = client.db('xplora');
+        const result = await db.collection('accommodations').updateOne(
+            {
+                user_id: MongoClient.ObjectId(id),
+                trip_id: MongoClient.ObjectId(id), 
+                _id: MongoClient.ObjectId(accommodationsId)
+            },
+            {
+                $set: {
+                    confirmation_num,       
+                    name,       
+                    address,       
+                    checkin_date,    
+                    checkout_date,    
+                    checkout_time,        
+                    checkin_time,        
+                    
+                }
+            }
+        );
+        if (result.matchedCount > 0){
+            res.status(200).json({ message: 'Accommodations updated successfully' });
+        }else{
+            res.status(404).json({ error: 'Accommodations not found' });
+        }        
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while updating the accommodations' });
+    }
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
