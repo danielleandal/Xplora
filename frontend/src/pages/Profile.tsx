@@ -32,10 +32,6 @@ const ProfilePage: React.FC = () => {
         }
     }, [navigate]);
 
-    // useEffect(() => {
-
-    // }, [userId]);
-
     return (
         <div className="profile-page">
         {/* Header Section */}
