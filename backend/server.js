@@ -384,6 +384,28 @@ app.put('/api/trips/:id/flights/:tripId', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while updating the flight' });
     }
 });
+//FLIGHTS --DELETE to remove a flight
+app.delete('/api/trips/:id/flights/:flightId', async (req, res) =>{
+    const { id, flightId } = req.params;
+    try{
+        const db = client.db('xplora');
+        const result = await db.collection('flights').deleteOne(
+            {
+                user_id: MongoClient.ObjectId(id),
+                trip_id: MongoClient.ObjectId(id), 
+                _id: MongoClient.ObjectId(flightId)
+            });
+            if (result.deletedCount > 0){
+                res.status(200).json({ message: 'Flight deleted successfully' });
+            } else{
+                res.status(404).json({ error: 'Flight not found' });
+            }
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while deleting the flight' });
+    }
+});
+
 
 // WRITE EVERYTHING ABOVE THESE LINES
 
