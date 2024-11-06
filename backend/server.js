@@ -233,6 +233,39 @@ app.get('/api/trips/:id/activities', async (req, res) => {
         }
 });
 
+//ACTIVITY -- PUT to update an activity
+app.put('/api/trips/:id/activities/:activityId', async (req, res) => {
+    const { id, activityId } = req.params;
+    const { name, date, time, location, notes } = req.body;
+
+    try{
+        const db = client.db('xplora');
+        const result = await db.collection('activities').updateOne(
+            {
+                user_id: MongoClient.ObjectId(id),
+                trip_id: MongoClient.ObjectId(id), 
+                _id: MongoClient.ObjectId(activityId)
+            },
+            {
+                $set: {
+                    name,
+                    date,
+                    time,
+                    location,
+                    notes
+                }
+            }
+        );
+        if (result.matchedCount > 0){
+            res.status(200).json({ message: 'Activity updated successfully' });
+        }else{
+            res.status(404).json({ error: 'Activity not found' });
+        }        
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while updating the activity' });
+    }
+});
 
 // WRITE EVERYTHING ABOVE THESE LINES
 
