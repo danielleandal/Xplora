@@ -35,9 +35,7 @@ const TripDetails: React.FC = () => {
                 </Link>
                 <nav className="homepage-nav">
                     <ul>
-                        <li><Link to="/how-it-works">How it works</Link></li>
-                        <li><Link to="/sign-up">Sign Up</Link></li>
-                        <li><Link to="/login">Sign In</Link></li>
+                        <li><Link to="/dashboard">Home</Link></li>
                     </ul>
                 </nav>
             </header>

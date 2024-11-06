@@ -143,6 +143,12 @@
     font-size: 1.2rem;
     color: #333;
     margin-bottom: 4px;
+    font-family: Poppins, sans-serif;
+}
+
+.trip-name a:hover {
+    color: #007BFF;
+    cursor: pointer;
 }
 
 .trip-location,

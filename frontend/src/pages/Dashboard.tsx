@@ -72,7 +72,9 @@ const Dashboard: React.FC = () => {
                         {/* Inline trip section for UI purposes */}
                         <div className="trip-card">
                             <div className="trip-details">
-                                <h3 className="trip-name">Trip to NYC</h3>
+                                <h3 className="trip-name">
+                                    <Link to="/trip-details">Trip to NYC</Link>
+                                </h3>
                                 <p className="trip-location">New York City</p>
                                 <p className="trip-dates">2024-12-01 - 2024-12-05 (5 days)</p>
                                 <button className='edit-trip-button' onClick={handleEditTrip}> ✏️ Edit Trip</button>
