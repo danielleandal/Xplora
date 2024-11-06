@@ -35,9 +35,7 @@ const TripDetails: React.FC = () => {
                 </Link>
                 <nav className="homepage-nav">
                     <ul>
-                        <li><Link to="/how-it-works">How it works</Link></li>
-                        <li><Link to="/sign-up">Sign Up</Link></li>
-                        <li><Link to="/login">Sign In</Link></li>
+                        <li><Link to="/dashboard">Home</Link></li>
                     </ul>
                 </nav>
             </header>
@@ -45,7 +43,7 @@ const TripDetails: React.FC = () => {
             <div className="dashboard-i-container">
                 <div className="dashboard-i-header"> Your Itinerary </div>
                 <div className="dashboard-i-content">
-                    <div className="trip-card">
+                    <div className="trip-card-tripdetails">
                         <div className="trip-details">
                             <h3 className="trip-name">TripName goes here</h3>
                             <p className="trip-location">New York City</p>
@@ -62,27 +60,36 @@ const TripDetails: React.FC = () => {
                     <div className="dropdown-all">
                         <div className="dropdown-section">
                             <div className="dropdown-header" onClick={() => toggleDropdown('flights')}>
-                                <span>Flights</span>
+                                <span className="text">Flights</span>
                                 <span className={`arrow ${flightsOpen ? 'open' : ''}`}>▼</span>
-                                <button className="add-button" onClick={() => handleAdd('flight')}>+</button>
+                                <div className="tooltip-container">
+                                    <button className="add-button" onClick={() => handleAdd('flight')}>+</button>
+                                    <span className="tooltip-text">Add new flight</span>
+                                </div>
                             </div>
                             {flightsOpen && <div className="dropdown-content">Flight details here</div>}
                         </div>
 
                         <div className="dropdown-section">
                             <div className="dropdown-header" onClick={() => toggleDropdown('accommodations')}>
-                                <span>Accommodations</span>
+                                <span className="text">Accommodations</span>
                                 <span className={`arrow ${accommodationsOpen ? 'open' : ''}`}>▼</span>
-                                <button className="add-button" onClick={() => handleAdd('accommodation')}>+</button>
+                                <div className="tooltip-container">
+                                    <button className="add-button" onClick={() => handleAdd('accommodation')}>+</button>
+                                    <span className="tooltip-text">Add new accommodation</span>
+                                </div>
                             </div>
                             {accommodationsOpen && <div className="dropdown-content">Accommodation details here</div>}
                         </div>
 
                         <div className="dropdown-section">
                             <div className="dropdown-header" onClick={() => toggleDropdown('activities')}>
-                                <span>Activities</span>
+                                <span className="text">Activities</span>
                                 <span className={`arrow ${activitiesOpen ? 'open' : ''}`}>▼</span>
-                                <button className="add-button" onClick={() => handleAdd('activity')}>+</button>
+                                <div className="tooltip-container">
+                                    <button className="add-button" onClick={() => handleAdd('activity')}>+</button>
+                                    <span className="tooltip-text">Add new activity</span>
+                                </div>
                             </div>
                             {activitiesOpen && <div className="dropdown-content">Activity details here</div>}
                         </div>
