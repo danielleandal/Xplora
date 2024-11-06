@@ -12,7 +12,7 @@
   align-items: center;
   padding: 20px;
   width: 100%;  /* Ensure full width */
-  background-color: #f0f8ff;  /* Optional: Set the background */
+  background-color: #ffff;  /* Optional: Set the background */
   box-sizing: border-box; /* Ensures padding is included in width */
 }
 
@@ -33,8 +33,33 @@
   text-decoration: none;
   color: #333;
   font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
+.homepage-nav a:hover {
+  background-color: #086bd5;
+  color: #fff;
+  text-decoration: none;
+}
+
+.centered-link {
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  text-decoration: none;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 50px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.centered-link:hover {
+  background-color: #086bd5;
+  color: #fff;
+  text-decoration: none;
+}
 .homepage-main {
   display: flex;
   flex-direction: column;

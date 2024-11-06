@@ -44,13 +44,13 @@
 }
 
 .homepage-nav ul li a {
-    color: #5c67f2;
+    color: #0f1dd6;
     text-decoration: none;
     font-weight: 500;
 }
 
 .homepage-nav ul li a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 /* Signup Container */
@@ -61,7 +61,7 @@
     padding: 2rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    background-color: #f0f8ff;
+    border: 0.1px solid #cbbaf3;
     text-align: center;
 }
 
@@ -83,8 +83,8 @@
 .signup-input-field {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #cbbaf3;
+    border-radius: 8px;
     font-size: 1rem;
     background-color: #fff;
     color: #000000;
@@ -109,15 +109,15 @@ input:invalid+.error-message {
     font-size: 1rem;
     font-weight: bold;
     color: #fff;
-    background-color: #6A0DAD;
+    background-color: #0558b1;
     border: none;
-    border-radius: 4px;
+    border-radius: 50px;
     cursor: pointer;
     margin-top: 1rem;
 }
 
 .signup-submit-button:hover {
-    background-color: #8750ae;
+    background-color: #086bd5;
 }
 
 .signup-submit-button:disabled {
@@ -138,4 +138,11 @@ input:invalid+.error-message {
 
 .signup-link a:hover {
     text-decoration: underline;
+}
+
+.signup-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #002a5c;
+    margin-bottom: 1rem;
 }

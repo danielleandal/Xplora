@@ -5,7 +5,11 @@ import HowItWorksPage from './pages/HowItWorks';
 import SignUpPage from './pages/SignUp';
 import LoginPage from './pages/Login';
 import Profile from './pages/Profile'
+import ProfileSecurityPage from './pages/ProfileSecurity'
 import Dashboard from './pages/Dashboard';
+import AddTrip from './pages/AddTrip'
+import EditTrip from './pages/EditTrip';
+import TripDetails from './pages/TripDetails';
 import './App.css';
 
 const App: React.FC = () => {
@@ -25,6 +29,10 @@ const App: React.FC = () => {
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} /> 
         <Route path="/profile" element={<Profile />} />
+        <Route path="/addtrip" element={<AddTrip />} />
+        <Route path="/edit-trip" element={<EditTrip />} />
+        <Route path="/trip-details" element={<TripDetails />} />
+        <Route path="/profile-security" element={<ProfileSecurityPage />} />
         {/* Protected Route */}
         <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /></ProtectedRoute>} />
       </Routes>
