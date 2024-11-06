@@ -289,6 +289,52 @@ app.delete('/api/trips/:id/activities/:activityId', async (req, res) =>{
     }
 });
 
+//-------------------
+//FLIGHTS -- POST a flight to a trip
+app.post('/api/trips/:id/flights', async (req, res) => {
+    const { id } = req.params;
+    const {user_id, trip_id, confirmation_num, flight_num,departure_airport,arrival_airport,departure_time,arrival_time,departure_date,arrival_date} = req.body;
+
+
+    try{
+    const db = client.db('xplora');
+
+    const existingFlight = await db.collection('flights').findOne({
+        user_id: MongoClient.ObjectId(user_id),
+        trip_id: MongoClient.ObjectId(trip_id),
+        confirmation_num,       
+        flight_num,       
+        departure_airport,       
+        arrival_airport,    
+        departure_time,    
+        arrival_time,        
+        departure_date,        
+        arrival_date
+    });
+    if (existingFlight) {
+        return res.status(409).json ({error: 'A similar flight already exists'});
+    }
+
+    const newflight = {
+        user_id: MongoClient.ObjectId(user_id),
+        trip_id: MongoClient.ObjectId(trip_id),
+        confirmation_num,       
+        flight_num,       
+        departure_airport,       
+        arrival_airport,    
+        departure_time,    
+        arrival_time,        
+        departure_date,        
+        arrival_date
+    };
+    
+    const result = await db.collection('flights').insertOne(newFlight);
+    res.status(201).json({ message: 'Activity added successfully', trip_id: result.insertedId });
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while adding the flight' });
+    }    
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
