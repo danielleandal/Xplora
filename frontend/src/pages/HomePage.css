@@ -24,6 +24,13 @@
   flex-direction: row;
   flex: 1;
   justify-content: start;
+  font-size: 0;
+}
+
+#homepage-logo {
+  min-height: 40px;
+  height: 2.5vw;
+  width: auto;
 }
 
 .links-section{
@@ -31,6 +38,7 @@
   flex-direction: row;
   flex: 1;
   justify-content: center;
+  font-size: 1.2rem;
 }
 
 .user-section{
@@ -44,8 +52,10 @@
 .user-section button{
   flex-grow: 1;
   max-width: 100px;
+  height: 100%;
   border-radius: 30px;
   text-align: center;
+  text-wrap: nowrap;
 }
 
 #login-btn{
@@ -59,10 +69,6 @@
 
 #register-btn a{
  color: white;
-}
-
-.homepage-logo {
-  height: 40px;
 }
 
 .homepage-main{
@@ -80,8 +86,17 @@
 .homepage-intro{
   display: flex;
   flex-direction: column;
-  gap: 50px;
-  max-width: 50%;
+  gap: 100px;
+  width: 50%;
+  white-space: normal; 
+  flex-grow: 1; 
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.homepage-intro h1{
+  font-size: 400%;
+  margin: 0 5%;
 }
 
 .homepage-intro h1 span{
@@ -91,14 +106,21 @@
 .homepage-intro button{
   background-color: #6A0DAD;
   color: white;
-  max-width: 40%;
+  max-width: 35%;
+  font-size: 1.2rem;
+  border-radius: 30px;
+  margin-inline: 5%;
+}
+
+.homepage-intro button a{
+  display: block;
 }
 
 .map-section{
   display: flex;
   flex-direction: column;
   width: 50%;
-  flex: 1;
+  flex-grow: 1;
   position: relative;
 }
 

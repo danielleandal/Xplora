@@ -2,35 +2,38 @@
 .login-page {
     display: flex;
     flex-direction: column;
+    align-items: center;
     font-family: 'Poppins', sans-serif;
+    color: #333;
     height: 100vh;
+
 }
 
-.login-main{
+.l-container{
+
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    justify-content: center;
+    flex-direction: row;
+    gap: 80px;
     align-items: center;
-    gap: 50px;
+    height: 70%;
+    justify-content: center;
+}
+
+.login-logo-container{
+    position: sticky;
+
 }
 
 /* Login Container */
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     width: 350px;
     max-width: 400px;
-    padding: 1rem;
+    margin-top: 2rem;
+    padding: 2rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    border: 0.1px solid #cbbaf3;
+    background-color: #f0f8ff;
     text-align: center;
-}
-
-#login-logo{
-    width: 300px;
 }
 
 .login-title {
@@ -38,10 +41,6 @@
     font-size: 1.5rem;
     color: #002a5c;
     font-weight: 600;
-}
-
-.login-form-wrapper{
-    width: 100%;
 }
 
 /* Form Styling */
@@ -53,13 +52,14 @@
 .login-form-field {
     display: flex;
     margin-top: 1rem;
+
 }
 
 .login-input-field {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #cbbaf3;
-    border-radius: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     font-size: 1rem;
     background-color: #fff;
     color: #000000;
@@ -83,15 +83,15 @@
     font-size: 1rem;
     font-weight: bold;
     color: #fff;
-    background-color: #02b3d4;
+    background-color: #6A0DAD;
     border: none;
-    border-radius: 50px;
+    border-radius: 4px;
     cursor: pointer;
     margin-top: 2rem;
 }
 
 .login-submit-button:hover {
-    background-color: #02b3d4CC;
+    background-color: #8750ae;
 }
 
 .login-submit-button:disabled {
@@ -99,8 +99,9 @@
     cursor: not-allowed;
 }
 
+/* Signup Link */
 .signup-link {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     font-size: 0.875rem;
 }
 

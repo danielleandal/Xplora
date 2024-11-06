@@ -20,15 +20,15 @@ const HomePage: React.FC = () => {
       <header className="homepage-header">
         <div className="logo-section">
           <Link to="/">
-            <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+            <img src={logo} alt="Xplora Logo" id="homepage-logo" />
           </Link>
         </div>
         <div className="links-section">
           <div><Link to="/how-it-works">How it works</Link></div>
         </div>
         <div className="user-section">
-          <button id="login-btn"><Link to="/login">Login</Link></button>
-          <button id="register-btn"><Link to="/sign-up">Register</Link></button>
+          <button id="login-btn"><Link to="/login">Sign In</Link></button>
+          <button id="register-btn"><Link to="/sign-up">Sign Up</Link></button>
         </div>
       </header>
 

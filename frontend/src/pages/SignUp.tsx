@@ -32,91 +32,78 @@ const SignupSchema = Yup.object().shape({
 const SignupForm: React.FC = () => {
     return (
         <div className="signup-page">
-            <header className="homepage-header">
+            <div className="sign-up-main">
                 <Link to="/">
-                    <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                    <img id="sign-up-logo" src={logo} />
                 </Link>
-                <nav className="homepage-nav">
-                    <ul>
-                        <li><Link to="/how-it-works">How it works</Link></li>
-                        <li><Link to="/sign-up">Sign Up</Link></li>
-                        <li><Link to="/login">Sign In</Link></li>
-                  
-                    </ul>
-                </nav>
-            </header>
-            <div className="another-container">
-                <div className="logo-container">
-                <img src={logo} alt="Xplora Logo" className='big-logo' />
-                    <h1>Discover the World Your Way </h1>
-                </div>
                 <div className="signup-container">
-                    <h2 className="signup-title">Sign Up!</h2>
-                    <Formik
-                        initialValues={{
-                            email: '',
-                            firstName: '',
-                            lastName: '',
-                            password: '',
-                            confirmPassword: '',
-                        }}
-                        validationSchema={SignupSchema}
-                        onSubmit={(values: SignupFormValues) => {
-                            console.log(values);
-                        }}
-                    >
-                        {({ isSubmitting }) => (
-                            <Form className="signup-form">
-                                
-                                {/*  email field */}
-                                <div className="signup-form-field">
-                                    <Field type="email" name="email" placeholder="Email" className="signup-input-field" />
-                                </div>
-                                <div className="signup-error">
-                                    <ErrorMessage name="email" component="div" className="error-message" />
-                                </div>
+                    <div className='sign-up-form-wrapper'>
+                        <Formik
+                            initialValues={{
+                                email: '',
+                                firstName: '',
+                                lastName: '',
+                                password: '',
+                                confirmPassword: '',
+                            }}
+                            validationSchema={SignupSchema}
+                            onSubmit={(values: SignupFormValues) => {
+                                console.log(values);
+                            }}
+                        >
+                            {({ isSubmitting }) => (
+                                <Form className="signup-form">
 
-                                {/* firstname field */}
-                                <div className="signup-form-field">
-                                    <Field type="text" name="firstName" placeholder="First Name" className="signup-input-field" />
-                                </div>
-                                <div className="signup-error">
-                                    <ErrorMessage name="firstName" component="div" className="error-message" />
-                                </div>
+                                    {/*  email field */}
+                                    <div className="signup-form-field">
+                                        <Field type="email" name="email" placeholder="Email" className="signup-input-field" />
+                                    </div>
+                                    <div className="signup-error">
+                                        <ErrorMessage name="email" component="div" className="signup-error-message" />
+                                    </div>
 
-                                {/* lastname field */}
-                                <div className="signup-form-field">
-                                    <Field type="text" name="lastName" placeholder="Last Name" className="signup-input-field" />
-                                </div>
-                                <div className="signup-error">
-                                    <ErrorMessage name="lastName" component="div" className="error-message" />
-                                </div>
+                                    {/* firstname field */}
+                                    <div className="signup-form-field">
+                                        <Field type="text" name="firstName" placeholder="First Name" className="signup-input-field" />
+                                    </div>
+                                    <div className="signup-error">
+                                        <ErrorMessage name="firstName" component="div" className="signup-error-message" />
+                                    </div>
 
-                                {/* password field */}
-                                <div className="signup-form-field">
-                                    <Field type="password" name="password" placeholder="Password" className="signup-input-field" />
-                                </div>
-                                <div className="signup-error">
-                                    <ErrorMessage name="password" component="div" className="error-message" />
-                                </div>
+                                    {/* lastname field */}
+                                    <div className="signup-form-field">
+                                        <Field type="text" name="lastName" placeholder="Last Name" className="signup-input-field" />
+                                    </div>
+                                    <div className="signup-error">
+                                        <ErrorMessage name="lastName" component="div" className="signup-error-message" />
+                                    </div>
 
-                                {/* confirm password field */}
-                                <div className="signup-form-field">
-                                    <Field type="password" name="confirmPassword" placeholder="Verify Password" className="signup-input-field" />
-                                </div>
-                                <div className="signup-error">
-                                    <ErrorMessage name="confirmPassword" component="div" className="error-message" />
-                                </div>
+                                    {/* password field */}
+                                    <div className="signup-form-field">
+                                        <Field type="password" name="password" placeholder="Password" className="signup-input-field" />
+                                    </div>
+                                    <div className="signup-error">
+                                        <ErrorMessage name="password" component="div" className="signup-error-message" />
+                                    </div>
 
-                                <button type="submit" disabled={isSubmitting} className="signup-submit-button">
-                                    Get Exploring!
-                                </button>
-                            </Form>
-                        )}
-                    </Formik>
-                    <p className="signup-link">Already have an account? <Link to="/login">Log In</Link></p>
+                                    {/* confirm password field */}
+                                    <div className="signup-form-field">
+                                        <Field type="password" name="confirmPassword" placeholder="Verify Password" className="signup-input-field" />
+                                    </div>
+                                    <div className="signup-error">
+                                        <ErrorMessage name="confirmPassword" component="div" className="signup-error-message" />
+                                    </div>
+
+                                    <button type="submit" disabled={isSubmitting} className="signup-submit-button">
+                                        Get Exploring!
+                                    </button>
+                                </Form>
+                            )}
+                        </Formik>
+                        <p className="login-link">Already have an account? <Link to="/login">Sign In</Link></p>
+                    </div>
                 </div>
-            </div> 
+            </div>
         </div>
     );
 };
