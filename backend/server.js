@@ -504,6 +504,28 @@ app.put('/api/trips/:id/accommodations/:tripId', async (req, res) => {
     }
 });
 
+//ACCOMMODATIONS --DELETE to remove accommodations
+app.delete('/api/trips/:id/accommodations/:accommodationsId', async (req, res) =>{
+    const { id, accommodationsId } = req.params;
+    try{
+        const db = client.db('xplora');
+        const result = await db.collection('accommodations').deleteOne(
+            {
+                user_id: MongoClient.ObjectId(id),
+                trip_id: MongoClient.ObjectId(id), 
+                _id: MongoClient.ObjectId(accommodationsId)
+            });
+            if (result.deletedCount > 0){
+                res.status(200).json({ message: 'Accommodations deleted successfully' });
+            } else{
+                res.status(404).json({ error: 'Accommodations not found' });
+            }
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while deleting the accommodations' });
+    }
+});
+
 // WRITE EVERYTHING ABOVE THESE LINES
 
 app.listen(PORT, () => {
