@@ -85,7 +85,7 @@ app.post('/api/register', async (req, res, next) => {
 
 //TRIPS -- POST to add a new trip. 
 app.post('/api/trips', async (req, res) => {
-    const { user_id, name, city, start_date, end_date, notes, picture_url} = req.body;
+    const { user_id, name, city, start_date, end_date, notes, picture_url } = req.body;
 
     try {
         const db = client.db('xplora');
@@ -98,9 +98,9 @@ app.post('/api/trips', async (req, res) => {
             end_date
         });
         if (existingTrip) {
-            return res.status(409).json ({error: 'A similar trip already exists'});
+            return res.status(409).json({ error: 'A similar trip already exists' });
         }
-        
+
         const newTrip = {
             user_id: MongoClient.ObjectId(user_id),
             name,
@@ -110,7 +110,7 @@ app.post('/api/trips', async (req, res) => {
             notes,
             picture_url,
         };
-        
+
         const result = await db.collection('trips').insertOne(newTrip);
         res.status(201).json({ message: 'Trip added successfully', trip_id: result.insertedId });
     } catch (error) {
@@ -120,17 +120,17 @@ app.post('/api/trips', async (req, res) => {
 
 //TRIPS -- GET to retrieve all trips in database
 app.get('/api/trips', async (req, res) => {
-    const { user_id, name, city, start_date, end_date, notes, picture_url} = req.body;
+    const userId = req.body.user_id;
 
-    try{
+    try {
         const db = client.db('xplora');
-        const trips = await db.collection('trips').find().toArray();
+        const trips = await db.collection('trips').find({ user_id: MongoClient.ObjectId(userId) }).toArray();
         res.json(trips);
-        } catch (err) {
-            res.status(500).json({ error: 'An error occurred while retrieving the trips' });
-        }
+    } catch (err) {
+        res.status(500).json({ error: 'An error occurred while retrieving the trips' });
+    }
 });
-  
+
 //TRIPS -- PUT to update trip
 app.put('/api/trips/:id', async (req, res) => {
     const { id } = req.params;
@@ -165,18 +165,18 @@ app.put('/api/trips/:id', async (req, res) => {
 //TRIPS -- DELETE to remove a trip from db
 app.delete('/api/trips/:id', async (req, res) => {
     const { id } = req.params;
- 
+
     try {
         const db = client.db('xplora');
-        const result = await db.collection('trips').deleteOne({ _id: MongoClient.ObjectId(id)});
+        const result = await db.collection('trips').deleteOne({ _id: MongoClient.ObjectId(id) });
         if (result.deletedCount > 0) {
             res.status(200).json({ message: 'Trip deleted successfully' });
-            } else {
-                res.status(404).json({ error: 'Trip not found' });
-            }
+        } else {
+            res.status(404).json({ error: 'Trip not found' });
+        }
     }
-    catch (error){
-        res.status(500).json({ error: 'An error occured while deleting the trip'});
+    catch (error) {
+        res.status(500).json({ error: 'An error occured while deleting the trip' });
     }
 
 });
@@ -184,53 +184,53 @@ app.delete('/api/trips/:id', async (req, res) => {
 //ACTIVITY -- POST an activity to a trip
 app.post('/api/trips/:id/activities', async (req, res) => {
     const { id } = req.params;
-    const {user_id, trip_id, name, date, time, location, notes} = req.body;
+    const { user_id, trip_id, name, date, time, location, notes } = req.body;
 
 
-    try{
-    const db = client.db('xplora');
+    try {
+        const db = client.db('xplora');
 
-    const existingActivity = await db.collection('activities').findOne({
-        user_id: MongoClient.ObjectId(user_id),
-        trip_id: MongoClient.ObjectId(trip_id),
-        name,
-        date,
-        time,
-        location,
-        notes
-    });
-    if (existingActivity) {
-        return res.status(409).json ({error: 'A similar activity already exists'});
-    }
+        const existingActivity = await db.collection('activities').findOne({
+            user_id: MongoClient.ObjectId(user_id),
+            trip_id: MongoClient.ObjectId(trip_id),
+            name,
+            date,
+            time,
+            location,
+            notes
+        });
+        if (existingActivity) {
+            return res.status(409).json({ error: 'A similar activity already exists' });
+        }
 
-    const newActivity = {
-        user_id: MongoClient.ObjectId(user_id),
-        trip_id: MongoClient.ObjectId(trip_id),
-        name,
-        date,
-        time,
-        location,
-        notes
-    };
-    
-    const result = await db.collection('activities').insertOne(newActivity);
-    res.status(201).json({ message: 'Activity added successfully', trip_id: result.insertedId });
+        const newActivity = {
+            user_id: MongoClient.ObjectId(user_id),
+            trip_id: MongoClient.ObjectId(trip_id),
+            name,
+            date,
+            time,
+            location,
+            notes
+        };
+
+        const result = await db.collection('activities').insertOne(newActivity);
+        res.status(201).json({ message: 'Activity added successfully', trip_id: result.insertedId });
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while adding the activity' });
-    }    
+    }
 });
 
 //ACTIVITY -- GET all activities in a trip
 app.get('/api/trips/:id/activities', async (req, res) => {
     const { id } = req.params;
-    try{
+    try {
         const db = client.db('xplora');
-        const activities = await db.collection('activities').find({trip_id: MongoClient.ObjectId(id)}).
-        sort({date: 1}).toArray();
+        const activities = await db.collection('activities').find({ trip_id: MongoClient.ObjectId(id) }).
+            sort({ date: 1 }).toArray();
         res.json(activities);
-        } catch (error) {
-            res.status(500).json({ error: 'An error occurred while fetching activities' });
-        }
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while fetching activities' });
+    }
 });
 
 //ACTIVITY -- PUT to update an activity
@@ -238,12 +238,12 @@ app.put('/api/trips/:id/activities/:activityId', async (req, res) => {
     const { id, activityId } = req.params;
     const { name, date, time, location, notes } = req.body;
 
-    try{
+    try {
         const db = client.db('xplora');
         const result = await db.collection('activities').updateOne(
             {
                 user_id: MongoClient.ObjectId(id),
-                trip_id: MongoClient.ObjectId(id), 
+                trip_id: MongoClient.ObjectId(id),
                 _id: MongoClient.ObjectId(activityId)
             },
             {
@@ -256,35 +256,35 @@ app.put('/api/trips/:id/activities/:activityId', async (req, res) => {
                 }
             }
         );
-        if (result.matchedCount > 0){
+        if (result.matchedCount > 0) {
             res.status(200).json({ message: 'Activity updated successfully' });
-        }else{
+        } else {
             res.status(404).json({ error: 'Activity not found' });
-        }        
+        }
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'An error occurred while updating the activity' });
     }
 });
 
 //ACTIVITY --DELETE to remove an activity
-app.delete('/api/trips/:id/activities/:activityId', async (req, res) =>{
+app.delete('/api/trips/:id/activities/:activityId', async (req, res) => {
     const { id, activityId } = req.params;
-    try{
+    try {
         const db = client.db('xplora');
         const result = await db.collection('activities').deleteOne(
             {
                 user_id: MongoClient.ObjectId(id),
-                trip_id: MongoClient.ObjectId(id), 
+                trip_id: MongoClient.ObjectId(id),
                 _id: MongoClient.ObjectId(activityId)
             });
-            if (result.deletedCount > 0){
-                res.status(200).json({ message: 'Activity deleted successfully' });
-            } else{
-                res.status(404).json({ error: 'Activity not found' });
-            }
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: 'Activity deleted successfully' });
+        } else {
+            res.status(404).json({ error: 'Activity not found' });
+        }
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'An error occurred while deleting the activity' });
     }
 });
@@ -293,115 +293,115 @@ app.delete('/api/trips/:id/activities/:activityId', async (req, res) =>{
 //FLIGHTS -- POST a flight to a trip
 app.post('/api/trips/:id/flights', async (req, res) => {
     const { id } = req.params;
-    const {user_id, trip_id, confirmation_num, flight_num,departure_airport,arrival_airport,departure_time,arrival_time,departure_date,arrival_date} = req.body;
+    const { user_id, trip_id, confirmation_num, flight_num, departure_airport, arrival_airport, departure_time, arrival_time, departure_date, arrival_date } = req.body;
 
 
-    try{
-    const db = client.db('xplora');
+    try {
+        const db = client.db('xplora');
 
-    const existingFlight = await db.collection('flights').findOne({
-        user_id: MongoClient.ObjectId(user_id),
-        trip_id: MongoClient.ObjectId(trip_id),
-        confirmation_num,       
-        flight_num,       
-        departure_airport,       
-        arrival_airport,    
-        departure_time,    
-        arrival_time,        
-        departure_date,        
-        arrival_date
-    });
-    if (existingFlight) {
-        return res.status(409).json ({error: 'A similar flight already exists'});
-    }
+        const existingFlight = await db.collection('flights').findOne({
+            user_id: MongoClient.ObjectId(user_id),
+            trip_id: MongoClient.ObjectId(trip_id),
+            confirmation_num,
+            flight_num,
+            departure_airport,
+            arrival_airport,
+            departure_time,
+            arrival_time,
+            departure_date,
+            arrival_date
+        });
+        if (existingFlight) {
+            return res.status(409).json({ error: 'A similar flight already exists' });
+        }
 
-    const newflight = {
-        user_id: MongoClient.ObjectId(user_id),
-        trip_id: MongoClient.ObjectId(trip_id),
-        confirmation_num,       
-        flight_num,       
-        departure_airport,       
-        arrival_airport,    
-        departure_time,    
-        arrival_time,        
-        departure_date,        
-        arrival_date
-    };
-    
-    const result = await db.collection('flights').insertOne(newFlight);
-    res.status(201).json({ message: 'Activity added successfully', trip_id: result.insertedId });
+        const newflight = {
+            user_id: MongoClient.ObjectId(user_id),
+            trip_id: MongoClient.ObjectId(trip_id),
+            confirmation_num,
+            flight_num,
+            departure_airport,
+            arrival_airport,
+            departure_time,
+            arrival_time,
+            departure_date,
+            arrival_date
+        };
+
+        const result = await db.collection('flights').insertOne(newFlight);
+        res.status(201).json({ message: 'Activity added successfully', trip_id: result.insertedId });
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while adding the flight' });
-    }    
+    }
 });
 
 //FLIGHTS -- GET all flights in a trip
 app.get('/api/trips/:id/flights', async (req, res) => {
     const { id } = req.params;
-    try{
+    try {
         const db = client.db('xplora');
-        const activities = await db.collection('flights').find({trip_id: MongoClient.ObjectId(id)}).sort({departure_date : 1}).toArray();
+        const activities = await db.collection('flights').find({ trip_id: MongoClient.ObjectId(id) }).sort({ departure_date: 1 }).toArray();
         res.json(flights);
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching flights' });
-        }
+    }
 });
 
 //FLIGHTS -- PUT to update a flight
 app.put('/api/trips/:id/flights/:tripId', async (req, res) => {
     const { id, tripId } = req.params;
-    const {user_id, trip_id, confirmation_num, flight_num,departure_airport,arrival_airport,departure_time,arrival_time,departure_date,arrival_date} = req.body;
+    const { user_id, trip_id, confirmation_num, flight_num, departure_airport, arrival_airport, departure_time, arrival_time, departure_date, arrival_date } = req.body;
 
-    try{
+    try {
         const db = client.db('xplora');
         const result = await db.collection('flights').updateOne(
             {
                 user_id: MongoClient.ObjectId(id),
-                trip_id: MongoClient.ObjectId(id), 
+                trip_id: MongoClient.ObjectId(id),
                 _id: MongoClient.ObjectId(flightId)
             },
             {
                 $set: {
-                    confirmation_num,       
-                    flight_num,       
-                    departure_airport,       
-                    arrival_airport,    
-                    departure_time,    
-                    arrival_time,        
-                    departure_date,        
+                    confirmation_num,
+                    flight_num,
+                    departure_airport,
+                    arrival_airport,
+                    departure_time,
+                    arrival_time,
+                    departure_date,
                     arrival_date
                 }
             }
         );
-        if (result.matchedCount > 0){
+        if (result.matchedCount > 0) {
             res.status(200).json({ message: 'Flight updated successfully' });
-        }else{
+        } else {
             res.status(404).json({ error: 'Flight not found' });
-        }        
+        }
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'An error occurred while updating the flight' });
     }
 });
 //FLIGHTS --DELETE to remove a flight
-app.delete('/api/trips/:id/flights/:flightId', async (req, res) =>{
+app.delete('/api/trips/:id/flights/:flightId', async (req, res) => {
     const { id, flightId } = req.params;
-    try{
+    try {
         const db = client.db('xplora');
         const result = await db.collection('flights').deleteOne(
             {
                 user_id: MongoClient.ObjectId(id),
-                trip_id: MongoClient.ObjectId(id), 
+                trip_id: MongoClient.ObjectId(id),
                 _id: MongoClient.ObjectId(flightId)
             });
-            if (result.deletedCount > 0){
-                res.status(200).json({ message: 'Flight deleted successfully' });
-            } else{
-                res.status(404).json({ error: 'Flight not found' });
-            }
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: 'Flight deleted successfully' });
+        } else {
+            res.status(404).json({ error: 'Flight not found' });
+        }
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'An error occurred while deleting the flight' });
     }
 });
@@ -411,117 +411,117 @@ app.delete('/api/trips/:id/flights/:flightId', async (req, res) =>{
 //ACCOMMODATIONS -- POST accommodations to a trip
 app.post('/api/trips/:id/accommodations', async (req, res) => {
     const { id } = req.params;
-    const {user_id, trip_id, confirmation_num, name,address,checkin_date,checkout_date,checkout_time,checkin_time,} = req.body;
+    const { user_id, trip_id, confirmation_num, name, address, checkin_date, checkout_date, checkout_time, checkin_time, } = req.body;
 
 
-    try{
-    const db = client.db('xplora');
+    try {
+        const db = client.db('xplora');
 
-    const existingAccommodations = await db.collection('accommodations').findOne({
-        user_id: MongoClient.ObjectId(user_id),
-        trip_id: MongoClient.ObjectId(trip_id),
-        confirmation_num,       
-        name,       
-        address,       
-        checkin_date,    
-        checkout_date,    
-        checkout_time,        
-        checkin_time,        
-        
-    });
-    if (existingAccommodations) {
-        return res.status(409).json ({error: 'A similar accommodations already exists'});
-    }
+        const existingAccommodations = await db.collection('accommodations').findOne({
+            user_id: MongoClient.ObjectId(user_id),
+            trip_id: MongoClient.ObjectId(trip_id),
+            confirmation_num,
+            name,
+            address,
+            checkin_date,
+            checkout_date,
+            checkout_time,
+            checkin_time,
 
-    const newAccommodations = {
-        user_id: MongoClient.ObjectId(user_id),
-        trip_id: MongoClient.ObjectId(trip_id),
-        confirmation_num,       
-        name,       
-        address,       
-        checkin_date,    
-        checkout_date,    
-        checkout_time,        
-        checkin_time,        
-        
-    };
-    
-    const result = await db.collection('accommodations').insertOne(newAccommodations);
-    res.status(201).json({ message: 'accommodations added successfully', trip_id: result.insertedId });
+        });
+        if (existingAccommodations) {
+            return res.status(409).json({ error: 'A similar accommodations already exists' });
+        }
+
+        const newAccommodations = {
+            user_id: MongoClient.ObjectId(user_id),
+            trip_id: MongoClient.ObjectId(trip_id),
+            confirmation_num,
+            name,
+            address,
+            checkin_date,
+            checkout_date,
+            checkout_time,
+            checkin_time,
+
+        };
+
+        const result = await db.collection('accommodations').insertOne(newAccommodations);
+        res.status(201).json({ message: 'accommodations added successfully', trip_id: result.insertedId });
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while adding the accommodations' });
-    }    
+    }
 });
 
 //ACCOMMODATIONS -- GET all accommodations in a trip
 app.get('/api/trips/:id/accommodations', async (req, res) => {
     const { id } = req.params;
-    try{
+    try {
         const db = client.db('xplora');
-        const accommodations = await db.collection('accommodations').find({trip_id: MongoClient.ObjectId(id)}).sort({checkin_time : 1}).toArray();
+        const accommodations = await db.collection('accommodations').find({ trip_id: MongoClient.ObjectId(id) }).sort({ checkin_time: 1 }).toArray();
         res.json(accommodations);
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching accommodations' });
-        }
+    }
 });
 
 
 //ACCOMMODATIONS -- PUT to update accommodations
 app.put('/api/trips/:id/accommodations/:tripId', async (req, res) => {
     const { id, tripId } = req.params;
-    const {user_id, trip_id, confirmation_num, name,address,checkin_date,checkout_date,checkout_time,checkin_time,} = req.body;
+    const { user_id, trip_id, confirmation_num, name, address, checkin_date, checkout_date, checkout_time, checkin_time, } = req.body;
 
-    try{
+    try {
         const db = client.db('xplora');
         const result = await db.collection('accommodations').updateOne(
             {
                 user_id: MongoClient.ObjectId(id),
-                trip_id: MongoClient.ObjectId(id), 
+                trip_id: MongoClient.ObjectId(id),
                 _id: MongoClient.ObjectId(accommodationsId)
             },
             {
                 $set: {
-                    confirmation_num,       
-                    name,       
-                    address,       
-                    checkin_date,    
-                    checkout_date,    
-                    checkout_time,        
-                    checkin_time,        
-                    
+                    confirmation_num,
+                    name,
+                    address,
+                    checkin_date,
+                    checkout_date,
+                    checkout_time,
+                    checkin_time,
+
                 }
             }
         );
-        if (result.matchedCount > 0){
+        if (result.matchedCount > 0) {
             res.status(200).json({ message: 'Accommodations updated successfully' });
-        }else{
+        } else {
             res.status(404).json({ error: 'Accommodations not found' });
-        }        
+        }
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'An error occurred while updating the accommodations' });
     }
 });
 
 //ACCOMMODATIONS --DELETE to remove accommodations
-app.delete('/api/trips/:id/accommodations/:accommodationsId', async (req, res) =>{
+app.delete('/api/trips/:id/accommodations/:accommodationsId', async (req, res) => {
     const { id, accommodationsId } = req.params;
-    try{
+    try {
         const db = client.db('xplora');
         const result = await db.collection('accommodations').deleteOne(
             {
                 user_id: MongoClient.ObjectId(id),
-                trip_id: MongoClient.ObjectId(id), 
+                trip_id: MongoClient.ObjectId(id),
                 _id: MongoClient.ObjectId(accommodationsId)
             });
-            if (result.deletedCount > 0){
-                res.status(200).json({ message: 'Accommodations deleted successfully' });
-            } else{
-                res.status(404).json({ error: 'Accommodations not found' });
-            }
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: 'Accommodations deleted successfully' });
+        } else {
+            res.status(404).json({ error: 'Accommodations not found' });
+        }
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ error: 'An error occurred while deleting the accommodations' });
     }
 });
@@ -551,10 +551,10 @@ app.post('/api/forgot-password', async (req, res) => {
         );
 
         const transporter = nodemailer.createTransport({
-            service: 'Proton',  
+            service: 'Proton',
             auth: {
-                user: 'team10poosd@proton.me',  
-                pass: 'FriendersTeam10!',  
+                user: 'team10poosd@proton.me',
+                pass: 'FriendersTeam10!',
             },
         });
 
@@ -578,21 +578,21 @@ app.post('/api/reset-password', async (req, res) => {
 
     try {
         const db = client.db('xplora');
-        const user = await db.collection('users').findOne({ 
-            _id: MongoClient.ObjectId(id), 
+        const user = await db.collection('users').findOne({
+            _id: MongoClient.ObjectId(id),
             resetToken: token,
-            resetTokenExpiration: { $gt: Date.now() } 
+            resetTokenExpiration: { $gt: Date.now() }
         });
 
         if (!user) {
             return res.status(400).json({ error: 'Invalid or expired token' });
         }
 
-        const hashedPassword = crypto.createHash('sha256').update(newPassword).digest('hex'); 
+        const hashedPassword = crypto.createHash('sha256').update(newPassword).digest('hex');
 
         await db.collection('users').updateOne(
             { _id: user._id },
-            { 
+            {
                 $set: { password: hashedPassword },
                 $unset: { resetToken: "", resetTokenExpiration: "" }  // Remove reset fields
             }
