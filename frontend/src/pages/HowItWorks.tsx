@@ -9,7 +9,7 @@ const HowItWorksPage: React.FC = () => {
       <header className="homepage-header">
         <div className="logo-section">
           <Link to="/">
-            <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+            <img src={logo} alt="Xplora Logo" id="homepage-logo" />
           </Link>
         </div>
         <div className="user-section">
