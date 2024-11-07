@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './TripDetails.css';
 import logo from '../images/logo.png';
 import newyork from '../images/new-york.png';
+import { calculateTripDays } from './calculateTripDays';
 
 const TripDetails: React.FC = () => {
     const navigate = useNavigate();
@@ -10,10 +11,6 @@ const TripDetails: React.FC = () => {
     const [flightsOpen, setFlightsOpen] = useState(false);
     const [accommodationsOpen, setAccommodationsOpen] = useState(false);
     const [activitiesOpen, setActivitiesOpen] = useState(false);
-
-    const handleEditTrip = () => {
-        navigate('/edit-trip');
-    };
 
     const toggleDropdown = (dropdownType: string) => {
         if (dropdownType === 'flights') setFlightsOpen(!flightsOpen);
@@ -27,32 +24,71 @@ const TripDetails: React.FC = () => {
         if (type === 'activity') navigate('/add-activity');
     };
 
+    // TODO: Implement with Database
+    async function fetchTripDates(): Promise<{ startDate: string; endDate: string }> {
+        return {
+            // sample data for now 
+            startDate: "2024-12-01",
+            endDate: "2024-12-05"
+        };
+    }
+
+    const [daysCount, setDaysCount] = useState<number | null>(null);
+    const [startDate, setStartDate] = useState<string | null>(null);
+    const [endDate, setEndDate] = useState<string | null>(null);
+
+    useEffect(() => {
+        // Fetch dates from the database and calculate days
+        async function getDatesAndCalculateDays() {
+            const { startDate, endDate } = await fetchTripDates();
+            setStartDate(startDate);
+            setEndDate(endDate);
+
+            const days = calculateTripDays(startDate, endDate);
+            setDaysCount(days);
+        }
+
+        getDatesAndCalculateDays();
+    }, []);
+
     return (
         <div className="trip-details-page">
-            <header className="homepage-header">
+            <header className="tripdetails-header">
                 <Link to="/">
-                    <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                    <img src={logo} alt="Xplora Logo" className="tripdetails-logo" />
                 </Link>
-                <nav className="homepage-nav">
+                <nav className="tripdetails-nav">
                     <ul>
                         <li><Link to="/dashboard">Home</Link></li>
                     </ul>
                 </nav>
             </header>
 
-            <div className="dashboard-i-container">
-                <div className="dashboard-i-header"> Your Itinerary </div>
-                <div className="dashboard-i-content">
+            <div className="tripdetails-i-container">
+                <div className="tripdetails-i-header"> TripName goes here  </div>
+                <div className="tripdetails-i-content">
                     <div className="trip-card-tripdetails">
-                        <div className="trip-details">
-                            <h3 className="trip-name">TripName goes here</h3>
-                            <p className="trip-location">New York City</p>
-                            <p className="trip-dates">2024-12-01 - 2024-12-05 (5 days)</p>
-                            <button className="edit-trip-button" onClick={handleEditTrip}> ✏️ Edit Trip</button>
+                        <div className="deets-and-photo">
+                            <div className="td-trip-details">
+                                <p className="trip-location">Trip Location Here</p>
+                                <p className="trip-dates">
+                                    {startDate && endDate ? (
+                                        <>
+                                            {startDate} - {endDate} ({daysCount !== null ? `${daysCount} days` : 'Calculating...'})
+                                        </>
+                                    ) : (
+                                        "Loading dates..."
+                                    )}
+                                </p>
+                            </div>
+
+                            <div className="tripdetails-image-container">
+                                <img src={newyork} alt="New York City" className="tripdetails-image" />
+                            </div>
                         </div>
 
-                        <div className="trip-image-container">
-                            <img src={newyork} alt="New York City" className="trip-image" />
+                        <div className="note-box">
+                            <p>Note: This is important information about the content above.</p>
                         </div>
                     </div>
 
