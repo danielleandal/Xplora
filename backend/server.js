@@ -31,7 +31,6 @@ app.post('/api/login', async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-       await client.connect();
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne(
@@ -49,9 +48,6 @@ app.post('/api/login', async (req, res, next) => {
         error = 'An error occurred while accessing the database';
         res.status(500).json({ error });
     }
-    finally {
-        await client.close(); // Close client if needed based on connection strategy
-    }
 });
 
 // Register API
@@ -61,7 +57,6 @@ app.post('/api/register', async (req, res, next) => {
     console.log(`${first_name} ${last_name} ${email} ${password}`);
 
     try {
-       await client.connect();
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne({ email: email });
@@ -92,9 +87,6 @@ app.post('/api/register', async (req, res, next) => {
         error = 'An error occurred while accessing the database';
         res.status(500).json({ error });
     }
-    finally {
-        await client.close(); // Close client if needed based on connection strategy
-    }
 });
 
 //TRIPS -- POST to add a new trip. 
@@ -103,7 +95,6 @@ app.post('/api/trips', async (req, res) => {
 
     try {
         const db = client.db('xplora');
-
         const existingTrip = await db.collection('trips').findOne({
             user_id: MongoClient.ObjectId(user_id),
             name,
@@ -134,17 +125,12 @@ app.post('/api/trips', async (req, res) => {
 
 app.get('/api/trips', async (req, res) => {
     try {
-        // Test the connection before the query
-       await client.connect();
         const db = client.db('xplora');
         const trips = await db.collection('trips').find().toArray();
         res.json(trips);
     } catch (error) {
         console.error('Database connection or query error:', error);
         res.status(500).json({ error: 'Database connection or query error' });
-    } 
-    finally {
-        await client.close(); // Close client if needed based on connection strategy
     }
 });
 
