@@ -4,6 +4,17 @@ import './Dashboard.css';
 import TripListItem from '../components/TripListItem';
 import iconlogo from '../images/xplora-icon.png';
 
+export const handleLogout = () => {
+    const navigate = useNavigate();
+
+    localStorage.removeItem('authToken');
+    // Clear user data and navigate to login
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('lastName');
+    localStorage.removeItem('authToken'); // Remove token as well, if needed
+    navigate('/login');
+};
+
 const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
 
 function buildPath(route: string): string {
@@ -49,11 +60,6 @@ const Dashboard: React.FC = () => {
 
         fetchTrips();
     }, [navigate]);
-
-    const handleLogout = () => {
-        localStorage.clear();
-        navigate('/login');
-    };
 
     const handleDeleteTrip = async (id: string) => {
         try {
