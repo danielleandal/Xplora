@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './TripDetails.css';
 import logo from '../images/logo.png';
 import newyork from '../images/new-york.png';
-import { calculateTripDays } from './calculateTripDays';
+import { calculateTripDays } from '../helper-files/calculateTripDays';
 
 const TripDetails: React.FC = () => {
     const navigate = useNavigate();
