@@ -50,17 +50,16 @@ app.post('/api/login', async (req, res, next) => {
     }
 });
 
-//Register API
+// Register API
 app.post('/api/register', async (req, res, next) => {
     let error = '';
     const { first_name, last_name, email, password } = req.body;
+    console.log(`${first_name} ${last_name} ${email} ${password}`);
 
     try {
         const db = client.db('xplora');
 
-        const results = await db.collection('users').findOne(
-            { email: email }
-        );
+        const results = await db.collection('users').findOne({ email: email });
 
         if (!results) {
             const newUser = {
@@ -71,8 +70,15 @@ app.post('/api/register', async (req, res, next) => {
             };
 
             const result = await db.collection('users').insertOne(newUser);
-            message = 'User added successfully';
-            res.status(201).json({ message: message });
+            const message = 'User added successfully';
+
+            // Send the user's data along with the success message
+            res.status(201).json({
+                message: message,
+                first_name: newUser.first_name,
+                last_name: newUser.last_name,
+                email: newUser.email,
+            });
         } else {
             error = 'Email already exists';
             res.status(401).json({ error });
