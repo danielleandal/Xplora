@@ -47,10 +47,21 @@ const Dashboard: React.FC = () => {
     // };
 
     const [inputValue, setInputValue] = useState('');
+    // const [placeholder, setPlaceholder] = useState('');
 
     const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setInputValue(event.target.value);
     };
+
+    // const handleMouseEnter = () => {
+    //     setTimeout(() => {
+    //         setPlaceholder('Search...');
+    //     }, 120);
+    // };
+
+    // const handleMouseLeave = () => {
+    //     setPlaceholder('');
+    // };
 
     return (
         <div className="dashboard">
@@ -60,6 +71,7 @@ const Dashboard: React.FC = () => {
                         <img src={iconlogo} alt="Xplora Logo" id="dashboard-logo" />
                     </Link>
                     <span id='welcome-text'>Welcome, {firstName} {lastName}!</span>
+                    <i className=''></i>
                 </div>
                 <div className='actions-section'>
                     <button id="profile-btn"><Link to="/profile">Profile</Link></button>
@@ -71,13 +83,17 @@ const Dashboard: React.FC = () => {
                     <div className='trip-list-header'>
                         Your upcoming itineraries
                     </div>
-                    <input
-                        id='search-input'
-                        type="text"
-                        value={inputValue}
-                        onChange={handleChange}
-                        placeholder="Search..."
-                    />
+                    <div className='search-container' /*onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}*/>
+                        <input
+                            id='search-input'
+                            type="text"
+                            value={inputValue}
+                            onChange={handleChange}
+                            // placeholder={placeholder}
+                            placeholder='Search...'
+                        />
+                        <i id="search-icon" className="fa fa-search"></i>
+                    </div>
                     <button className="add-trip-btn">+</button>
                     <div className='trip-list-item'>
                         <img src={newyork} alt='trip picture' className='trip-image' />
