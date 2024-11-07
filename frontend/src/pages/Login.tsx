@@ -57,17 +57,17 @@ const LoginForm: React.FC = () => {
                                             'Content-Type': 'application/json',
                                         },
                                         body: JSON.stringify(values),
-                                        
+
                                     });
 
                                     const data = await response.json();
 
                                     if (response.ok) {
                                         console.log('Login successful:', data);
-                                    
+
 
                                         // Store user data in localStorage
-                                        localStorage.setItem('ID;', data.id);
+                                        localStorage.setItem('ID', data.id);
                                         console.log(data.id);
                                         localStorage.setItem('firstName', data.firstName);
                                         localStorage.setItem('lastName', data.lastName);

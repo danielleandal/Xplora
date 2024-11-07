@@ -46,7 +46,8 @@ const Dashboard: React.FC = () => {
         // Fetch trips data
         const fetchTrips = async () => {
             try {
-                const response = await fetch(buildPath('api/trips'));
+                const userId = localStorage.getItem("ID");
+                const response = await fetch(buildPath(`api/trips?user_id=${userId}`));
                 if (response.ok) {
                     const data = await response.json();
                     setTrips(data);

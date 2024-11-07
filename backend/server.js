@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient, ObjectId } = require('mongodb');
 
 const PORT = 5000;
 
@@ -92,11 +92,12 @@ app.post('/api/register', async (req, res, next) => {
 //TRIPS -- POST to add a new trip. 
 app.post('/api/trips', async (req, res) => {
     const { user_id, name, city, start_date, end_date, notes, picture_url } = req.body;
-
+    console.log(user_id);
+    const objectId = new ObjectId(String(user_id));
     try {
         const db = client.db('xplora');
         const existingTrip = await db.collection('trips').findOne({
-            user_id: MongoClient.ObjectId(user_id),
+            user_id: objectId,
             name,
             city,
             start_date,
@@ -107,7 +108,7 @@ app.post('/api/trips', async (req, res) => {
         }
 
         const newTrip = {
-            user_id: MongoClient.ObjectId(user_id),
+            user_id: objectId,
             name,
             city,
             start_date,
@@ -126,7 +127,9 @@ app.post('/api/trips', async (req, res) => {
 app.get('/api/trips', async (req, res) => {
     try {
         const db = client.db('xplora');
-        const trips = await db.collection('trips').find().toArray();
+        const user_id = req.query.user_id;
+        const objectId = new ObjectId(String(user_id));
+        const trips = await db.collection('trips').find({ user_id: objectId }).toArray();
         res.json(trips);
     } catch (error) {
         console.error('Database connection or query error:', error);
@@ -138,6 +141,7 @@ app.get('/api/trips', async (req, res) => {
 app.put('/api/trips/:id', async (req, res) => {
     const { id } = req.params;
     const { name, city, start_date, end_date, notes, picture_url } = req.body;
+    const objectId = new ObjectId(String(id));
 
     try {
         const db = client.db('xplora');
@@ -151,7 +155,7 @@ app.put('/api/trips/:id', async (req, res) => {
         };
 
         const result = await db.collection('trips').updateOne(
-            { _id: MongoClient.ObjectId(id) },
+            { _id: objectId },
             { $set: updatedTrip }
         );
 
@@ -168,10 +172,11 @@ app.put('/api/trips/:id', async (req, res) => {
 //TRIPS -- DELETE to remove a trip from db
 app.delete('/api/trips/:id', async (req, res) => {
     const { id } = req.params;
+    const objectId = new ObjectId(String(id));
 
     try {
         const db = client.db('xplora');
-        const result = await db.collection('trips').deleteOne({ _id: MongoClient.ObjectId(id) });
+        const result = await db.collection('trips').deleteOne({ _id: objectId });
         if (result.deletedCount > 0) {
             res.status(200).json({ message: 'Trip deleted successfully' });
         } else {
