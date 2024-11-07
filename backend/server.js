@@ -31,6 +31,7 @@ app.post('/api/login', async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
+        await client.connect();
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne(
@@ -48,6 +49,9 @@ app.post('/api/login', async (req, res, next) => {
         error = 'An error occurred while accessing the database';
         res.status(500).json({ error });
     }
+    finally {
+        await client.close(); // Close client if needed based on connection strategy
+    }
 });
 
 // Register API
@@ -57,6 +61,7 @@ app.post('/api/register', async (req, res, next) => {
     console.log(`${first_name} ${last_name} ${email} ${password}`);
 
     try {
+        await client.connect();
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne({ email: email });
@@ -86,6 +91,9 @@ app.post('/api/register', async (req, res, next) => {
     } catch (err) {
         error = 'An error occurred while accessing the database';
         res.status(500).json({ error });
+    }
+    finally {
+        await client.close(); // Close client if needed based on connection strategy
     }
 });
 
