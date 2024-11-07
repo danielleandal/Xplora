@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
+import TripListItem from '../components/TripListItem';
 import iconlogo from '../images/xplora-icon.png';
-import newyork from '../images/new-york.png';
 
-export const handleLogout = () => {
-    const navigate = useNavigate();
+const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
 
-    localStorage.removeItem('authToken');
-    // Clear user data and navigate to login
-    localStorage.removeItem('firstName');
-    localStorage.removeItem('lastName');
-    localStorage.removeItem('authToken'); // Remove token as well, if needed
-    navigate('/login');
-};
+function buildPath(route: string): string {
+    if (process.env.NODE_ENV !== 'development') {
+        return `https://${app_name}/${route}`;
+    } else {
+        return `http://localhost:5000/${route}`;
+    }
+}
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
+    const [trips, setTrips] = useState<any[]>([]);
+    const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
         const storedFirstName = localStorage.getItem('firstName');
@@ -30,6 +31,23 @@ const Dashboard: React.FC = () => {
         } else {
             navigate('/login');
         }
+
+        // Fetch trips data
+        const fetchTrips = async () => {
+            try {
+                const response = await fetch(buildPath('api/trips'));
+                if (response.ok) {
+                    const data = await response.json();
+                    setTrips(data);
+                } else {
+                    console.error('Failed to fetch trips');
+                }
+            } catch (error) {
+                console.error('Error fetching trips:', error);
+            }
+        };
+
+        fetchTrips();
     }, [navigate]);
 
     const handleLogout = () => {
@@ -37,31 +55,18 @@ const Dashboard: React.FC = () => {
         navigate('/login');
     };
 
-
-    // const handleEditTrip = () => {
-    //     navigate('/edit-trip'); // Navigate to the EditTrip page
-    // };
-
-    // const handleAddTrip = () => {
-    //     navigate('/addtrip'); // Navigates to /addtrip when button is clicked
-    // };
-
-    const [inputValue, setInputValue] = useState('');
-    // const [placeholder, setPlaceholder] = useState('');
-
-    const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setInputValue(event.target.value);
+    const handleDeleteTrip = async (id: string) => {
+        try {
+            await fetch(buildPath(`/api/trips/${id}`), { method: 'DELETE' });
+            setTrips(trips.filter(trip => trip._id !== id));
+        } catch (error) {
+            console.error('Error deleting trip:', error);
+        }
     };
 
-    // const handleMouseEnter = () => {
-    //     setTimeout(() => {
-    //         setPlaceholder('Search...');
-    //     }, 120);
-    // };
-
-    // const handleMouseLeave = () => {
-    //     setPlaceholder('');
-    // };
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(event.target.value);
+    };
 
     return (
         <div className="dashboard">
@@ -71,7 +76,6 @@ const Dashboard: React.FC = () => {
                         <img src={iconlogo} alt="Xplora Logo" id="dashboard-logo" />
                     </Link>
                     <span id='welcome-text'>Welcome, {firstName} {lastName}!</span>
-                    <i className=''></i>
                 </div>
                 <div className='actions-section'>
                     <button id="profile-btn"><Link to="/profile">Profile</Link></button>
@@ -83,104 +87,30 @@ const Dashboard: React.FC = () => {
                     <div className='trip-list-header'>
                         Your upcoming itineraries
                     </div>
-                    <div className='search-container' /*onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}*/>
+                    <div className='search-container'>
                         <input
                             id='search-input'
                             type="text"
                             value={inputValue}
                             onChange={handleChange}
-                            // placeholder={placeholder}
                             placeholder='Search...'
                         />
                         <i id="search-icon" className="fa fa-search"></i>
                     </div>
                     <button className="add-trip-btn">+</button>
-                    <div className='trip-list-item'>
-                        <img src={newyork} alt='trip picture' className='trip-image' />
-                        <div className='trip-details'>
-                            <span id='trip-title'>NYC 2025</span>
-                            <div id='trip-dates-container'>
-                                <span>New York City</span><span>Aug. 8 - Aug. 20</span>
-                            </div>
-                        </div>
-                        <i id="trip-item-trash-icon" className='fa fa-trash-alt'></i>
-                    </div>
-                    <div className='trip-list-item'>
-                        <img src={newyork} alt='trip picture' className='trip-image' />
-                        <div className='trip-details'>
-                            <span id='trip-title'>NYC 2025</span>
-                            <div id='trip-dates-container'>
-                                <span>New York City</span><span>Aug. 8 - Aug. 20</span>
-                            </div>
-                        </div>
-                        <i id="trip-item-trash-icon" className='fa fa-trash-alt'></i>
-                    </div>
-                    <div className='trip-list-item'>
-                        <img src={newyork} alt='trip picture' className='trip-image' />
-                        <div className='trip-details'>
-                            <span id='trip-title'>NYC 2025</span>
-                            <div id='trip-dates-container'>
-                                <span>New York City</span><span>Aug. 8 - Aug. 20</span>
-                            </div>
-                        </div>
-                        <i id="trip-item-trash-icon" className='fa fa-trash-alt'></i>
-                    </div>
-                    <div className='trip-list-item'>
-                        <img src={newyork} alt='trip picture' className='trip-image' />
-                        <div className='trip-details'>
-                            <span id='trip-title'>NYC 2025</span>
-                            <div id='trip-dates-container'>
-                                <span>New York City</span><span>Aug. 8 - Aug. 20</span>
-                            </div>
-                        </div>
-                        <i id="trip-item-trash-icon" className='fa fa-trash-alt'></i>
-                    </div>
-                    <div className='trip-list-item'>
-                        <img src={newyork} alt='trip picture' className='trip-image' />
-                        <div className='trip-details'>
-                            <span id='trip-title'>NYC 2025</span>
-                            <div id='trip-dates-container'>
-                                <span>New York City</span><span>Aug. 8 - Aug. 20</span>
-                            </div>
-                        </div>
-                        <i id="trip-item-trash-icon" className='fa fa-trash-alt'></i>
-                    </div>
-                    <div className='trip-list-item'>
-                        <img src={newyork} alt='trip picture' className='trip-image' />
-                        <div className='trip-details'>
-                            <span id='trip-title'>NYC 2025</span>
-                            <div id='trip-dates-container'>
-                                <span>New York City</span><span>Aug. 8 - Aug. 20</span>
-                            </div>
-                        </div>
-                        <i id="trip-item-trash-icon" className='fa fa-trash-alt'></i>
-                    </div>
-                    <div className='trip-list-item'>
-                        <img src={newyork} alt='trip picture' className='trip-image' />
-                        <div className='trip-details'>
-                            <span id='trip-title'>NYC 2025</span>
-                            <div id='trip-dates-container'>
-                                <span>New York City</span><span>Aug. 8 - Aug. 20</span>
-                            </div>
-                        </div>
-                        <i id="trip-item-trash-icon" className='fa fa-trash-alt'></i>
-                    </div>
-                    <div className='trip-list-item'>
-                        <img src={newyork} alt='trip picture' className='trip-image' />
-                        <div className='trip-details'>
-                            <span id='trip-title'>NYC 2025</span>
-                            <div id='trip-dates-container'>
-                                <span>New York City</span><span>Aug. 8 - Aug. 20</span>
-                            </div>
-                        </div>
-                        <i id="trip-item-trash-icon" className='fa fa-trash-alt'></i>
-                    </div>
+                    {trips.map((trip) => (
+                        <TripListItem
+                            key={trip._id}
+                            title={trip.name}
+                            location={trip.city}
+                            dates={`${trip.start_date} - ${trip.end_date}`}
+                            onDelete={() => handleDeleteTrip(trip._id)}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
     );
-
-
 };
 
 export default Dashboard;

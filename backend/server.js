@@ -31,6 +31,7 @@ app.post('/api/login', async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
+        await client.connect();
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne(
@@ -48,6 +49,9 @@ app.post('/api/login', async (req, res, next) => {
         error = 'An error occurred while accessing the database';
         res.status(500).json({ error });
     }
+    finally {
+        await client.close(); // Close client if needed based on connection strategy
+    }
 });
 
 // Register API
@@ -57,6 +61,7 @@ app.post('/api/register', async (req, res, next) => {
     console.log(`${first_name} ${last_name} ${email} ${password}`);
 
     try {
+        await client.connect();
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne({ email: email });
@@ -86,6 +91,9 @@ app.post('/api/register', async (req, res, next) => {
     } catch (err) {
         error = 'An error occurred while accessing the database';
         res.status(500).json({ error });
+    }
+    finally {
+        await client.close(); // Close client if needed based on connection strategy
     }
 });
 
@@ -124,16 +132,18 @@ app.post('/api/trips', async (req, res) => {
     }
 });
 
-//TRIPS -- GET to retrieve all trips in database
 app.get('/api/trips', async (req, res) => {
-    const userId = req.body.user_id;
-
     try {
+        // Test the connection before the query
+        await client.connect();
         const db = client.db('xplora');
-        const trips = await db.collection('trips').find({ user_id: MongoClient.ObjectId(userId) }).toArray();
+        const trips = await db.collection('trips').find().toArray();
         res.json(trips);
-    } catch (err) {
-        res.status(500).json({ error: 'An error occurred while retrieving the trips' });
+    } catch (error) {
+        console.error('Database connection or query error:', error);
+        res.status(500).json({ error: 'Database connection or query error' });
+    } finally {
+        await client.close(); // Close client if needed based on connection strategy
     }
 });
 
