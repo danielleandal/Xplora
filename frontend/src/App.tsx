@@ -9,7 +9,7 @@ import Dashboard from './pages/Dashboard';
 // import Profile from './pages/Profile'
 // import ProfileSecurityPage from './pages/ProfileSecurity'
 // import AddTrip from './pages/AddTrip'
-// import EditTrip from './pages/EditTrip';
+import EditTrip from './pages/EditTrip';
 import './App.css';
 
 const App: React.FC = () => {
@@ -36,6 +36,7 @@ const App: React.FC = () => {
         <Route path="/trip-details" element={<TripDetails />} />
         <Route path="/profile-security" element={<ProfileSecurityPage />} />
         */}
+           <Route path="/edit-trip" element={<EditTrip />} />
       </Routes>
     </Router>
   );

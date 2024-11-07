@@ -1,8 +1,8 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
-import './SignUp.css'; // Ensure CSS is appropriately aligned
+import { Link, useNavigate } from 'react-router-dom';
+import './SignUp.css';
 import logo from '../images/logo.png'; // Adjust path if needed
 
 interface SignupFormValues {
@@ -29,7 +29,21 @@ const SignupSchema = Yup.object().shape({
         .required('Required')
 });
 
+
+const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
+
+function buildPath(route: string): string {
+    if (process.env.NODE_ENV !== 'development') {
+        return `https://${app_name}/${route}`;
+    } else {
+        return `http://localhost:5000/${route}`;
+    }
+}
+
+
 const SignupForm: React.FC = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="signup-page">
             <div className="sign-up-main">
@@ -47,14 +61,50 @@ const SignupForm: React.FC = () => {
                                 confirmPassword: '',
                             }}
                             validationSchema={SignupSchema}
-                            onSubmit={(values: SignupFormValues) => {
-                                console.log(values);
+                            onSubmit={async (values: SignupFormValues, { setSubmitting, setErrors }) => {
+                                const payload = {
+                                    first_name: values.firstName,
+                                    last_name: values.lastName,
+                                    email: values.email,
+                                    password: values.password,
+                                };
+                                try {
+                                    const response = await fetch(buildPath('api/register'), {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify(payload),
+                                    });
+                            
+                                    const data = await response.json();
+                            
+                                    if (response.ok) {
+                                        console.log('User registered successfully:', data.message);
+
+                                        console.log('User registered successfully:', data.first_name);
+                                        localStorage.setItem('firstName', data.first_name);
+                                        localStorage.setItem('lastName', data.last_name);
+                                       // localStorage.setItem('email', data.email);
+                                        
+                                        
+                                        navigate('/Dashboard'); // Redirect to login page on success
+
+                                    } else {
+                                        setErrors({ email: data.error });
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    setErrors({ email: 'An error occurred. Please try again.' });
+                                } finally {
+                                    setSubmitting(false);
+                                }
                             }}
                         >
                             {({ isSubmitting }) => (
                                 <Form className="signup-form">
 
-                                    {/*  email field */}
+                                    {/* Email field */}
                                     <div className="signup-form-field">
                                         <Field type="email" name="email" placeholder="Email" className="signup-input-field" />
                                     </div>
@@ -62,7 +112,7 @@ const SignupForm: React.FC = () => {
                                         <ErrorMessage name="email" component="div" className="signup-error-message" />
                                     </div>
 
-                                    {/* firstname field */}
+                                    {/* First name field */}
                                     <div className="signup-form-field">
                                         <Field type="text" name="firstName" placeholder="First Name" className="signup-input-field" />
                                     </div>
@@ -70,7 +120,7 @@ const SignupForm: React.FC = () => {
                                         <ErrorMessage name="firstName" component="div" className="signup-error-message" />
                                     </div>
 
-                                    {/* lastname field */}
+                                    {/* Last name field */}
                                     <div className="signup-form-field">
                                         <Field type="text" name="lastName" placeholder="Last Name" className="signup-input-field" />
                                     </div>
@@ -78,7 +128,7 @@ const SignupForm: React.FC = () => {
                                         <ErrorMessage name="lastName" component="div" className="signup-error-message" />
                                     </div>
 
-                                    {/* password field */}
+                                    {/* Password field */}
                                     <div className="signup-form-field">
                                         <Field type="password" name="password" placeholder="Password" className="signup-input-field" />
                                     </div>
@@ -86,7 +136,7 @@ const SignupForm: React.FC = () => {
                                         <ErrorMessage name="password" component="div" className="signup-error-message" />
                                     </div>
 
-                                    {/* confirm password field */}
+                                    {/* Confirm password field */}
                                     <div className="signup-form-field">
                                         <Field type="password" name="confirmPassword" placeholder="Verify Password" className="signup-input-field" />
                                     </div>

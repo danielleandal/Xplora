@@ -164,46 +164,6 @@ const Dashboard: React.FC = () => {
         </div>
     );
 
-    {/* <header className="homepage-header">
-                <div className="logo-section">
-                    <Link to="/">
-                        <img src={logo} alt="Xplora Logo" className="homepage-logo" />
-                    </Link>
-                </div>
-                <div className="user-section">
-                    <button className="profile-btn"><Link to="/profile">Profile</Link></button>
-                    <button className="logout-button" onClick={handleLogout}>Logout</button>
-                </div>
-            </header>
-
-            <main className="dashboard-main">
-                <div className="dashboard-intro">
-                    <h1>Welcome, {firstName} {lastName}!</h1>
-                    <p>This is your personalized space where you can view and manage your account details, settings, and more.</p>
-                </div>
-                <div className="dashboard-i-container">
-                    <div className="dashboard-i-header">Your upcoming itineraries</div>
-                    <div className="dashboard-i-content">
-                        <div className="trip-card">
-                            <div className="trip-details">
-                                <h3 className="trip-name">
-                                    <Link to="/trip-details">Trip to NYC</Link>
-                                </h3>
-                                <p className="trip-location">New York City</p>
-                                <p className="trip-dates">2024-12-01 - 2024-12-05 (5 days)</p>
-                                <button className='edit-trip-button' onClick={handleEditTrip}> ✏️ Edit Trip</button>
-                            </div>
-
-                            <div className="trip-image-container">
-                                <img src={newyork} alt="New York City" className="trip-image" />
-                            </div>
-                        </div>
-                        <button className="add-trip-button" onClick={handleAddTrip}>
-                            <span className="plus-icon">+</span> Add a trip
-                        </button>
-                    </div>
-                </div>
-            </main> */}
 
 };
 
