@@ -89,12 +89,6 @@ TripDetails.css .tripdetails-logo {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
-.trip-details {
-    text-align: left;
-    margin-left: 50px;
-    font-family: Poppins, sans-serif;
-}
-
 .trip-dates {
     color: #666;
     font-size: 0.9rem;
