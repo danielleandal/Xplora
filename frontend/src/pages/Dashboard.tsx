@@ -4,16 +4,7 @@ import './Dashboard.css';
 import TripListItem from '../components/TripListItem';
 import iconlogo from '../images/xplora-icon.png';
 
-export const handleLogout = () => {
-    const navigate = useNavigate();
 
-    localStorage.removeItem('authToken');
-    // Clear user data and navigate to login
-    localStorage.removeItem('firstName');
-    localStorage.removeItem('lastName');
-    localStorage.removeItem('authToken'); // Remove token as well, if needed
-    navigate('/login');
-};
 
 const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
 
@@ -31,6 +22,13 @@ const Dashboard: React.FC = () => {
     const [lastName, setLastName] = useState<string>('');
     const [trips, setTrips] = useState<any[]>([]);
     const [inputValue, setInputValue] = useState('');
+
+     const handleLogout = () => {
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('lastName');
+        localStorage.removeItem('ID'); 
+        navigate('/login');
+    };
 
     useEffect(() => {
         const storedFirstName = localStorage.getItem('firstName');
@@ -105,15 +103,24 @@ const Dashboard: React.FC = () => {
                         <i id="search-icon" className="fa fa-search"></i>
                     </div>
                     <button className="add-trip-btn">+</button>
-                    {trips.map((trip) => (
-                        <TripListItem
-                            key={trip._id}
-                            title={trip.name}
-                            location={trip.city}
-                            dates={`${trip.start_date} - ${trip.end_date}`}
-                            onDelete={() => handleDeleteTrip(trip._id)}
-                        />
-                    ))}
+
+                    
+                     {/* Conditional rendering to check if trips is empty */}
+                        {trips.length === 0 ? (
+                            // If there are no trips, display this message
+                            <div className="no-trips-message">No trips yet</div>
+                        ) : (
+                            // If there are trips, map over them and display each one
+                            trips.map((trip) => (
+                                <TripListItem
+                                    key={trip._id}
+                                    title={trip.name}
+                                    location={trip.city}
+                                    dates={`${trip.start_date} - ${trip.end_date}`}
+                                    onDelete={() => handleDeleteTrip(trip._id)}
+                                />
+                            ))
+                        )}
                 </div>
             </div>
         </div>
