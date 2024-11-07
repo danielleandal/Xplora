@@ -64,9 +64,11 @@ const LoginForm: React.FC = () => {
 
                                     if (response.ok) {
                                         console.log('Login successful:', data);
+                                    
 
                                         // Store user data in localStorage
-                          
+                                        localStorage.setItem('ID;', data.id);
+                                        console.log(data.id);
                                         localStorage.setItem('firstName', data.firstName);
                                         localStorage.setItem('lastName', data.lastName);
 

@@ -31,7 +31,7 @@ app.post('/api/login', async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        await client.connect();
+       await client.connect();
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne(
@@ -61,7 +61,7 @@ app.post('/api/register', async (req, res, next) => {
     console.log(`${first_name} ${last_name} ${email} ${password}`);
 
     try {
-        await client.connect();
+       await client.connect();
         const db = client.db('xplora');
 
         const results = await db.collection('users').findOne({ email: email });
@@ -135,14 +135,15 @@ app.post('/api/trips', async (req, res) => {
 app.get('/api/trips', async (req, res) => {
     try {
         // Test the connection before the query
-        await client.connect();
+       await client.connect();
         const db = client.db('xplora');
         const trips = await db.collection('trips').find().toArray();
         res.json(trips);
     } catch (error) {
         console.error('Database connection or query error:', error);
         res.status(500).json({ error: 'Database connection or query error' });
-    } finally {
+    } 
+    finally {
         await client.close(); // Close client if needed based on connection strategy
     }
 });
