@@ -9,6 +9,12 @@
     height: 100vh;
 }
 
+.addtrip-logo {
+    min-height: 40px;
+    height: 2.5vw;
+    width: auto;
+}
+
 /* Main content styling */
 .addtrip-main {
     display: flex;
@@ -225,4 +231,21 @@ input:-webkit-autofill:active {
 .add-trip-header {
     font-size: 2em;
     color: #6a1b9a;
+}
+
+.addtrip-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    color: #fff;
+    background-color: #ffff;
+    box-sizing: border-box;
+}
+
+.addtrip-nav ul li a {
+    color: #0f1dd6;
+    text-decoration: none;
+    font-weight: 500;
 }

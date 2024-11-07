@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './EditTrip.css';
-import logo from '../images/logo.png';
-import newyork from '../images/new-york.png';
 
 interface TabContent {
     id: number;
@@ -105,7 +103,6 @@ const EditTrip: React.FC = () => {
         <div className="dashboard">
             {/* Header with logo and navigation */}
             <header className="homepage-header">
-                <img src={logo} alt="Xplora Logo" className="homepage-logo" />
                 <nav className="homepage-nav">
                     <ul>
                         {/* Navigation items if needed */}
@@ -126,9 +123,6 @@ const EditTrip: React.FC = () => {
                             <p className="trip-dates">2024-12-01 - 2024-12-05 (5 days)</p>
                         </div>
                         
-                        <div className="trip-image-container">
-                            <img src={newyork} alt="New York City" className="trip-image" />
-                        </div>
                     </div>
 
                     {/* Tabs for Activities, Flight, and Accommodation */}
