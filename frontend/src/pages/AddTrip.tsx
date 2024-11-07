@@ -40,15 +40,13 @@ const AddTrip: React.FC = () => {
 
     return (
         <div className="addtrip-page">
-            <header className="homepage-header">
+            <header className="addtrip-header">
                 <Link to="/">
-                    <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                    <img src={logo} alt="Xplora Logo" className="addtrip-logo" />
                 </Link>
-                <nav className="homepage-nav">
+                <nav className="addtrip-nav">
                     <ul>
-                        <li><Link to="/how-it-works">How it works</Link></li>
-                        <li><Link to="/sign-up">Sign Up</Link></li>
-                        <li><Link to="/login">Sign In</Link></li>
+                        <li><Link to="/dashboard">Home</Link></li>
                     </ul>
                 </nav>
             </header>
