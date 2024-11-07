@@ -8,8 +8,8 @@ import LoginPage from './pages/Login';
 import Dashboard from './pages/Dashboard';
 // import Profile from './pages/Profile'
 // import ProfileSecurityPage from './pages/ProfileSecurity'
-// import AddTrip from './pages/AddTrip'
-// import EditTrip from './pages/EditTrip';
+import AddTrip from './pages/AddTrip'
+import EditTrip from './pages/EditTrip';
 import TripDetails from './pages/TripDetails';
 import './App.css';
 
@@ -33,11 +33,11 @@ const App: React.FC = () => {
         {/* 
           <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /></ProtectedRoute>} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/addtrip" element={<AddTrip />} />
-        <Route path="/edit-trip" element={<EditTrip />} />
         <Route path="/profile-security" element={<ProfileSecurityPage />} />
         */}
         <Route path="/trip-details" element={<TripDetails />} />
+        <Route path="/edit-trip" element={<EditTrip />} />
+        <Route path="/addtrip" element={<AddTrip />} />
       </Routes>
     </Router>
   );
