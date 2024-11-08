@@ -104,11 +104,10 @@ const TripDetails: React.FC = () => {
                                     <span className="tooltip-text">Add new flight</span>
                                 </div>
                             </div>
-                            {/* {flightsOpen && <div className="dropdown-content">Flight details here</div>} */}
+                            {flightsOpen && 
                             <div className='flights-list'>
                                 <div className='flight-details'>
                                     <div className='top-info'>
-                                        {/* <span id='from-airport'>LHR</span><span id='airport-separation-line'> ------------------------------------------------ </span><span id='dest-airport'>JFK</span> */}
                                         <span id='from-airport'>LHR</span>
                                         <div className="airport-separation-line">
                                             <img src={xploraplane} alt="Airplane Icon" className="airplane-icon" />
@@ -127,6 +126,7 @@ const TripDetails: React.FC = () => {
                                     </div> 
                                 </div>
                             </div>
+                            }
                         </div>
 
                         <div className="dropdown-section">
