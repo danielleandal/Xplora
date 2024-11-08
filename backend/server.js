@@ -194,13 +194,14 @@ app.post('/api/trips/:id/activities', async (req, res) => {
     const { id } = req.params;
     const { user_id, trip_id, name, date, time, location, notes } = req.body;
 
-
     try {
         const db = client.db('xplora');
+        const userObjId = new ObjectId(String(user_id));
+        const tripObjId = new ObjectId(String(trip_id));
 
         const existingActivity = await db.collection('activities').findOne({
-            user_id: MongoClient.ObjectId(user_id),
-            trip_id: MongoClient.ObjectId(trip_id),
+            user_id: userObjId,
+            trip_id: tripObjId,
             name,
             date,
             time,
