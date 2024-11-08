@@ -233,7 +233,7 @@ app.post('/api/users/:userId/trips/:tripId/activities', async (req, res) => {
     const { name, date, time, location, notes } = req.body;
 
     if (!name || !date || !time || !location || !notes) {
-        return res.status(400).json({ error: 'Name, date, time, location and notes are required' });
+        return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
@@ -281,7 +281,7 @@ app.get('/api/users/:userId/trips/:tripId/activities', async (req, res) => {
         const activities = await db.collection('activities').find({ user_id: userObjId, trip_id: tripObjId }).sort({ date: 1 }).toArray();
 
         if (activities.length === 0) {
-            return res.status(404).json({ error: 'No activities found for this trip.' });
+            return res.status(404).json({ error: 'No activities found for this trip' });
         }
 
         res.json(activities);
@@ -308,16 +308,16 @@ app.put('/api/users/:userId/trips/:tripId/activities/:activityId', async (req, r
             return res.status(404).json({ error: 'Activity not found' });
         }
 
-        const updatedActivity = {};
-        if (name !== undefined) updatedActivity.name = name;
-        if (date !== undefined) updatedActivity.date = date;
-        if (time !== undefined) updatedActivity.time = time;
-        if (location !== undefined) updatedActivity.location = location;
-        if (notes !== undefined) updatedActivity.notes = notes;
+        const updatedFlight = {};
+        if (name !== undefined) updatedFlight.name = name;
+        if (date !== undefined) updatedFlight.date = date;
+        if (time !== undefined) updatedFlight.time = time;
+        if (location !== undefined) updatedFlight.location = location;
+        if (notes !== undefined) updatedFlight.notes = notes;
 
         const result = await db.collection('activities').updateOne(
             { _id: activityObjId },
-            { $set: updatedActivity }
+            { $set: updatedFlight }
         );
 
         if (result.matchedCount > 0) {
@@ -354,17 +354,31 @@ app.delete('/api/users/:userId/trips/:tripId/activities/:activityId', async (req
 
 //----------------------------------
 //FLIGHTS -- POST a flight to a trip
-app.post('/api/trips/:id/flights', async (req, res) => {
-    const { id } = req.params;
-    const { user_id, trip_id, confirmation_num, flight_num, departure_airport, arrival_airport, departure_time, arrival_time, departure_date, arrival_date } = req.body;
+app.post('/api/users/:userId/trips/:tripId/flights', async (req, res) => {
+    const { userId, tripId } = req.params;
+    const userObjId = new ObjectId(String(userId));
+    const tripObjId = new ObjectId(String(tripId));
+    const {
+        confirmation_num,
+        flight_num,
+        departure_airport,
+        arrival_airport,
+        departure_time,
+        arrival_time,
+        departure_date,
+        arrival_date } = req.body;
 
+    if (!confirmation_num || !flight_num || !departure_airport || !arrival_airport ||
+        !departure_time || !arrival_time || !departure_date || !arrival_date) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
 
     try {
         const db = client.db('xplora');
 
         const existingFlight = await db.collection('flights').findOne({
-            user_id: MongoClient.ObjectId(user_id),
-            trip_id: MongoClient.ObjectId(trip_id),
+            user_id: userObjId,
+            trip_id: tripObjId,
             confirmation_num,
             flight_num,
             departure_airport,
@@ -374,13 +388,14 @@ app.post('/api/trips/:id/flights', async (req, res) => {
             departure_date,
             arrival_date
         });
+
         if (existingFlight) {
             return res.status(409).json({ error: 'A similar flight already exists' });
         }
 
-        const newflight = {
-            user_id: MongoClient.ObjectId(user_id),
-            trip_id: MongoClient.ObjectId(trip_id),
+        const newFlight = {
+            user_id: userObjId,
+            trip_id: tripObjId,
             confirmation_num,
             flight_num,
             departure_airport,
@@ -392,51 +407,73 @@ app.post('/api/trips/:id/flights', async (req, res) => {
         };
 
         const result = await db.collection('flights').insertOne(newFlight);
-        res.status(201).json({ message: 'Activity added successfully', trip_id: result.insertedId });
+        res.status(201).json({ message: 'Flight added successfully', flight_id: result.insertedId });
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while adding the flight' });
     }
 });
 
 //FLIGHTS -- GET all flights in a trip
-app.get('/api/trips/:id/flights', async (req, res) => {
-    const { id } = req.params;
+app.get('/api/users/:userId/trips/:tripId/flights', async (req, res) => {
+    const { userId, tripId } = req.params;
+    const userObjId = new ObjectId(String(userId));
+    const tripObjId = new ObjectId(String(tripId));
+
     try {
         const db = client.db('xplora');
-        const activities = await db.collection('flights').find({ trip_id: MongoClient.ObjectId(id) }).sort({ departure_date: 1 }).toArray();
+        const flights = await db.collection('flights').find({ user_id: userObjId, trip_id: tripObjId }).sort({ departure_date: 1 }).toArray();
+
+        if (flights.length === 0) {
+            return res.status(404).json({ error: 'No flights found for this trip' });
+        }
+
         res.json(flights);
-    }
-    catch (error) {
+    } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching flights' });
     }
 });
 
 //FLIGHTS -- PUT to update a flight
-app.put('/api/trips/:id/flights/:tripId', async (req, res) => {
-    const { id, tripId } = req.params;
-    const { user_id, trip_id, confirmation_num, flight_num, departure_airport, arrival_airport, departure_time, arrival_time, departure_date, arrival_date } = req.body;
+app.put('/api/users/:userId/trips/:tripId/flights/:flightId', async (req, res) => {
+    const { userId, tripId, flightId } = req.params;
+    const {
+        confirmation_num,
+        flight_num,
+        departure_airport,
+        arrival_airport,
+        departure_time,
+        arrival_time,
+        departure_date,
+        arrival_date } = req.body;
+
+    const userObjId = new ObjectId(String(userId));
+    const tripObjId = new ObjectId(String(tripId));
+    const flightObjId = new ObjectId(String(flightId));
 
     try {
         const db = client.db('xplora');
+
+        const flight = await db.collection('flights').findOne({ _id: flightObjId, user_id: userObjId, trip_id: tripObjId });
+
+        if (!flight) {
+            return res.status(404).json({ error: 'Flight not found' });
+        }
+
+        const updatedFlight = {};
+        if (confirmation_num !== undefined) updatedFlight.confirmation_num = confirmation_num;
+        if (flight_num !== undefined) updatedFlight.flight_num = flight_num;
+        if (departure_airport !== undefined) updatedFlight.departure_airport = departure_airport;
+        if (arrival_airport !== undefined) updatedFlight.arrival_airport = arrival_airport;
+        if (departure_time !== undefined) updatedFlight.departure_time = departure_time;
+        if (arrival_time !== undefined) updatedFlight.arrival_time = arrival_time;
+        if (departure_date !== undefined) updatedFlight.departure_date = departure_date;
+        if (arrival_date !== undefined) updatedFlight.arrival_date = arrival_date;
+
         const result = await db.collection('flights').updateOne(
-            {
-                user_id: MongoClient.ObjectId(id),
-                trip_id: MongoClient.ObjectId(id),
-                _id: MongoClient.ObjectId(flightId)
-            },
-            {
-                $set: {
-                    confirmation_num,
-                    flight_num,
-                    departure_airport,
-                    arrival_airport,
-                    departure_time,
-                    arrival_time,
-                    departure_date,
-                    arrival_date
-                }
-            }
+            { _id: flightObjId },
+            { $set: updatedFlight }
         );
+
         if (result.matchedCount > 0) {
             res.status(200).json({ message: 'Flight updated successfully' });
         } else {
@@ -447,17 +484,17 @@ app.put('/api/trips/:id/flights/:tripId', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while updating the flight' });
     }
 });
+
 //FLIGHTS --DELETE to remove a flight
-app.delete('/api/trips/:id/flights/:flightId', async (req, res) => {
-    const { id, flightId } = req.params;
+app.delete('/api/users/:userId/trips/:tripId/flights/:flightId', async (req, res) => {
+    const { userId, tripId, flightId } = req.params;
+    const userObjId = new ObjectId(String(userId));
+    const tripObjId = new ObjectId(String(tripId));
+    const flightObjId = new ObjectId(String(flightId));
+
     try {
         const db = client.db('xplora');
-        const result = await db.collection('flights').deleteOne(
-            {
-                user_id: MongoClient.ObjectId(id),
-                trip_id: MongoClient.ObjectId(id),
-                _id: MongoClient.ObjectId(flightId)
-            });
+        const result = await db.collection('flights').deleteOne({ _id: flightObjId, trip_id: tripObjId, user_id: userObjId });
         if (result.deletedCount > 0) {
             res.status(200).json({ message: 'Flight deleted successfully' });
         } else {
@@ -465,10 +502,9 @@ app.delete('/api/trips/:id/flights/:flightId', async (req, res) => {
         }
     }
     catch (error) {
-        res.status(500).json({ error: 'An error occurred while deleting the flight' });
+        res.status(500).json({ error: 'An error occurred while deleting the Flight' });
     }
 });
-
 
 //-----------------------------------------------
 //ACCOMMODATIONS -- POST accommodations to a trip
