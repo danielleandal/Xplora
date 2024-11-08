@@ -103,6 +103,9 @@ TripDetails.css .tripdetails-logo {
 }
 
 .dropdown-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 10px 0;
     border-bottom: 1px solid #cbbaf3;
     padding: 10px;
@@ -115,6 +118,8 @@ TripDetails.css .tripdetails-logo {
 .dropdown-header {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 100%;
     cursor: pointer;
     font-size: 18px;
     font-weight: bold;
@@ -221,4 +226,82 @@ TripDetails.css .tripdetails-logo {
     min-height: 40px;
     height: 2.5vw;
     width: auto;
+}
+
+.flights-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    padding: 5px;
+}
+
+.flight-details{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    border-radius: 25px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.top-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.airport-separation-line {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.airport-separation-line::before,
+.airport-separation-line::after {
+    content: "";
+    flex: 1;
+    border-top: 2px dotted #00000055;
+    margin: 0 8px;
+}
+
+.airplane-icon {
+    width: 35px;
+    height: auto;
+    display: inline-block;
+    transform: rotate(90deg);
+}
+
+#from-airport{
+    text-align: start;
+}
+
+#dest-airport {
+    text-align: end;
+}
+
+.bottom-info{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.from-info, .dest-info{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.from-info{
+    align-items: start;
+}
+
+.dest-info{
+    align-items: end;
 }

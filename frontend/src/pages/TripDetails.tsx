@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './TripDetails.css';
 import logo from '../images/logo.png';
+import xploraplane from '../images/xplora-plane.png';
 import newyork from '../images/new-york.png';
 import { calculateTripDays } from '../helper-files/calculateTripDays';
 
@@ -103,7 +104,29 @@ const TripDetails: React.FC = () => {
                                     <span className="tooltip-text">Add new flight</span>
                                 </div>
                             </div>
-                            {flightsOpen && <div className="dropdown-content">Flight details here</div>}
+                            {flightsOpen && 
+                            <div className='flights-list'>
+                                <div className='flight-details'>
+                                    <div className='top-info'>
+                                        <span id='from-airport'>LHR</span>
+                                        <div className="airport-separation-line">
+                                            <img src={xploraplane} alt="Airplane Icon" className="airplane-icon" />
+                                        </div>                            
+                                        <span id='dest-airport'>JFK</span>         
+                                    </div>
+                                    <div className='bottom-info'>
+                                        <div className='from-info'>
+                                            <span id='from-city'>London</span>
+                                            <span id='from-date'>06/08/2024</span>
+                                        </div>
+                                        <div className='dest-info'>
+                                            <span id='dest-city'>New York</span>
+                                            <span id='dest-date'>06/09/2024</span>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            }
                         </div>
 
                         <div className="dropdown-section">
