@@ -5,6 +5,13 @@ import TripListItem from '../components/TripListItem';
 import iconlogo from '../images/xplora-icon.png';
 
 
+export const handleLogout = () => {
+    const navigate = useNavigate();
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('lastName');
+    localStorage.removeItem('ID'); 
+    navigate('/login');
+};
 
 const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
 
