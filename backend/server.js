@@ -89,12 +89,13 @@ app.post('/api/register', async (req, res, next) => {
     }
 });
 
+//--------------------------------
 // TRIPS -- POST to add a new trip
 app.post('/api/users/:userId/trips', async (req, res) => {
     const { name, city, start_date, end_date, notes, picture_url } = req.body;
 
     if (!name || !city || !start_date || !end_date) {
-        return res.status(400).json({ error: 'Name, city, start_date, and end_date are required' });
+        return res.status(400).json({ error: 'All fields are required' });
     }
 
     const objectId = new ObjectId(String(req.params.userId));
@@ -111,7 +112,7 @@ app.post('/api/users/:userId/trips', async (req, res) => {
         });
 
         if (existingTrip) {
-            return res.status(409).json({ error: 'A similar trip already exists' });
+            return res.status(409).json({ error: 'Trip already exists' });
         }
 
         const newTrip = {
@@ -147,7 +148,7 @@ app.get('/api/users/:userId/trips', async (req, res) => {
         const trips = await db.collection('trips').find({ user_id: objectId }).toArray();
 
         if (trips.length === 0) {
-            return res.status(404).json({ error: 'No trips found for this user' });
+            return res.status(404).json({ error: 'No trips found' });
         }
 
         res.json(trips);
@@ -170,17 +171,16 @@ app.put('/api/users/:userId/trips/:tripId', async (req, res) => {
         const trip = await db.collection('trips').findOne({ _id: tripObjId, user_id: userObjId });
 
         if (!trip) {
-            return res.status(404).json({ error: 'Trip not found or does not belong to this user' });
+            return res.status(404).json({ error: 'Trip not found' });
         }
 
-        const updatedTrip = {
-            name,
-            city,
-            start_date,
-            end_date,
-            notes,
-            picture_url,
-        };
+        const updatedTrip = {};
+        if (name !== undefined) updatedTrip.name = name;
+        if (city !== undefined) updatedTrip.city = city;
+        if (start_date !== undefined) updatedTrip.start_date = start_date;
+        if (end_date !== undefined) updatedTrip.end_date = end_date;
+        if (notes !== undefined) updatedTrip.notes = notes;
+        if (picture_url !== undefined) updatedTrip.picture_url = picture_url;
 
         const result = await db.collection('trips').updateOne(
             { _id: tripObjId },
@@ -224,14 +224,20 @@ app.delete('/api/users/:userId/trips/:tripId', async (req, res) => {
     }
 });
 
+//--------------------------------------
 //ACTIVITY -- POST an activity to a trip
-app.post('/api/trips/activities', async (req, res) => {
-    const { user_id, trip_id, name, date, time, location, notes } = req.body;
+app.post('/api/users/:userId/trips/:tripId/activities', async (req, res) => {
+    const { userId, tripId } = req.params;
+    const userObjId = new ObjectId(String(userId));
+    const tripObjId = new ObjectId(String(tripId));
+    const { name, date, time, location, notes } = req.body;
+
+    if (!name || !date || !time || !location || !notes) {
+        return res.status(400).json({ error: 'Name, date, time, location and notes are required' });
+    }
 
     try {
         const db = client.db('xplora');
-        const userObjId = new ObjectId(String(user_id));
-        const tripObjId = new ObjectId(String(trip_id));
 
         const existingActivity = await db.collection('activities').findOne({
             user_id: userObjId,
@@ -242,6 +248,7 @@ app.post('/api/trips/activities', async (req, res) => {
             location,
             notes
         });
+
         if (existingActivity) {
             return res.status(409).json({ error: 'A similar activity already exists' });
         }
@@ -257,20 +264,26 @@ app.post('/api/trips/activities', async (req, res) => {
         };
 
         const result = await db.collection('activities').insertOne(newActivity);
-        res.status(201).json({ message: 'Activity added successfully', trip_id: result.insertedId });
+        res.status(201).json({ message: 'Activity added successfully', activity_id: result.insertedId });
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while adding the activity' });
     }
 });
 
 //ACTIVITY -- GET all activities in a trip
-app.get('/api/trips/:id/activities', async (req, res) => {
-    const { id } = req.params;
-    const tripObjId = new ObjectId(String(id));
+app.get('/api/users/:userId/trips/:tripId/activities', async (req, res) => {
+    const { userId, tripId } = req.params;
+    const userObjId = new ObjectId(String(userId));
+    const tripObjId = new ObjectId(String(tripId));
+
     try {
         const db = client.db('xplora');
-        const activities = await db.collection('activities').find({ trip_id: tripObjId }).
-            sort({ date: 1 }).toArray();
+        const activities = await db.collection('activities').find({ user_id: userObjId, trip_id: tripObjId }).sort({ date: 1 }).toArray();
+
+        if (activities.length === 0) {
+            return res.status(404).json({ error: 'No activities found for this trip.' });
+        }
+
         res.json(activities);
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching activities' });
@@ -278,26 +291,35 @@ app.get('/api/trips/:id/activities', async (req, res) => {
 });
 
 //ACTIVITY -- PUT to update an activity
-app.put('/api/trips/activities/', async (req, res) => {
-    const { _id, name, date, time, location, notes } = req.body;
-    const activityObjId = new ObjectId(String(_id));
+app.put('/api/users/:userId/trips/:tripId/activities/:activityId', async (req, res) => {
+    const { userId, tripId, activityId } = req.params;
+    const { name, date, time, location, notes } = req.body;
+
+    const userObjId = new ObjectId(String(userId));
+    const tripObjId = new ObjectId(String(tripId));
+    const activityObjId = new ObjectId(String(activityId));
 
     try {
         const db = client.db('xplora');
+
+        const activity = await db.collection('activities').findOne({ _id: activityObjId, user_id: userObjId, trip_id: tripObjId });
+
+        if (!activity) {
+            return res.status(404).json({ error: 'Activity not found' });
+        }
+
+        const updatedActivity = {};
+        if (name !== undefined) updatedActivity.name = name;
+        if (date !== undefined) updatedActivity.date = date;
+        if (time !== undefined) updatedActivity.time = time;
+        if (location !== undefined) updatedActivity.location = location;
+        if (notes !== undefined) updatedActivity.notes = notes;
+
         const result = await db.collection('activities').updateOne(
-            {
-                _id: activityObjId
-            },
-            {
-                $set: {
-                    name,
-                    date,
-                    time,
-                    location,
-                    notes
-                }
-            }
+            { _id: activityObjId },
+            { $set: updatedActivity }
         );
+
         if (result.matchedCount > 0) {
             res.status(200).json({ message: 'Activity updated successfully' });
         } else {
@@ -310,16 +332,15 @@ app.put('/api/trips/activities/', async (req, res) => {
 });
 
 //ACTIVITY --DELETE to remove an activity
-app.delete('/api/trips/activities/:activityId', async (req, res) => {
-    const { activityId } = req.params;
+app.delete('/api/users/:userId/trips/:tripId/activities/:activityId', async (req, res) => {
+    const { userId, tripId, activityId } = req.params;
+    const userObjId = new ObjectId(String(userId));
+    const tripObjId = new ObjectId(String(tripId));
     const activityObjId = new ObjectId(String(activityId));
 
     try {
         const db = client.db('xplora');
-        const result = await db.collection('activities').deleteOne(
-            {
-                _id: activityObjId
-            });
+        const result = await db.collection('activities').deleteOne({ _id: activityObjId, trip_id: tripObjId, user_id: userObjId });
         if (result.deletedCount > 0) {
             res.status(200).json({ message: 'Activity deleted successfully' });
         } else {
@@ -331,7 +352,7 @@ app.delete('/api/trips/activities/:activityId', async (req, res) => {
     }
 });
 
-//-------------------
+//----------------------------------
 //FLIGHTS -- POST a flight to a trip
 app.post('/api/trips/:id/flights', async (req, res) => {
     const { id } = req.params;
@@ -449,7 +470,7 @@ app.delete('/api/trips/:id/flights/:flightId', async (req, res) => {
 });
 
 
-//-------------------
+//-----------------------------------------------
 //ACCOMMODATIONS -- POST accommodations to a trip
 app.post('/api/trips/:id/accommodations', async (req, res) => {
     const { id } = req.params;
