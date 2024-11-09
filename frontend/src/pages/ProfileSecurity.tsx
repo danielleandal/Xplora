@@ -51,7 +51,7 @@ const ProfileSecurityPage: React.FC = () => {
             
             <div id="profile-sidebar" className="profile-sidebar">
                 <a href="/profile">Home</a>
-                <a href="#security">Security</a>                
+                <a href="/security">Security</a>                
             </div>
             
             <div className="profile-main">
