@@ -1,6 +1,6 @@
 
 .dashboard {
-    font-family: Poppins, sans-serif;
+    font-family: 'Poppins', sans-serif;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -83,6 +83,7 @@
     padding: 40px;
     gap: 20px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .trip-list-header, .search-container, .add-trip-btn{

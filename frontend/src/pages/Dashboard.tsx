@@ -9,7 +9,7 @@ export const handleLogout = () => {
     const navigate = useNavigate();
     localStorage.removeItem('firstName');
     localStorage.removeItem('lastName');
-    localStorage.removeItem('ID'); 
+    localStorage.removeItem('ID');
     navigate('/login');
 };
 
@@ -30,11 +30,15 @@ const Dashboard: React.FC = () => {
     const [trips, setTrips] = useState<any[]>([]);
     const [inputValue, setInputValue] = useState('');
 
-     const handleLogout = () => {
+    const handleLogout = () => {
         localStorage.removeItem('firstName');
         localStorage.removeItem('lastName');
-        localStorage.removeItem('ID'); 
+        localStorage.removeItem('ID');
         navigate('/login');
+    };
+
+    const handleAddTrip = () => {
+        navigate('/addtrip');
     };
 
     useEffect(() => {
@@ -52,12 +56,12 @@ const Dashboard: React.FC = () => {
         const fetchTrips = async () => {
             try {
                 const userId = localStorage.getItem("ID");
-                const response = await fetch(buildPath(`api/trips?user_id=${userId}`));
+                const response = await fetch(buildPath(`api/users/${userId}/trips`));
                 if (response.ok) {
                     const data = await response.json();
                     setTrips(data);
                 } else {
-                    console.error('Failed to fetch trips');
+                    console.error('Failed to fetch trips:', response.statusText);
                 }
             } catch (error) {
                 console.error('Error fetching trips:', error);
@@ -67,10 +71,11 @@ const Dashboard: React.FC = () => {
         fetchTrips();
     }, [navigate]);
 
-    const handleDeleteTrip = async (id: string) => {
+    const handleDeleteTrip = async (tripId: string) => {
         try {
-            await fetch(buildPath(`/api/trips/${id}`), { method: 'DELETE' });
-            setTrips(trips.filter(trip => trip._id !== id));
+            const userId = localStorage.getItem("ID");
+            await fetch(buildPath(`api/users/${userId}/trips/${tripId}`), { method: 'DELETE' });
+            setTrips(trips.filter(trip => trip._id !== tripId));
         } catch (error) {
             console.error('Error deleting trip:', error);
         }
@@ -105,29 +110,29 @@ const Dashboard: React.FC = () => {
                             type="text"
                             value={inputValue}
                             onChange={handleChange}
-                            placeholder='Search...'
+                            placeholder='Search by trip or city name...'
                         />
                         <i id="search-icon" className="fa fa-search"></i>
                     </div>
-                    <button className="add-trip-btn">+</button>
+                    <button className="add-trip-btn" onClick={handleAddTrip}>+</button>
 
-                    
-                     {/* Conditional rendering to check if trips is empty */}
-                        {trips.length === 0 ? (
-                            // If there are no trips, display this message
-                            <div className="no-trips-message">No trips yet</div>
-                        ) : (
-                            // If there are trips, map over them and display each one
-                            trips.map((trip) => (
-                                <TripListItem
-                                    key={trip._id}
-                                    title={trip.name}
-                                    location={trip.city}
-                                    dates={`${trip.start_date} - ${trip.end_date}`}
-                                    onDelete={() => handleDeleteTrip(trip._id)}
-                                />
-                            ))
-                        )}
+
+                    {/* Conditional rendering to check if trips is empty */}
+                    {trips.length === 0 ? (
+                        // If there are no trips, display this message
+                        <div className="no-trips-message">No trips yet</div>
+                    ) : (
+                        // If there are trips, map over them and display each one
+                        trips.map((trip) => (
+                            <TripListItem
+                                key={trip._id}
+                                title={trip.name}
+                                location={trip.city}
+                                dates={`${trip.start_date} - ${trip.end_date}`}
+                                onDelete={() => handleDeleteTrip(trip._id)}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

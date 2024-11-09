@@ -15,12 +15,12 @@ import './App.css';
 
 const App: React.FC = () => {
   // children == dashboard, add profile later
-//   const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-//     const email = localStorage.getItem('email');
+  //   const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  //     const email = localStorage.getItem('email');
 
-//     // If there's an email, allow access to the page; otherwise, redirect to login
-//     return email ? <>{children}</> : <Navigate to="/login" />;
-// };
+  //     // If there's an email, allow access to the page; otherwise, redirect to login
+  //     return email ? <>{children}</> : <Navigate to="/login" />;
+  // };
 
   return (
     <Router>
@@ -29,7 +29,7 @@ const App: React.FC = () => {
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/dashboard" element={ <Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         {/* 
           <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /></ProtectedRoute>} />
         <Route path="/profile" element={<Profile />} />
