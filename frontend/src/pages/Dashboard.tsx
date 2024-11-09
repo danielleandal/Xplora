@@ -1,25 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
-import logo from '../images/logo.png';
-import newyork from '../images/new-york.png';
+import TripListItem from '../components/TripListItem';
+import iconlogo from '../images/xplora-icon.png';
+
 
 export const handleLogout = () => {
     const navigate = useNavigate();
-    
-    localStorage.removeItem('authToken');
-     // Clear user data and navigate to login
-     localStorage.removeItem('firstName');
-     localStorage.removeItem('lastName');
-     localStorage.removeItem('authToken'); // Remove token as well, if needed
-     navigate('/login');
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('lastName');
+    localStorage.removeItem('ID');
+    navigate('/login');
 };
 
+const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
+
+function buildPath(route: string): string {
+    if (process.env.NODE_ENV !== 'development') {
+        return `https://${app_name}/${route}`;
+    } else {
+        return `http://localhost:5000/${route}`;
+    }
+}
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
+    const [trips, setTrips] = useState<any[]>([]);
+    const [inputValue, setInputValue] = useState('');
+
+    const handleLogout = () => {
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('lastName');
+        localStorage.removeItem('ID');
+        navigate('/login');
+    };
+
+    const handleAddTrip = () => {
+        navigate('/addtrip');
+    };
 
     useEffect(() => {
         const storedFirstName = localStorage.getItem('firstName');
@@ -31,68 +51,92 @@ const Dashboard: React.FC = () => {
         } else {
             navigate('/login');
         }
+
+        // Fetch trips data
+        const fetchTrips = async () => {
+            try {
+                const userId = localStorage.getItem("ID");
+                const response = await fetch(buildPath(`api/users/${userId}/trips`));
+                if (response.ok) {
+                    const data = await response.json();
+                    setTrips(data);
+                } else {
+                    console.error('Failed to fetch trips:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching trips:', error);
+            }
+        };
+
+        fetchTrips();
     }, [navigate]);
 
-    const handleLogout = () => {
-        localStorage.clear();
-        navigate('/login');
+    const handleDeleteTrip = async (tripId: string) => {
+        try {
+            const userId = localStorage.getItem("ID");
+            await fetch(buildPath(`api/users/${userId}/trips/${tripId}`), { method: 'DELETE' });
+            setTrips(trips.filter(trip => trip._id !== tripId));
+        } catch (error) {
+            console.error('Error deleting trip:', error);
+        }
     };
 
-
-    const handleEditTrip = () => {
-        navigate('/edit-trip'); // Navigate to the EditTrip page
-    };
-
-    const handleAddTrip = () => {
-        navigate('/addtrip'); // Navigates to /addtrip when button is clicked
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(event.target.value);
     };
 
     return (
         <div className="dashboard">
-            <header className="homepage-header">
-                <img src={logo} alt="Xplora Logo" className="homepage-logo" />
-                <nav className="homepage-nav">
-                    <ul>
-                        <li><Link to="/profile">Profile</Link></li>
-                        <li><button onClick={handleLogout} className="logout-button">Logout</button></li>
-                    </ul>
-                </nav>
-            </header>
-
-            <main className="dashboard-main">
-                <div className="dashboard-intro">
-                    <h1>Welcome, {firstName} {lastName}!</h1>
-                    <p>This is your personalized space where you can view and manage your account details, settings, and more.</p>
+            <div className='dashboard-header'>
+                <div className='logo-welcome-section'>
+                    <Link to="/">
+                        <img src={iconlogo} alt="Xplora Logo" id="dashboard-logo" />
+                    </Link>
+                    <span id='welcome-text'>Welcome, {firstName} {lastName}!</span>
                 </div>
-              
-
-                <div className="dashboard-i-container">
-                    <div className="dashboard-i-header">Your upcoming itineraries</div>
-                    <div className="dashboard-i-content">
-                        {/* Inline trip section for UI purposes */}
-                        <div className="trip-card">
-                            <div className="trip-details">
-                                <h3 className="trip-name">Trip to NYC</h3>
-                                <p className="trip-location">New York City</p>
-                                <p className="trip-dates">2024-12-01 - 2024-12-05 (5 days)</p>
-                                <button className='edit-trip-button' onClick={handleEditTrip}> ✏️ Edit Trip</button>
-                            </div>
-                            
-                            <div className="trip-image-container">
-                                <img src={newyork} alt="New York City" className="trip-image" />
-
-                            </div>
-                        </div>
-                        <button className="add-trip-button" onClick={handleAddTrip}>
-                            <span className="plus-icon">+</span> Add a trip
-                        </button>
+                <div className='actions-section'>
+                    <button id="profile-btn"><Link to="/profile">Profile</Link></button>
+                    <button id="logout-button" onClick={handleLogout}>Logout</button>
+                </div>
+            </div>
+            <div className='dashboard-main'>
+                <div className='trip-list-container'>
+                    <div className='trip-list-header'>
+                        Your upcoming itineraries
                     </div>
+                    <div className='search-container'>
+                        <input
+                            id='search-input'
+                            type="text"
+                            value={inputValue}
+                            onChange={handleChange}
+                            placeholder='Search by trip or city name...'
+                        />
+                        <i id="search-icon" className="fa fa-search"></i>
+                    </div>
+                    <button className="add-trip-btn" onClick={handleAddTrip}>+</button>
+
+
+                    {/* Conditional rendering to check if trips is empty */}
+                    {trips.length === 0 ? (
+                        // If there are no trips, display this message
+                        <div className="no-trips-message">No trips yet</div>
+                    ) : (
+                        // If there are trips, map over them and display each one
+                        trips.map((trip) => (
+                            <TripListItem
+                                key={trip._id}
+                                title={trip.name}
+                                location={trip.city}
+                                dates={`${trip.start_date} - ${trip.end_date}`}
+                                onDelete={() => handleDeleteTrip(trip._id)}
+                            />
+                        ))
+                    )}
                 </div>
-            </main>
+            </div>
         </div>
     );
-
-    
 };
 
 export default Dashboard;
