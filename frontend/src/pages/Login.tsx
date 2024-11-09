@@ -33,97 +33,86 @@ const LoginForm: React.FC = () => {
 
     return (
         <div className="login-page">
-            <header className="homepage-header">
+            <div className="login-main">
                 <Link to="/">
-                    <img src={logo} alt="Xplora Logo" className="homepage-logo" />
+                    <img id="login-logo" src={logo} />
                 </Link>
-                <nav className="homepage-nav">
-                    <ul>
-                        <li><Link to="/how-it-works">How it works</Link></li>
-                        <li><Link to="/sign-up">Sign Up</Link></li>
-                        <li><Link to="/login">Sign In</Link></li>
-                    </ul>
-                </nav>
-            </header>
-
-            <div className="l-container">
-                <div className="login-logo-container">
-                    <img src={logo} alt="Xplora Logo" className='big-logo' />
-                    <h1>Discover The World Your Way</h1>
-                </div>
                 <div className="login-container">
-                    <h1 className="login-title">Welcome Back!</h1>
-                    <Formik
-                        initialValues={{
-                            email: '',
-                            password: '',
-                        }}
-                        validationSchema={LoginSchema}
-                        onSubmit={async (values: LoginFormValues, { setSubmitting, setErrors }) => {
-                            //debugger
-                            console.log("Form submitted"); 
-                            try {
-                                // calls the login api 
-                                const response = await fetch(buildPath('api/login'), {
-                                    // get information from database
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify(values),
-                                });
-                        
-                                const data = await response.json();
-                        
-                                if (response.ok) {
-                                    console.log('Login successful:', data);
+                    <div className="login-form-wrapper">
+                        <Formik
+                            initialValues={{
+                                email: '',
+                                password: '',
+                            }}
+                            validationSchema={LoginSchema}
+                            onSubmit={async (values: LoginFormValues, { setSubmitting, setErrors }) => {
+                                //debugger
+                                console.log("Form submitted");
+                                try {
+                                    // calls the login api 
+                                    const response = await fetch(buildPath('api/login'), {
+                                        // get information from database
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify(values),
 
-                                    // Store user data in localStorage
-                                    localStorage.setItem('userId', data.id);
-                                    localStorage.setItem('firstName', data.firstName);
-                                    localStorage.setItem('lastName', data.lastName);
-                                    localStorage.setItem('email', data.email);
+                                    });
 
-                                    navigate('/dashboard'); 
-                                    // Handle successful login here
-                                } else {
-                                    setErrors({ email: data.error });
+                                    const data = await response.json();
+
+                                    if (response.ok) {
+                                        console.log('Login successful:', data);
+
+
+                                        // Store user data in localStorage
+                                        localStorage.setItem('ID', data.id);
+                                        console.log(data.id);
+                                        localStorage.setItem('firstName', data.firstName);
+                                        localStorage.setItem('lastName', data.lastName);
+
+                                        navigate('/dashboard');
+                                        // Handle successful login here
+                                    } else {
+                                        setErrors({ email: data.error });
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    setErrors({ email: 'An error occurred. Please try again.' });
+                                } finally {
+                                    setSubmitting(false);
                                 }
-                            } catch (error) {
-                                console.error('Error:', error);
-                                setErrors({ email: 'An error occurred. Please try again.' });
-                            } finally {
-                                setSubmitting(false);
-                            }
-                        }}
-                    >
-                        {({ isSubmitting }) => (
-                            <Form className="login-form">
-                                <div className="login-form-field">
-                                    <Field type="email" name="email" placeholder="Email" className="login-input-field" />
-                                </div>
-                                <div className="login-error-container">
-                                    <ErrorMessage name="email" component="div" className="login-error-message" />
-                                </div>
+                            }}>
+                            {({ isSubmitting }) => (
+                                <Form className="login-form">
+                                    <h2>Welcome Back!</h2>
+                                    <div className="login-form-field">
+                                        <Field type="email" name="email" placeholder="Email" className="login-input-field" />
+                                    </div>
+                                    <div className="login-error-container">
+                                        <ErrorMessage name="email" component="div" className="login-error-message" />
+                                    </div>
 
-                                <div className="login-form-field">
-                                    <Field type="password" name="password" placeholder="Password" className="login-input-field" />
-                                </div>
-                                <div className="login-error-container">
-                                    <ErrorMessage name="password" component="div" className="login-error-message" />
-                                </div>
+                                    <div className="login-form-field">
+                                        <Field type="password" name="password" placeholder="Password" className="login-input-field" />
+                                    </div>
+                                    <div className="login-error-container">
+                                        <ErrorMessage name="password" component="div" className="login-error-message" />
+                                    </div>
 
-                                <div className="login-forgot-password-container">
-                                    <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
-                                </div>
+                                    <div className="login-forgot-password-container">
+                                        <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
+                                    </div>
 
-                                <button type="submit" disabled={isSubmitting} className="login-submit-button">
-                                    Get Exploring!
-                                </button>
-                            </Form>
-                        )}
-                    </Formik>
-                    <p className="signup-link">Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
+                                    <button type="submit" disabled={isSubmitting} className="login-submit-button">
+                                        Get Exploring!
+                                    </button>
+                                </Form>
+                            )}
+                        </Formik>
+                        <p className="signup-link">Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
+                    </div>
                 </div>
             </div>
         </div>
