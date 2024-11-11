@@ -71,6 +71,7 @@ const LoginForm: React.FC = () => {
                                         console.log(data.id);
                                         localStorage.setItem('firstName', data.firstName);
                                         localStorage.setItem('lastName', data.lastName);
+                                        localStorage.setItem('email', data.email);
 
                                         navigate('/dashboard');
                                         // Handle successful login here
