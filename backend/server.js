@@ -42,8 +42,8 @@ app.post('/api/login', async (req, res, next) => {
         );
 
         if (results) {
-            const { _id: id, first_name: firstName, last_name: lastName } = results;
-            res.status(200).json({ id, firstName, lastName, error: '' });
+            const { _id: id, first_name: firstName, last_name: lastName, email: email } = results;
+            res.status(200).json({ id, firstName, lastName, email, error: '' });
         } else {
             error = 'Invalid login or password';
             res.status(401).json({ error });
