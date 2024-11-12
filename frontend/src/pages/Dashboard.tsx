@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import TripListItem from '../components/TripListItem';
 import iconlogo from '../images/xplora-icon.png';
+import cancelicon from '../images/cancel-icon.png';
 
 
 export const handleLogout = () => {
@@ -95,7 +96,28 @@ const Dashboard: React.FC = () => {
                     <span id='welcome-text'>Welcome, {firstName} {lastName}!</span>
                 </div>
                 <div className='actions-section'>
-                    <button id="profile-btn"><Link to="/profile">Profile</Link></button>
+                    {/* <button id="profile-btn"><Link to="/profile">Profile</Link></button> */}
+                    <button id="profile-btn" onClick={toggleMenu}>Profile</button>
+                    {isMenuOpen && (
+                        // <div className="profile-menu-container open">                            
+                        <div className={`profile-menu-container ${isMenuOpen ? 'open-menu' : ''}`} id="profile-menu">
+                            <img src={profileicon} alt="Profile Icon" id="profile-icon" />
+                            {/* <div className="profile-info">
+                                <h2>{firstName} {lastName}</h2>
+                            </div> */}
+                            <div className="profile-info">
+                                <div id="name">{firstName} {lastName}</div>
+                            </div>
+                            <div className="profile-info">
+                                <div id="email">{email}</div>
+                            </div>
+                            <div className="profile-actions-section">
+                                <button id="cancel-btn"><img src={iconlogo} alt="Cancel" /></button>
+                                <button id="edit-btn"><img src={editicon} alt="Edit" /></button>
+                            </div>
+                        </div>
+                        // </div>
+                    )}                                        
                     <button id="logout-button" onClick={handleLogout}>Logout</button>
                 </div>
             </div>
