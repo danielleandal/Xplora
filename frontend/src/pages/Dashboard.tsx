@@ -6,6 +6,7 @@ import iconlogo from '../images/xplora-icon.png';
 import profileicon from '../images/profile-icon.png';
 import editicon from '../images/edit-icon.png';
 import cancelicon from '../images/cancel-icon.png';
+import saveicon from '../images/save-icon.png'
 
 
 export const handleLogout = () => {
@@ -35,8 +36,33 @@ const Dashboard: React.FC = () => {
     const [trips, setTrips] = useState<any[]>([]);
     const [inputValue, setInputValue] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editFirstName, setEditFirstName] = useState<string>('');
+    const [editLastName, setEditLastName] = useState<string>('');
+    const [editEmail, setEditEmail] = useState<string>('');
+
+    
+    
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+    const handleEditProfile = () => {
+        setIsEditing(true);
+        setEditFirstName(firstName);
+        setEditLastName(lastName);
+        setEditEmail(email);
+    }
+
+    const handleCancelProfile = () => setIsEditing(false);
+
+    const handleSaveProfile = () => {
+        setEditFirstName(editFirstName);
+        setEditLastName(editLastName);
+        setEditEmail(editEmail);
+
+        localStorage.setItem('firstName', editFirstName);
+        localStorage.setItem('lastName', editLastName);
+        localStorage.setItem('email', editEmail);
+        setIsEditing(false);
     }
 
     const handleLogout = () => {
@@ -115,21 +141,52 @@ const Dashboard: React.FC = () => {
                         // <div className="profile-menu-container open">                            
                         <div className={`profile-menu-container ${isMenuOpen ? 'open-menu' : ''}`} id="profile-menu">
                             <img src={profileicon} alt="Profile Icon" id="profile-icon" />
-                            {/* <div className="profile-info">
-                                <h2>{firstName} {lastName}</h2>
-                            </div> */}
+
                             <div className="profile-info">
-                                <div id="name">{firstName} {lastName}</div>
+                                {isEditing ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            value={editFirstName}
+                                            onChange={(e) => setEditFirstName(e.target.value)}
+                                            placeholder="First Name"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={editLastName}
+                                            onChange={(e) => setEditLastName(e.target.value)}
+                                            placeholder="Last Name"
+                                        />
+                                    </>
+                                ) : (
+                                    <div id="name">{firstName} {lastName}</div> 
+                                )}
                             </div>
                             <div className="profile-info">
-                                <div id="email">{email}</div>
+                                <div id="email">
+                                    {isEditing ? (
+                                        <input
+                                            type="email"
+                                            value={editEmail}
+                                            onChange={(e) => setEditEmail(e.target.value)}
+                                            placeholder="Email"
+                                        />
+                                    ) : (
+                                        email
+                                    )}
+                                </div>
                             </div>
                             <div className="profile-actions-section">
-                                <button id="cancel-btn"><img src={cancelicon} alt="Cancel" /></button>
-                                <button id="edit-btn"><img src={editicon} alt="Edit" /></button>
+                                {isEditing ? (
+                                    <>
+                                        <button id="cancel-btn" onClick={handleCancelProfile}><img src={cancelicon} alt="Cancel" /></button>
+                                        <button id="save-btn" onClick={handleSaveProfile}><img src={saveicon} alt="Save"/></button>
+                                    </>
+                                ) : (
+                                    <button id="edit-btn" onClick={handleEditProfile}><img src={editicon} alt="Edit" /></button>
+                                )}
                             </div>
                         </div>
-                        // </div>
                     )}                                                                               
                     <button id="logout-button" onClick={handleLogout}>Logout</button>
                 </div>

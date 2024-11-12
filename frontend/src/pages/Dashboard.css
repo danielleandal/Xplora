@@ -23,9 +23,8 @@
     max-height: 0px;
     overflow: hidden;
     visibility: hidden;
-    /* transition: max-height 0.5s; */
-    transform: translateY(-20px); /* Start slightly above the view */
-    transition: max-height 1.5s ease, opacity 1.5s ease, transform 1.5s ease; /* Smooth transition */
+    transform: translateY(-20px);
+    transition: max-height 1.5s ease, opacity 1.5s ease, transform 1.5s ease; 
     z-index: 10;
 }
 
@@ -37,8 +36,8 @@
     border: 1px solid #6A0DAD;
     padding: 10px;
     border-radius: 20px;
-    opacity: 1; /* Fully opaque */
-    transform: translateY(0); /* Roll down effect */
+    opacity: 1; 
+    transform: translateY(0); 
 }
 
 .profile-menu{
@@ -54,7 +53,7 @@
     height: auto;
 }
 
-#cancel-btn img, #edit-btn img{
+#cancel-btn img, #edit-btn img, #save-btn img{
     width: 40px;
     height: 40px;
     margin: 5px;
@@ -62,17 +61,21 @@
 }
 
 .profile-info{
-    /* display: flex;
-    flex-direction: row;
-    align-items: left;
-    margin: 0px; */
     border: 1px solid #6A0DAD;
     border-radius: 20px;
     padding: 4px;
     margin: 15px;
     font-weight: 300;
     font-size: 20px;
+}
 
+.profile-info input{
+    border: 1px solid #6A0DAD;
+    border-radius: 20px;
+    padding: 4px;
+    margin: 15px;
+    font-weight: 300;
+    font-size: 20px;
 }
 
 .profile-info h2{
@@ -98,7 +101,6 @@
 
 #dashboard-logo{
     max-width: 100px;
-    /* min-width: 40px; */
     width: 2.5vw;
     height: auto;
 }
