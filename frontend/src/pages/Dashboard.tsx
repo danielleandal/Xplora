@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import TripListItem from '../components/TripListItem';
 import iconlogo from '../images/xplora-icon.png';
+import profileicon from '../images/profile-icon.png';
+import editicon from '../images/edit-icon.png';
 
 
 export const handleLogout = () => {
@@ -10,6 +12,7 @@ export const handleLogout = () => {
     localStorage.removeItem('firstName');
     localStorage.removeItem('lastName');
     localStorage.removeItem('ID');
+    localStorage.removeItem('email');
     navigate('/login');
 };
 
@@ -27,13 +30,19 @@ const Dashboard: React.FC = () => {
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [trips, setTrips] = useState<any[]>([]);
     const [inputValue, setInputValue] = useState('');
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('firstName');
         localStorage.removeItem('lastName');
         localStorage.removeItem('ID');
+        localStorage.removeItem('email');
         navigate('/login');
     };
 
@@ -44,10 +53,13 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         const storedFirstName = localStorage.getItem('firstName');
         const storedLastName = localStorage.getItem('lastName');
+        const storedEmail = localStorage.getItem('email');
+        console.log("Email fetched from localStorage: ", storedEmail);
 
-        if (storedFirstName && storedLastName) {
+        if (storedFirstName && storedLastName && storedEmail) {
             setFirstName(storedFirstName);
             setLastName(storedLastName);
+            setEmail(storedEmail);
         } else {
             navigate('/login');
         }
@@ -94,8 +106,30 @@ const Dashboard: React.FC = () => {
                     </Link>
                     <span id='welcome-text'>Welcome, {firstName} {lastName}!</span>
                 </div>
+                
                 <div className='actions-section'>
-                    <button id="profile-btn"><Link to="/profile">Profile</Link></button>
+                    {/* <button id="profile-btn"><Link to="/profile">Profile</Link></button> */}
+                    <button id="profile-btn" onClick={toggleMenu}>Profile</button>
+                    {isMenuOpen && (
+                        // <div className="profile-menu-container open">                            
+                        <div className={`profile-menu-container ${isMenuOpen ? 'open-menu' : ''}`} id="profile-menu">
+                            <img src={profileicon} alt="Profile Icon" id="profile-icon" />
+                            {/* <div className="profile-info">
+                                <h2>{firstName} {lastName}</h2>
+                            </div> */}
+                            <div className="profile-info">
+                                <div id="name">{firstName} {lastName}</div>
+                            </div>
+                            <div className="profile-info">
+                                <div id="email">{email}</div>
+                            </div>
+                            <div className="profile-actions-section">
+                                <button id="cancel-btn"><img src={iconlogo} alt="Cancel" /></button>
+                                <button id="edit-btn"><img src={editicon} alt="Edit" /></button>
+                            </div>
+                        </div>
+                        // </div>
+                    )}                                        
                     <button id="logout-button" onClick={handleLogout}>Logout</button>
                 </div>
             </div>

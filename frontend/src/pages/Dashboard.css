@@ -15,6 +15,71 @@
     padding: 20px 30px;
 }
 
+.profile-menu-container{
+    position: absolute;
+    top: 100%;
+    right: 10%;
+    width: 320px;
+    max-height: 0px;
+    overflow: hidden;
+    visibility: hidden;
+    /* transition: max-height 0.5s; */
+    transform: translateY(-20px); /* Start slightly above the view */
+    transition: max-height 1.5s ease, opacity 1.5s ease, transform 1.5s ease; /* Smooth transition */
+    z-index: 10;
+}
+
+.profile-menu-container.open-menu{
+    max-height: 400px;
+    overflow: visible;
+    visibility: visible;
+    background: #f5eeff;
+    border: 1px solid #6A0DAD;
+    padding: 10px;
+    border-radius: 20px;
+    opacity: 1; /* Fully opaque */
+    transform: translateY(0); /* Roll down effect */
+}
+
+.profile-menu{
+    background: #fff;
+    padding: 20px;
+    margin: 10px;
+}
+
+#profile-icon{
+    min-width: 80px;
+    border-radius: 50%;
+    width: 3.5vw;
+    height: auto;
+}
+
+#cancel-btn img, #edit-btn img{
+    width: 40px;
+    height: auto;
+    margin-right: 8px;
+    align-items: center;
+}
+
+.profile-info{
+    /* display: flex;
+    flex-direction: row;
+    align-items: left;
+    margin: 0px; */
+    border: 1px solid #6A0DAD;
+    border-radius: 20px;
+    padding: 4px;
+    margin: 15px;
+    font-weight: 300;
+    font-size: 20px;
+
+}
+
+.profile-info h2{
+    font-weight: 200;
+
+}
+
 .logo-welcome-section{
     display: flex;
     flex-direction: row;
@@ -26,7 +91,8 @@
 }
 
 #dashboard-logo{
-    min-width: 40px;
+    max-width: 100px;
+    /* min-width: 40px; */
     width: 2.5vw;
     height: auto;
 }
@@ -45,6 +111,7 @@
 }
 
 .actions-section{
+    position: relative;
     display: flex;
     flex-direction: row;
     flex-grow: 1;
