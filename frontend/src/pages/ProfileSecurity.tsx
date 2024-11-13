@@ -1,5 +1,5 @@
 import React from 'react';
-import './HowItWorks.css'; // Create this CSS file for styling
+import './HowItWorks.css';
 import './ProfileSecurity.css';
 import logo from '../images/logo.png';
 
