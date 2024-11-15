@@ -145,13 +145,13 @@ const Dashboard: React.FC = () => {
                             <div className="profile-info">
                                 {isEditing ? (
                                     <>
-                                        <input
+                                        <input id="edit-info"
                                             type="text"
                                             value={editFirstName}
                                             onChange={(e) => setEditFirstName(e.target.value)}
                                             placeholder="First Name"
                                         />
-                                        <input
+                                        <input id="edit-info"
                                             type="text"
                                             value={editLastName}
                                             onChange={(e) => setEditLastName(e.target.value)}
@@ -165,7 +165,7 @@ const Dashboard: React.FC = () => {
                             <div className="profile-info">
                                 <div id="email">
                                     {isEditing ? (
-                                        <input
+                                        <input id="edit-info"
                                             type="email"
                                             value={editEmail}
                                             onChange={(e) => setEditEmail(e.target.value)}

@@ -82,6 +82,16 @@
     font-weight: 200;
 }
 
+.profile-info.edit-info input{
+    border: 1px solid #6A0DAD;
+    background-color: white;
+    border-radius: 20px;
+    padding: 4px;
+    margin: 15px;
+    font-weight: 300;
+    font-size: 20px;
+}
+
 .profile-actions-section{
     display: flex;
     flex-direction: row;
