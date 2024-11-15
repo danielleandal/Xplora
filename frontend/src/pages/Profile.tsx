@@ -12,20 +12,17 @@ import image1 from '../images/image1.png';
 const ProfilePage: React.FC = () => { 
     const navigate = useNavigate();
 
-    const [userId, setUserId] = useState<String>('');
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<String>('');
 
     useEffect(() => {
         // Retrieve first and last names from localStorage
-        const storedUserId = localStorage.getItem('userId');
         const storedFirstName = localStorage.getItem('firstName');
         const storedLastName = localStorage.getItem('lastName');
         const storedEmail = localStorage.getItem('email');
 
-        if (storedFirstName && storedLastName && storedUserId && storedEmail) {
-            setUserId(storedUserId);
+        if (storedFirstName && storedLastName && storedEmail) {
             setFirstName(storedFirstName);
             setLastName(storedLastName);
             setEmail(storedEmail);
