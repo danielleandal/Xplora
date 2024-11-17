@@ -163,6 +163,26 @@ app.get('/api/users/:userId/trips', async (req, res) => {
     }
 });
 
+//TRIPS -- GET singular trip from user_id
+app.get('/api/users/:userId/trips/:tripId', async (req, res) => {
+    const { userId, tripId } = req.params;
+    const tripObjId = new ObjectId(String(tripId));
+
+    try {
+        const db = client.db('xplora');
+        const trip = await db.collection('trips').findOne({ _id: tripObjId });
+
+        if (!trip) {
+            return res.status(404).json({ error: 'Trip not found' });
+        }
+
+        res.status(200).json(trip);
+    } catch (error) {
+        console.error('Error fetching trip:', error);
+        res.status(500).json({ error: 'An error occurred while fetching the trip' });
+    }
+});
+
 //TRIPS -- PUT to update trip
 app.put('/api/users/:userId/trips/:tripId', async (req, res) => {
     const { userId, tripId } = req.params;
