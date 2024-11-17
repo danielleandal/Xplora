@@ -28,6 +28,7 @@ const TripDetails: React.FC = () => {
     const [tripName, setTripName] = useState<string>('');
     const [city, setCity] = useState<string>('');
     const [notes, setNotes] = useState<string>('');
+    const [pictureUrl, setPictureUrl] = useState<string | null>(null);
 
     const [flightsOpen, setFlightsOpen] = useState(false);
     const [accommodationsOpen, setAccommodationsOpen] = useState(false);
@@ -45,15 +46,6 @@ const TripDetails: React.FC = () => {
         if (type === 'activity') navigate('/add-activity');
     };
 
-    // TODO: Implement with Database
-    // async function fetchTripDates(): Promise<{ startDate: string; endDate: string }> {
-    //     return {
-    //         // sample data for now 
-    //         startDate: "2024-12-01",
-    //         endDate: "2024-12-05"
-    //     };
-    // }
-
     // more vairables 
     const [daysCount, setDaysCount] = useState<number | null>(null);
     const [startDate, setStartDate] = useState<string | null>(null);
@@ -62,8 +54,11 @@ const TripDetails: React.FC = () => {
     useEffect(() => {
         // Fetch trip details using the tripId and userId, and calculate days
         const fetchTripDetails = async () => {
-            if (tripId && userId) {
-                try {
+            if (!tripId || !userId){
+                console.error('Missing tripId or userId');
+                return;
+            }
+            try {
                     const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}`)); // it wont connect to database, unsure if the api only gets infomartion or also takes info from database
                     console.log('Response:', response);
                     if (response.ok) {
@@ -71,10 +66,12 @@ const TripDetails: React.FC = () => {
                         
                         // Set the fetched data into state
                         setTripName(data.name);
+                        console.log('Fetched tripName:', data.name);
                         setCity(data.city);
                         setStartDate(data.start_date);
                         setEndDate(data.end_date);
                         setNotes(data.notes);
+                        setPictureUrl(data.picture_url || null);
     
                         // Calculate the number of days using the helper function
                         const days = calculateTripDays(data.start_date, data.end_date);
@@ -85,7 +82,6 @@ const TripDetails: React.FC = () => {
                 } catch (error) {
                     console.error('Error fetching trip details:', error);
                 }
-            }
         };
     
         // Call the function to fetch trip details
