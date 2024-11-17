@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate,useParams  } from 'react-router-dom';
 import './TripDetails.css';
 import logo from '../images/logo.png';
 import xploraplane from '../images/xplora-plane.png';
@@ -8,6 +8,26 @@ import { calculateTripDays } from '../helper-files/calculateTripDays';
 
 const TripDetails: React.FC = () => {
     const navigate = useNavigate();
+
+
+    // added buildpath 
+    const app_name = 'xplora.fun'; 
+    function buildPath(route: string): string {
+        if (process.env.NODE_ENV !== 'development') {
+            return `https://${app_name}/${route}`;
+        } else {
+            return `http://localhost:5000/${route}`;
+        }
+    }
+
+    // the ids for specific user and specific trips
+    const { tripId } = useParams<{ tripId: string }>();
+    const userId = localStorage.getItem('ID');
+
+    // variables to store the trip detals
+    const [tripName, setTripName] = useState<string>('');
+    const [city, setCity] = useState<string>('');
+    const [notes, setNotes] = useState<string>('');
 
     const [flightsOpen, setFlightsOpen] = useState(false);
     const [accommodationsOpen, setAccommodationsOpen] = useState(false);
@@ -26,31 +46,51 @@ const TripDetails: React.FC = () => {
     };
 
     // TODO: Implement with Database
-    async function fetchTripDates(): Promise<{ startDate: string; endDate: string }> {
-        return {
-            // sample data for now 
-            startDate: "2024-12-01",
-            endDate: "2024-12-05"
-        };
-    }
+    // async function fetchTripDates(): Promise<{ startDate: string; endDate: string }> {
+    //     return {
+    //         // sample data for now 
+    //         startDate: "2024-12-01",
+    //         endDate: "2024-12-05"
+    //     };
+    // }
 
+    // more vairables 
     const [daysCount, setDaysCount] = useState<number | null>(null);
     const [startDate, setStartDate] = useState<string | null>(null);
     const [endDate, setEndDate] = useState<string | null>(null);
 
     useEffect(() => {
-        // Fetch dates from the database and calculate days
-        async function getDatesAndCalculateDays() {
-            const { startDate, endDate } = await fetchTripDates();
-            setStartDate(startDate);
-            setEndDate(endDate);
-
-            const days = calculateTripDays(startDate, endDate);
-            setDaysCount(days);
-        }
-
-        getDatesAndCalculateDays();
-    }, []);
+        // Fetch trip details using the tripId and userId, and calculate days
+        const fetchTripDetails = async () => {
+            if (tripId && userId) {
+                try {
+                    const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}`)); // it wont connect to database, unsure if the api only gets infomartion or also takes info from database
+                    console.log('Response:', response);
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // Set the fetched data into state
+                        setTripName(data.name);
+                        setCity(data.city);
+                        setStartDate(data.start_date);
+                        setEndDate(data.end_date);
+                        setNotes(data.notes);
+    
+                        // Calculate the number of days using the helper function
+                        const days = calculateTripDays(data.start_date, data.end_date);
+                        setDaysCount(days);
+                    } else {
+                        console.error('Failed to fetch trip:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error fetching trip details:', error);
+                }
+            }
+        };
+    
+        // Call the function to fetch trip details
+        fetchTripDetails();
+    }, [tripId, userId]);
 
     return (
         <div className="trip-details-page">
@@ -66,12 +106,12 @@ const TripDetails: React.FC = () => {
             </header>
 
             <div className="tripdetails-i-container">
-                <div className="tripdetails-i-header"> TripName goes here  </div>
+                <div className="tripdetails-i-header">{tripName || 'Loading...'}</div>
                 <div className="tripdetails-i-content">
                     <div className="trip-card-tripdetails">
                         <div className="deets-and-photo">
                             <div className="td-trip-details">
-                                <p className="trip-location">Trip Location Here</p>
+                                <p className="trip-location">{city || 'Loading city...'}</p>
                                 <p className="trip-dates">
                                     {startDate && endDate ? (
                                         <>
@@ -89,7 +129,7 @@ const TripDetails: React.FC = () => {
                         </div>
 
                         <div className="note-box">
-                            <p>Note: This is important information about the content above.</p>
+                            <p>{notes || 'No additional notes'}</p>
                         </div>
                     </div>
 

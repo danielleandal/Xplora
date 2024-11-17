@@ -306,6 +306,24 @@
     font-size: 25px;
     margin-right: 10px;
 }
+#trip-item-trash-icon:hover{
+    color: rgb(245, 177, 177);
+    transition: color 0.3s ease-in-out;
+    transform: translateY(-1px);
+}
+
+#trip-item-edit-icon{
+    color: #02b3d4CC;
+    font-size: 25px;
+    margin-right: 15px;
+}
+
+#trip-item-edit-icon:hover{
+    color: #83d2e0cc;
+    transform: translateY(-1px);
+    transition: color 0.3s ease-in-out;
+   
+}
 
 .no-trips-message {
     text-align: center;

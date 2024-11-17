@@ -18,8 +18,7 @@ export const handleLogout = () => {
     navigate('/login');
 };
 
-const app_name = 'xplora.fun'; // Replace with your actual production server domain, e.g., 'example.com'
-
+const app_name = 'xplora.fun'; 
 function buildPath(route: string): string {
     if (process.env.NODE_ENV !== 'development') {
         return `https://${app_name}/${route}`;
@@ -76,6 +75,10 @@ const Dashboard: React.FC = () => {
 
     const handleAddTrip = () => {
         navigate('/addtrip');
+    };
+
+    const handleEditTrip = (tripId: string) => {
+        navigate(`/trip-details/${tripId}`);
     };
 
     useEffect(() => {
@@ -160,6 +163,7 @@ const Dashboard: React.FC = () => {
                         location={trip.city}
                         dates={`${trip.start_date} - ${trip.end_date}`}
                         onDelete={() => handleDeleteTrip(trip._id)}
+                        onEdit={() => handleEditTrip(trip._id)} 
                     />
                 ));
             }

@@ -6,9 +6,10 @@ interface TripListItemProps {
     location: string;
     dates: string;
     onDelete: () => void;
+    onEdit: () => void;
 }
 
-const TripListItem: React.FC<TripListItemProps> = ({ title, location, dates, onDelete }) => {
+const TripListItem: React.FC<TripListItemProps> = ({ title, location, dates, onDelete, onEdit }) => {
     return (
         <div className='trip-list-item'>
             <img src={newyork} alt='trip picture' className='trip-image' />
@@ -19,6 +20,7 @@ const TripListItem: React.FC<TripListItemProps> = ({ title, location, dates, onD
                 </div>
             </div>
            
+            <i id="trip-item-edit-icon" className='fa fa-pen-alt' onClick={onEdit}></i>
             <i id="trip-item-trash-icon" className='fa fa-trash-alt' onClick={onDelete}></i>
         </div>
     );
