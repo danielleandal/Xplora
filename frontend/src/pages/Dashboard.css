@@ -331,3 +331,10 @@
     color: gray;
     margin-top: 20px;
 }
+
+.trip-link {
+    font-family: Poppins, sans-serif;
+    text-decoration: none;
+    color: #551A8B;
+    font-weight: bold;
+}

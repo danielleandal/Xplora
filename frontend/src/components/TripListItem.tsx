@@ -2,7 +2,7 @@ import React from 'react';
 import newyork from '../images/new-york.png'; // Replace with actual image or prop-based image
 
 interface TripListItemProps {
-    title: string;
+    title: React.ReactNode;
     location: string;
     dates: string;
     onDelete: () => void;
