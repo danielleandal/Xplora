@@ -61,21 +61,22 @@
 }
 
 .profile-info{
-    border: 1px solid #6A0DAD;
     border-radius: 20px;
     padding: 4px;
     margin: 15px;
     font-weight: 300;
     font-size: 20px;
+    display: flex;
 }
 
 .profile-info input{
-    border: 1px solid #6A0DAD;
-    border-radius: 20px;
-    padding: 4px;
+    border: 1px solid #cbbaf3;;
+    border-radius: 10px;
+    padding: 5px;
     margin: 15px;
     font-weight: 300;
     font-size: 20px;
+    width: 100%;
 }
 
 .profile-info h2{
@@ -308,7 +309,7 @@
 
 .no-trips-message {
     text-align: center;
-    font-size: 3rem;
+    font-size: 1rem;
     color: gray;
     margin-top: 20px;
 }

@@ -212,7 +212,7 @@ const Dashboard: React.FC = () => {
                     {/* Conditional rendering to check if trips is empty */}
                     {trips.length === 0 ? (
                         // If there are no trips, display this message
-                        <div className="no-trips-message">No trips yet</div>
+                        <div className="no-trips-message">No upcoming itineraries</div>
                     ) : (
                         // If there are trips, map over them and display each one
                         trips.map((trip) => (
