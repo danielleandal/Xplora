@@ -18,6 +18,7 @@ const TripListItem: React.FC<TripListItemProps> = ({ title, location, dates, onD
                     <span>{location}</span><span>{dates}</span>
                 </div>
             </div>
+           
             <i id="trip-item-trash-icon" className='fa fa-trash-alt' onClick={onDelete}></i>
         </div>
     );

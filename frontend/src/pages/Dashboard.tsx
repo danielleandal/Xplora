@@ -41,6 +41,7 @@ const Dashboard: React.FC = () => {
     const [editLastName, setEditLastName] = useState<string>('');
     const [editEmail, setEditEmail] = useState<string>('');
 
+
     
     
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -113,6 +114,11 @@ const Dashboard: React.FC = () => {
     const handleDeleteTrip = async (tripId: string) => {
         try {
             const userId = localStorage.getItem("ID");
+
+            // alert added to make sure user wants to delete 
+            const confirmDelete = window.confirm("Are you sure you want to delete this trip?");
+            if (!confirmDelete) return;
+
             await fetch(buildPath(`api/users/${userId}/trips/${tripId}`), { method: 'DELETE' });
             setTrips(trips.filter(trip => trip._id !== tripId));
         } catch (error) {
@@ -123,6 +129,44 @@ const Dashboard: React.FC = () => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
     };
+
+
+    const filteredTrip = trips.filter((trip) =>{
+        const searchTerm = inputValue.toLowerCase();
+        const tripName = trip.name.toLowerCase();
+        const tripCity = trip.city.toLowerCase();
+        return tripName.includes(searchTerm) || tripCity.includes(searchTerm);
+    })
+
+    // Conditional rendering using if-else statements
+        const renderTrips = () => {
+
+            // No trips at all
+            if (trips.length === 0) {
+                return <div className="no-trips-message">No upcoming itineraries</div>;
+            }
+
+            // Trips exist, but no trips match the search input
+            if (filteredTrip.length === 0 && inputValue) {
+                return <div className="no-trips-message">Trip not found</div>;
+            }
+
+            // Trips exist and match the search input
+            if (filteredTrip.length > 0) {
+                return filteredTrip.map((trip) => (
+                    <TripListItem
+                        key={trip._id}
+                        title={trip.name}
+                        location={trip.city}
+                        dates={`${trip.start_date} - ${trip.end_date}`}
+                        onDelete={() => handleDeleteTrip(trip._id)}
+                    />
+                ));
+            }
+
+            // Default case (fallback)
+            return null;
+        };
 
     return (
         <div className="dashboard">
@@ -209,22 +253,7 @@ const Dashboard: React.FC = () => {
                     <button className="add-trip-btn" onClick={handleAddTrip}>+</button>
 
 
-                    {/* Conditional rendering to check if trips is empty */}
-                    {trips.length === 0 ? (
-                        // If there are no trips, display this message
-                        <div className="no-trips-message">No upcoming itineraries</div>
-                    ) : (
-                        // If there are trips, map over them and display each one
-                        trips.map((trip) => (
-                            <TripListItem
-                                key={trip._id}
-                                title={trip.name}
-                                location={trip.city}
-                                dates={`${trip.start_date} - ${trip.end_date}`}
-                                onDelete={() => handleDeleteTrip(trip._id)}
-                            />
-                        ))
-                    )}
+                    {renderTrips()}
                 </div>
             </div>
         </div>
