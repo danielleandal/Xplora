@@ -3,7 +3,8 @@ import { Link, useNavigate,useParams  } from 'react-router-dom';
 import './TripDetails.css';
 import logo from '../images/logo.png';
 import xploraplane from '../images/xplora-plane.png';
-import newyork from '../images/new-york.png';
+import tripdefault from '../images/trip_default.png';
+// import test from '../images/test.jpg';
 import { calculateTripDays } from '../helper-files/calculateTripDays';
 
 const TripDetails: React.FC = () => {
@@ -120,7 +121,7 @@ const TripDetails: React.FC = () => {
                             </div>
 
                             <div className="tripdetails-image-container">
-                                <img src={ pictureUrl || newyork } alt="New York City" className="tripdetails-image" />
+                                <img src={pictureUrl || tripdefault } alt="New York City" className="tripdetails-image" />
                             </div>
                         </div>
 
