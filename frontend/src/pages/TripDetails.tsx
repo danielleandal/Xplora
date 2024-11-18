@@ -3,6 +3,7 @@ import { Link, useNavigate,useParams  } from 'react-router-dom';
 import './TripDetails.css';
 import logo from '../images/logo.png';
 import xploraplane from '../images/xplora-plane.png';
+import hotel from '../images/accommodation_placeholder.png';
 import tripdefault from '../images/trip_default.png';
 // import test from '../images/test.jpg';
 import { calculateTripDays } from '../helper-files/calculateTripDays';
@@ -175,8 +176,37 @@ const TripDetails: React.FC = () => {
                                     <span className="tooltip-text">Add new accommodation</span>
                                 </div>
                             </div>
-                            {accommodationsOpen && <div className="dropdown-content">Accommodation details here</div>}
+                            {accommodationsOpen &&
+                                <div className='accommodations-list'>
+                                    <div className='accommodation-details'>
+                                        <div className='top-acc-info'>
+                                            <div>
+                                                <img src={hotel} alt="Accommodation Icon" className="accommodation-icon" />
+                                            </div>
+                                            <div className='accommodation-title'>
+                                                <span className='your-stay-at'>Your stay at <span className='accommodation-name'> AccommodationName </span> </span>
+                                            </div>
+                                        </div>
+                                        <div className='from-dest-deets'>
+                                            <span id='from-deets'>Arrival</span>
+                                            <span id='dest-deets'>Departure</span>
+                                        </div>
+                                        <div className='bottom-acc-info'>
+                                            <div className='from-acc-info'>
+                                                <span id='accommodation-from-date'>06/08/2024</span>
+                                                <span id='accommodation-from-time'>10:00am</span>
+                                            </div>
+                                            <div className='dest-acc-info'>
+                                                <span id='accommodation-destination-date'>06/09/2024</span>
+                                                <span id='accommodation-destination-time'>10:00am</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
+
+
 
                         <div className="dropdown-section">
                             <div className="dropdown-header" onClick={() => toggleDropdown('activities')}>
