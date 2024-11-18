@@ -10,6 +10,15 @@ import { calculateTripDays } from '../helper-files/calculateTripDays';
 const TripDetails: React.FC = () => {
     const navigate = useNavigate();
 
+       // State variables for flight details
+       const [fromCity, setFromCity] = useState("");
+       const [fromAirport, setFromAirport] = useState("");
+       const [toCity, setToCity] = useState("");
+       const [toAirport, setToAirport] = useState("");
+       const [fromDate, setFromDate] = useState("");
+       const [toDate, setToDate] = useState("");
+   
+
 
     // added buildpath 
     const app_name = 'xplora.fun'; 
@@ -31,10 +40,12 @@ const TripDetails: React.FC = () => {
     const [notes, setNotes] = useState<string>('');
     const [pictureUrl, setPictureUrl] = useState<string | null>(null);
 
+    // variable states for dropdown
     const [flightsOpen, setFlightsOpen] = useState(false);
     const [accommodationsOpen, setAccommodationsOpen] = useState(false);
     const [activitiesOpen, setActivitiesOpen] = useState(false);
 
+ 
     const toggleDropdown = (dropdownType: string) => {
         if (dropdownType === 'flights') setFlightsOpen(!flightsOpen);
         if (dropdownType === 'accommodations') setAccommodationsOpen(!accommodationsOpen);
@@ -51,6 +62,95 @@ const TripDetails: React.FC = () => {
     const [daysCount, setDaysCount] = useState<number | null>(null);
     const [startDate, setStartDate] = useState<string | null>(null);
     const [endDate, setEndDate] = useState<string | null>(null);
+
+    // variable states for modal/pop up 
+    const [isFlightModalOpen, setIsFlightModalOpen] = useState(false);
+    const [isAccomodationModalOpen, setIsAccomodationModalOpen] = useState(false);
+    const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+        
+    // variable state for trip details
+    const [selectedFlight, setSelectedFlight] = useState<any>(null);
+    const [selectedAccomodation, setSelectedAccomodation] = useState<any>(null);
+    const [selectedActivity, setSelectedActivity] = useState<any>(null);
+   
+    // functions to deal with modal opening for each trip detail 
+    const handleFlightClick = (flight: any) =>{
+        setSelectedFlight(flight);
+        setIsFlightModalOpen(true);
+    }
+
+    const handleAccomodationClick = (accommodation: any) => {
+        setSelectedAccomodation(accommodation); // ✅ Correct
+        setIsAccomodationModalOpen(true);
+    };
+    
+    const handleActivityClick = (activity: any) => {
+        setSelectedActivity(activity); // ✅ Correct
+        setIsActivityModalOpen(true);
+    };
+
+    // const closeModals = () => {
+    //     setIsFlightModalOpen(false);
+    //     setIsAccomodationModalOpen(false);
+    //     setIsActivityModalOpen(false);
+    //     setSelectedFlight(null);
+    //     setSelectedAccomodation(null);
+    //     setSelectedActivity(null);
+    // };
+
+    // functions for the html details that will be printed in the modals
+
+    // flight modal
+    const FlightDetailsModal: React.FC <{flight:any, onClose:() => void}> = ({flight, onClose}) =>{
+        if(!flight) return null;
+
+        return (
+            <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <button className="close-button" onClick={onClose}>✖</button>
+                <h2>Flight Details</h2>
+                <p><strong>From:</strong> {flight.fromCity} ({flight.fromAirport})</p>
+                <p><strong>To:</strong> {flight.toCity} ({flight.toAirport})</p>
+                <p><strong>Departure Date:</strong> {flight.fromDate}</p>
+                <p><strong>Arrival Date:</strong> {flight.toDate}</p>
+            </div>
+        </div>
+        )
+    }
+
+    const AccommodationDetailsModal: React.FC<{ accommodation: any, onClose: () => void }> = ({ accommodation, onClose }) => {
+        if (!accommodation) return null;
+    
+        return (
+            <div className="modal-overlay" onClick={onClose}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <button className="close-button" onClick={onClose}>✖</button>
+                    <h2>Accommodation Details</h2>
+                    <p><strong>Hotel:</strong> {accommodation.name}</p>
+                    <p><strong>Location:</strong> {accommodation.location}</p>
+                    <p><strong>Check-in:</strong> {accommodation.checkIn}</p>
+                    <p><strong>Check-out:</strong> {accommodation.checkOut}</p>
+                </div>
+            </div>
+        );
+    };
+
+    const ActivityDetailsModal: React.FC<{ activity: any, onClose: () => void }> = ({ activity, onClose }) => {
+        if (!activity) return null;
+    
+        return (
+            <div className="modal-overlay" onClick={onClose}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <button className="close-button" onClick={onClose}>✖</button>
+                    <h2>Activity Details</h2>
+                    <p><strong>Activity:</strong> {activity.name}</p>
+                    <p><strong>Location:</strong> {activity.location}</p>
+                    <p><strong>Date:</strong> {activity.date}</p>
+                </div>
+            </div>
+        );
+    };
+
 
     useEffect(() => {
         // Fetch trip details using the tripId and userId, and calculate days
@@ -92,7 +192,7 @@ const TripDetails: React.FC = () => {
     return (
         <div className="trip-details-page">
             <header className="tripdetails-header">
-                <Link to="/">
+                <Link to="/dashboard">
                     <img src={logo} alt="Xplora Logo" className="tripdetails-logo" />
                 </Link>
                 <nav className="tripdetails-nav">
@@ -133,7 +233,19 @@ const TripDetails: React.FC = () => {
                     {/* Dropdown Sections */}
                     <div className="dropdown-all">
                         <div className="dropdown-section">
-                            <div className="dropdown-header" onClick={() => toggleDropdown('flights')}>
+                            <div className="dropdown-header" onClick={() =>{
+                                toggleDropdown('flights')
+
+
+                                // Update state variables independently
+                                setFromCity("London");
+                                setFromAirport("LHR");
+                                setToCity("New York");
+                                setToAirport("JFK");
+                                setFromDate("06/08/2024");
+                                setToDate("06/09/2024");
+
+                            } }>
                                 <span className="text">Flights</span>
                                 <span className={`arrow ${flightsOpen ? 'open' : ''}`}>▼</span>
                                 <div className="tooltip-container">
@@ -142,25 +254,40 @@ const TripDetails: React.FC = () => {
                                 </div>
                             </div>
                             {flightsOpen && 
-                            <div className='flights-list'>
-                                <div className='flight-details'>
+                            <div className='flights-list' >
+                                <div className='flight-details' 
+                                
+                                onClick={() =>{
+                                    // still hardcoded to variables, will change when api is working
+                                    handleFlightClick({
+                                        fromCity: 'London',
+                                        fromAirport: 'LHR',
+                                        toCity: 'New York',
+                                        toAirport: 'JFK',
+                                        fromDate: '06/08/2024',
+                                        toDate: '06/09/2024',
+                                    })
+                                 } }>
+                                    
+
                                     <div className='top-info'>
-                                        <span id='from-airport'>LHR</span>
+                                        <span id='from-airport'>{fromAirport}</span>
                                         <div className="airport-separation-line">
                                             <img src={xploraplane} alt="Airplane Icon" className="airplane-icon" />
                                         </div>                            
-                                        <span id='dest-airport'>JFK</span>         
+                                        <span id='dest-airport'>{toAirport}</span>         
                                     </div>
                                     <div className='bottom-info'>
                                         <div className='from-info'>
-                                            <span id='from-city'>London</span>
-                                            <span id='from-date'>06/08/2024</span>
+                                            <span id='from-city'>{fromCity}</span>
+                                            <span id='from-date'>{fromDate}</span>
                                         </div>
                                         <div className='dest-info'>
-                                            <span id='dest-city'>New York</span>
-                                            <span id='dest-date'>06/09/2024</span>
+                                            <span id='dest-city'>{toCity}</span>
+                                            <span id='dest-date'>{toDate}</span>
                                         </div>
                                     </div> 
+                                    
                                 </div>
                             </div>
                             }
@@ -175,7 +302,17 @@ const TripDetails: React.FC = () => {
                                     <span className="tooltip-text">Add new accommodation</span>
                                 </div>
                             </div>
-                            {accommodationsOpen && <div className="dropdown-content">Accommodation details here</div>}
+                            {accommodationsOpen && <div className="dropdown-content"
+                                 
+                                 onClick={() => handleAccomodationClick({
+                                    name: 'Hilton Hotel',
+                                    location: 'New York',
+                                    checkIn: '06/08/2024',
+                                    checkOut: '06/12/2024'
+                                })}
+                                
+
+                            >Accommodation details here</div>}
                         </div>
 
                         <div className="dropdown-section">
@@ -187,11 +324,54 @@ const TripDetails: React.FC = () => {
                                     <span className="tooltip-text">Add new activity</span>
                                 </div>
                             </div>
-                            {activitiesOpen && <div className="dropdown-content">Activity details here</div>}
+                            {activitiesOpen && <div className="dropdown-content"
+                                 
+                                 onClick={() => handleActivityClick({
+                                    name: 'Statue of Liberty Tour',
+                                    location: 'New York',
+                                    date: '06/09/2024'
+                                })}
+    
+
+                            >Activity details here</div>}
                         </div>
                     </div>
                 </div>
             </div>
+
+             {/* Render Flight Modals */}
+             {isFlightModalOpen && selectedFlight && (
+                <FlightDetailsModal
+                    flight={selectedFlight}
+                    onClose={() => {
+                        setIsFlightModalOpen(false);
+                        setSelectedFlight(null);
+                    }}
+                />
+            )}
+
+            {/*Render Accomodation Modals*/}
+            {isAccomodationModalOpen && selectedAccomodation && (
+                <AccommodationDetailsModal 
+                    accommodation={selectedAccomodation}
+                    onClose={() =>{
+                        setAccommodationsOpen(false);
+                        setSelectedAccomodation(null);
+                    }}
+                />
+            )}
+
+            {isActivityModalOpen && selectedActivity && (
+                <ActivityDetailsModal
+                    activity={selectedActivity}
+                    onClose={() =>{
+                        setActivitiesOpen(false);
+                        setSelectedActivity(null);
+                    }}
+                />
+            )}
+
+            
         </div>
     );
 };
