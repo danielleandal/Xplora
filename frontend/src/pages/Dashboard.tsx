@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import TripListItem from '../components/TripListItem';
 import iconlogo from '../images/xplora-icon.png';
-import profileicon from '../images/profile-icon.png';
+import defaultprofile from '../images/default_profile.png';
 import editicon from '../images/edit-icon.png';
 import cancelicon from '../images/cancel-icon.png';
 import saveicon from '../images/save-icon.png'
@@ -32,6 +32,7 @@ const Dashboard: React.FC = () => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
+    const [password] = useState<string>('');
     const [trips, setTrips] = useState<any[]>([]);
     const [inputValue, setInputValue] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,7 +40,7 @@ const Dashboard: React.FC = () => {
     const [editFirstName, setEditFirstName] = useState<string>('');
     const [editLastName, setEditLastName] = useState<string>('');
     const [editEmail, setEditEmail] = useState<string>('');
-
+    const [editPassword, setEditPassword] = useState<string>('');
 
     
     
@@ -50,6 +51,7 @@ const Dashboard: React.FC = () => {
         setEditFirstName(firstName);
         setEditLastName(lastName);
         setEditEmail(email);
+        setEditPassword(password);
     }
 
     const handleCancelProfile = () => setIsEditing(false);
@@ -183,37 +185,43 @@ const Dashboard: React.FC = () => {
                 </div>
                 
                 <div className='actions-section'>
-                    {/* <button id="profile-btn"><Link to="/profile">Profile</Link></button> */}
                     <button id="profile-btn" onClick={toggleMenu}>Profile</button>
                     {isMenuOpen && (
-                        // <div className="profile-menu-container open">                            
+                        // Conditional classNames based on isMenuOpen status                            
                         <div className={`profile-menu-container ${isMenuOpen ? 'open-menu' : ''}`} id="profile-menu">
-                            <img src={profileicon} alt="Profile Icon" id="profile-icon" />
-
-                            <div className="profile-info">
+                            
+                            {/* Conditional classNames based on isEditing status */}
+                            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
+                                                             
                                 {isEditing ? (
                                     <>
-                                        <input id="edit-info"
-                                            type="text"
-                                            value={editFirstName}
-                                            onChange={(e) => setEditFirstName(e.target.value)}
-                                            placeholder="First Name"
-                                        />
-                                        <input id="edit-info"
-                                            type="text"
-                                            value={editLastName}
-                                            onChange={(e) => setEditLastName(e.target.value)}
-                                            placeholder="Last Name"
-                                        />
+                                        <img src={defaultprofile} alt="Profile Icon" id="profile-icon" />   
+                                        <div id="edit-name">
+                                            <input className="edit-info"
+                                                type="text"
+                                                value={editFirstName}
+                                                onChange={(e) => setEditFirstName(e.target.value)}
+                                                placeholder="First Name"
+                                            />
+                                            <input className="edit-info"
+                                                type="text"
+                                                value={editLastName}
+                                                onChange={(e) => setEditLastName(e.target.value)}
+                                                placeholder="Last Name"
+                                            />
+                                        </div>
                                     </>
                                 ) : (
-                                    <div id="name">{firstName} {lastName}</div> 
+                                    <>
+                                    <img src={defaultprofile} alt="Profile Icon" id="profile-icon" />
+                                    <div id="name"><h2 id="profile-menu">{firstName} {lastName}</h2></div>
+                                    </> 
                                 )}
                             </div>
-                            <div className="profile-info">
+                            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
                                 <div id="email">
                                     {isEditing ? (
-                                        <input id="edit-info"
+                                        <input className="edit-info"
                                             type="email"
                                             value={editEmail}
                                             onChange={(e) => setEditEmail(e.target.value)}
@@ -224,14 +232,29 @@ const Dashboard: React.FC = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="profile-actions-section">
+                            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
+                                <div id="password">
+                                    {isEditing ? (
+                                        <input className="edit-info"
+                                            type="password"
+                                            value={editPassword}
+                                            onChange={(e) => setEditEmail(e.target.value)}
+                                            placeholder="Password"
+                                        />
+                                    ) : (
+                                        "***********"
+                                    )}
+                                </div>
+                            </div>
+                            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
                                 {isEditing ? (
                                     <>
                                         <button id="cancel-btn" onClick={handleCancelProfile}><img src={cancelicon} alt="Cancel" /></button>
                                         <button id="save-btn" onClick={handleSaveProfile}><img src={saveicon} alt="Save"/></button>
                                     </>
                                 ) : (
-                                    <button id="edit-btn" onClick={handleEditProfile}><img src={editicon} alt="Edit" /></button>
+                                    // <button id="edit-btn" onClick={handleEditProfile}><img src={editicon} alt="Edit" /></button>
+                                    <i id="trip-item-edit-icon" className='fa fa-pen-alt' onClick={handleEditProfile}></i>
                                 )}
                             </div>
                         </div>

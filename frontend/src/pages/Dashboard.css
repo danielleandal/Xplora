@@ -26,31 +26,52 @@
     transform: translateY(-20px);
     transition: max-height 1.5s ease, opacity 1.5s ease, transform 1.5s ease; 
     z-index: 10;
+    box-sizing: border-box;
+    justify-content: center;
+    /* flex-wrap: wrap; */
 }
 
 .profile-menu-container.open-menu{
-    max-height: 400px;
-    overflow: visible;
-    visibility: visible;
-    background: #f5eeff;
-    border: 1px solid #6A0DAD;
-    padding: 10px;
-    border-radius: 20px;
-    opacity: 1; 
     transform: translateY(0); 
+    visibility: visible;
+    /* z-index: 10; */
+
+    min-height: 350px;
+    max-height: fit-content;
+    overflow: visible;
+    padding: 10px;
+    border: 1px solid #6A0DAD;
+    border-radius: 20px;
+    box-sizing: inherit;
+    
+    background: white;
+    opacity: 1; 
+
+    overflow: visible;
+
+    display: flex;
+    flex-direction: column; 
+    align-items: center;      
+    justify-content: center;
+    /* flex-wrap: wrap; */
 }
 
 .profile-menu{
-    background: #fff;
+    background: white;
     padding: 20px;
     margin: 10px;
+    height: auto;
+    /* flex-wrap: wrap; */
+    /* justify-content: center; */
 }
 
 #profile-icon{
-    min-width: 80px;
+    /* min-width: 80px; */
+    padding: 20px;
+    margin-left: auto;
     border-radius: 50%;
-    width: 3.5vw;
-    height: auto;
+    width: 80px;
+    height: 80px;
 }
 
 #cancel-btn img, #edit-btn img, #save-btn img{
@@ -63,32 +84,38 @@
 .profile-info{
     border-radius: 20px;
     padding: 4px;
-    margin: 15px;
+    /* margin: 15px; */
     font-weight: 300;
     font-size: 20px;
     display: flex;
+    /* justify-content: center; */
+    align-items: center;
 }
 
 .profile-info input{
-    border: 1px solid #cbbaf3;;
+    border: 1px solid black;;
     border-radius: 10px;
     padding: 5px;
     margin: 15px;
     font-weight: 300;
     font-size: 20px;
     width: 100%;
+    align-items: center;
 }
 
-.profile-info h2{
-    font-weight: 200;
+#profile-menu h2{
+    font-weight: 1000;
+    font-size: 30px;
 }
 
-.profile-info.edit-info input{
-    border: 1px solid #6A0DAD;
-    background-color: white;
-    border-radius: 20px;
-    padding: 4px;
-    margin: 15px;
+.profile-info.editing input.edit-info{
+    /* border: 1px solid gray; */
+    background-color: rgb(235, 235, 235);
+    color: black;
+    border-radius: 10px;
+    padding: 10px;
+    /* margin: 15px; */
+    max-width: 90%;
     font-weight: 300;
     font-size: 20px;
 }
@@ -96,7 +123,7 @@
 .profile-actions-section{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
 }
 
