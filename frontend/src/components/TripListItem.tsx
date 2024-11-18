@@ -9,6 +9,8 @@ interface TripListItemProps {
     onEdit: () => void;
 }
 
+
+
 const TripListItem: React.FC<TripListItemProps> = ({ title, location, dates, onDelete, onEdit }) => {
     return (
         <div className='trip-list-item'>
