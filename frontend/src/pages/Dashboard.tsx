@@ -180,7 +180,7 @@ const Dashboard: React.FC = () => {
         <div className="dashboard">
             <div className='dashboard-header'>
                 <div className='logo-welcome-section'>
-                    <Link to="/">
+                    <Link to="/dashboard">
                         <img src={iconlogo} alt="Xplora Logo" id="dashboard-logo" />
                     </Link>
                     <span id='welcome-text'>Welcome, {firstName} {lastName}!</span>
