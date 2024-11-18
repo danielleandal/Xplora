@@ -321,8 +321,8 @@ const TripDetails: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className='from-dest-deets'>
-                                            <span id='from-deets'>Arrival</span>
-                                            <span id='dest-deets'>Departure</span>
+                                            <span id='from-deets'>Check-In</span>
+                                            <span id='dest-deets'>Check-Out</span>
                                         </div>
                                         <div className='bottom-acc-info'>
                                             <div className='from-acc-info'>
