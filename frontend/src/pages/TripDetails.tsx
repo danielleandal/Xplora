@@ -120,7 +120,7 @@ const TripDetails: React.FC = () => {
                             </div>
 
                             <div className="tripdetails-image-container">
-                                <img src={newyork} alt="New York City" className="tripdetails-image" />
+                                <img src={ pictureUrl || newyork } alt="New York City" className="tripdetails-image" />
                             </div>
                         </div>
 
