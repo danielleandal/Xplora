@@ -11,7 +11,8 @@ interface ProfileDropdownProps {
     password: string;
 
     onEditProfile: () => void;
-    onSaveProfile: () => void;
+    // onSaveProfile: () => void;
+    onSaveProfile: (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => void;
     onCancelProfile: () => void;
 
     isEditing: boolean;
@@ -25,6 +26,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
     const [newLastName, setNewLastName] = useState<string>(lastName);
     const [newEmail, setNewEmail] = useState<string>(email);
     const [newPassword, setNewPassword] = useState<string>('');
+
+    const handleSaveChange = () => {
+        onSaveProfile(newFirstName, newLastName, newEmail, newPassword);
+    };
     
     return(
         <div className={`profile-menu-container ${isMenuOpen ? 'open-menu' : ''}`} id="profile-menu">
@@ -93,7 +98,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                 {isEditing ? (
                     <>
                         <button id="cancel-btn" onClick={onCancelProfile}><img src={cancelicon} alt="Cancel" /></button>
-                        <button id="save-btn" onClick={onSaveProfile}><img src={saveicon} alt="Save"/></button>
+                        <button id="save-btn" onClick={handleSaveChange}><img src={saveicon} alt="Save"/></button>
                     </>
                 ) : (
                     // <button id="edit-btn" onClick={handleEditProfile}><img src={editicon} alt="Edit" /></button>

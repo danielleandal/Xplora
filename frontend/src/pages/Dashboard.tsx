@@ -42,23 +42,6 @@ const Dashboard: React.FC = () => {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-    // Profile
-    useEffect(() => {
-        const storedFirstName = localStorage.getItem('firstName');
-        const storedLastName = localStorage.getItem('lastName');
-        const storedEmail = localStorage.getItem('email');
-
-        if (storedFirstName && storedLastName && storedEmail) {
-            setFirstName(storedFirstName);
-            setLastName(storedLastName);
-            setEmail(storedEmail);
-        } else {
-            navigate('/login');
-        }
-
-        
-    }, [firstName, lastName, email, password]);
-
     const renderProfile = () => {
         
         if (isEditing) {
@@ -70,7 +53,7 @@ const Dashboard: React.FC = () => {
                     password = {"***********"}
 
                     onEditProfile={() => handleEditProfile(firstName, lastName, email, password)} 
-                    onSaveProfile={() => handleSaveProfile()}
+                    onSaveProfile={() => handleSaveProfile(firstName, lastName, email, password)}
                     onCancelProfile={() => handleCancelProfile()}
 
                     isEditing={true}
@@ -87,7 +70,9 @@ const Dashboard: React.FC = () => {
                 password = {"***********"}
 
                 onEditProfile={() => handleEditProfile(firstName, lastName, email, password)} 
-                onSaveProfile={() => handleSaveProfile()}
+                onSaveProfile={ (newFirstName, newLastName, newEmail, newPassword) =>
+                    handleSaveProfile(newFirstName, newLastName, newEmail, newPassword)
+                }
                 onCancelProfile={() => handleCancelProfile()}
 
                 isEditing={false}
@@ -103,24 +88,49 @@ const Dashboard: React.FC = () => {
         setEditLastName(newLastName);
         setEditEmail(newEmail);
         setEditPassword(newPassword);
-
-        renderProfile();
     }
 
     const handleCancelProfile = () => setIsEditing(false);
 
-    const handleSaveProfile = () => {
-        setEditFirstName(newFirstName);
-        setEditLastName(newLastName);
-        setEditEmail(newEmail);
+    // const handleSaveProfile = (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
+    //     setFirstName(newFirstName);
+    //     setLastName(newLastName);
+    //     setEmail(newEmail);
 
-        localStorage.setItem('firstName', newFirstName);
-        localStorage.setItem('lastName', newLastName);
-        localStorage.setItem('email', newEmail);
+    //     localStorage.setItem('firstName', newFirstName);
+    //     localStorage.setItem('lastName', newLastName);
+    //     localStorage.setItem('email', newEmail);
         
-        setIsEditing(false);
-        renderProfile();
-    }
+    //     setIsEditing(false);
+    //     renderProfile();
+    // }
+
+    const handleSaveProfile = async (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
+        try {
+            // Save locally
+            setFirstName(newFirstName);
+            setLastName(newLastName);
+            setEmail(newEmail);
+            localStorage.setItem('firstName', newFirstName);
+            localStorage.setItem('lastName', newLastName);
+            localStorage.setItem('email', newEmail);
+    
+            // Save to backend
+            const userId = localStorage.getItem('ID');
+            const response = await fetch(buildPath(`api/users/${userId}`), {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ firstName: newFirstName, lastName: newLastName, email: newEmail }),
+            });
+    
+            if (!response.ok) throw new Error('Failed to save profile');
+            
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Error saving profile:', error);
+        }
+    };
+    
 
     const handleLogout = () => {
         localStorage.removeItem('firstName');
