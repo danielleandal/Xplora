@@ -6,7 +6,6 @@ import ProfileDropdown from '../components/ProfileDropdown'
 import iconlogo from '../images/xplora-icon.png';
 
 
-
 export const handleLogout = () => {
     const navigate = useNavigate();
     localStorage.removeItem('firstName');
@@ -35,10 +34,10 @@ const Dashboard: React.FC = () => {
     const [inputValue, setInputValue] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [newFirstName, setEditFirstName] = useState<string>('');
-    const [newLastName, setEditLastName] = useState<string>('');
-    const [newEmail, setEditEmail] = useState<string>('');
-    const [newPassword, setEditPassword] = useState<string>('');
+    // const [newFirstName, setEditFirstName] = useState<string>('');
+    // const [newLastName, setEditLastName] = useState<string>('');
+    // const [newEmail, setEditEmail] = useState<string>('');
+    // const [newPassword, setEditPassword] = useState<string>('************');
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -50,9 +49,9 @@ const Dashboard: React.FC = () => {
                     firstName = {firstName}
                     lastName = {lastName}
                     email = {email}
-                    password = {"***********"}
+                    password = {''}
 
-                    onEditProfile={() => handleEditProfile(firstName, lastName, email, password)} 
+                    onEditProfile={() => handleEditProfile()} 
                     onSaveProfile={() => handleSaveProfile(firstName, lastName, email, password)}
                     onCancelProfile={() => handleCancelProfile()}
 
@@ -67,9 +66,9 @@ const Dashboard: React.FC = () => {
                 firstName = {firstName}
                 lastName = {lastName}
                 email = {email}
-                password = {"***********"}
+                password = {'*************'}
 
-                onEditProfile={() => handleEditProfile(firstName, lastName, email, password)} 
+                onEditProfile={() => handleEditProfile()} 
                 onSaveProfile={ (newFirstName, newLastName, newEmail, newPassword) =>
                     handleSaveProfile(newFirstName, newLastName, newEmail, newPassword)
                 }
@@ -81,16 +80,14 @@ const Dashboard: React.FC = () => {
         )
     }
 
-    const handleEditProfile = (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
+    const handleEditProfile = () => {
         setIsEditing(true);
-
-        setEditFirstName(newFirstName);
-        setEditLastName(newLastName);
-        setEditEmail(newEmail);
-        setEditPassword(newPassword);
     }
 
-    const handleCancelProfile = () => setIsEditing(false);
+    const handleCancelProfile = () => {
+        setIsEditing(false);
+        setIsMenuOpen(false);
+    }
 
     // const handleSaveProfile = (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
     //     setFirstName(newFirstName);
@@ -107,28 +104,39 @@ const Dashboard: React.FC = () => {
 
     const handleSaveProfile = async (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
         try {
-            // Save locally
+            // Update local state
             setFirstName(newFirstName);
             setLastName(newLastName);
             setEmail(newEmail);
+    
+            // Sync with localStorage
             localStorage.setItem('firstName', newFirstName);
             localStorage.setItem('lastName', newLastName);
             localStorage.setItem('email', newEmail);
+            
     
             // Save to backend
             const userId = localStorage.getItem('ID');
             const response = await fetch(buildPath(`api/users/${userId}`), {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ firstName: newFirstName, lastName: newLastName, email: newEmail }),
+                body: JSON.stringify({
+                    firstName: newFirstName,
+                    lastName: newLastName,
+                    email: newEmail,
+                    password: newPassword,
+                }),
             });
     
             if (!response.ok) throw new Error('Failed to save profile');
-            
+    
             setIsEditing(false);
         } catch (error) {
             console.error('Error saving profile:', error);
+        } finally {
+            setIsEditing(false);
         }
+        renderProfile();
     };
     
 
@@ -251,10 +259,19 @@ const Dashboard: React.FC = () => {
                 <div className='actions-section'>
                     <button id="profile-btn" onClick={toggleMenu}>Profile</button>
                     {isMenuOpen && (
-                        // Conditional classNames based on isMenuOpen status   
-                        renderProfile()
-                        
-                    )}                                                                               
+                        <ProfileDropdown
+                        firstName={firstName}
+                        lastName={lastName}
+                        email={email}
+                        password={'*************'}
+                        onEditProfile={handleEditProfile}
+                        onSaveProfile={handleSaveProfile}
+                        onCancelProfile={handleCancelProfile}
+                        isEditing={isEditing}
+                        isMenuOpen={true}
+                        />  
+                    )}
+                                                                                                  
                     <button id="logout-button" onClick={handleLogout}>Logout</button>
                 </div>
             </div>

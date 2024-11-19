@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import '../pages/Dashboard.css'
 import defaultprofile from '../images/default_profile.png';
-import cancelicon from '../images/cancel-icon.png';
-import saveicon from '../images/save-icon.png'
 
 interface ProfileDropdownProps {
     firstName: string;
@@ -90,19 +88,23 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                             placeholder="Password"
                         />
                     ) : (
-                        "***********"
+                        password
                     )}
                 </div>
             </div>
             <div className={`profile-info ${isEditing ? "editing" : ""}`}>
                 {isEditing ? (
                     <>
-                        <button id="cancel-btn" onClick={onCancelProfile}><img src={cancelicon} alt="Cancel" /></button>
-                        <button id="save-btn" onClick={handleSaveChange}><img src={saveicon} alt="Save"/></button>
+                        {/* <button id="cancel-btn" onClick={onCancelProfile}><img src={cancelicon} alt="Cancel" /></button> */}
+                        {/* <button id="save-btn" onClick={handleSaveChange}><img src={saveicon} alt="Save"/></button> */}
+                        <i id="profile-cancel-icon" className='fa fa-times-circle' onClick={onCancelProfile}></i>
+                        <i id="profile-save-icon" className='fa fa-save' onClick={handleSaveChange}></i>
                     </>
                 ) : (
-                    // <button id="edit-btn" onClick={handleEditProfile}><img src={editicon} alt="Edit" /></button>
-                    <i id="trip-item-edit-icon" className='fa fa-pen-alt' onClick={onEditProfile}></i>
+                    <>
+                        <i id="profile-cancel-icon" className='fa fa-times-circle' onClick={onCancelProfile}></i>
+                        <i id="trip-item-edit-icon" className='fa fa-pen-alt' onClick={onEditProfile}></i>
+                    </>
                 )}
             </div>
         </div>
