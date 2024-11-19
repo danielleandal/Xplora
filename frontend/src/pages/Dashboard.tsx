@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import TripListItem from '../components/TripListItem';
+import ProfileDropdown from '../components/ProfileDropdown'
 import iconlogo from '../images/xplora-icon.png';
-import defaultprofile from '../images/default_profile.png';
-import editicon from '../images/edit-icon.png';
-import cancelicon from '../images/cancel-icon.png';
-import saveicon from '../images/save-icon.png'
+
 
 
 export const handleLogout = () => {
@@ -37,34 +35,91 @@ const Dashboard: React.FC = () => {
     const [inputValue, setInputValue] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [editFirstName, setEditFirstName] = useState<string>('');
-    const [editLastName, setEditLastName] = useState<string>('');
-    const [editEmail, setEditEmail] = useState<string>('');
-    const [editPassword, setEditPassword] = useState<string>('');
+    const [newFirstName, setEditFirstName] = useState<string>('');
+    const [newLastName, setEditLastName] = useState<string>('');
+    const [newEmail, setEditEmail] = useState<string>('');
+    const [newPassword, setEditPassword] = useState<string>('');
 
-    
-    
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-    const handleEditProfile = () => {
+    // Profile
+    useEffect(() => {
+        const storedFirstName = localStorage.getItem('firstName');
+        const storedLastName = localStorage.getItem('lastName');
+        const storedEmail = localStorage.getItem('email');
+
+        if (storedFirstName && storedLastName && storedEmail) {
+            setFirstName(storedFirstName);
+            setLastName(storedLastName);
+            setEmail(storedEmail);
+        } else {
+            navigate('/login');
+        }
+
+        
+    }, [firstName, lastName, email, password]);
+
+    const renderProfile = () => {
+        
+        if (isEditing) {
+            return (
+                <ProfileDropdown
+                    firstName = {firstName}
+                    lastName = {lastName}
+                    email = {email}
+                    password = {"***********"}
+
+                    onEditProfile={() => handleEditProfile(firstName, lastName, email, password)} 
+                    onSaveProfile={() => handleSaveProfile()}
+                    onCancelProfile={() => handleCancelProfile()}
+
+                    isEditing={true}
+                    isMenuOpen={true}
+                />
+            )
+        }
+        
+        return (
+            <ProfileDropdown
+                firstName = {firstName}
+                lastName = {lastName}
+                email = {email}
+                password = {"***********"}
+
+                onEditProfile={() => handleEditProfile(firstName, lastName, email, password)} 
+                onSaveProfile={() => handleSaveProfile()}
+                onCancelProfile={() => handleCancelProfile()}
+
+                isEditing={false}
+                isMenuOpen={true}
+            />
+        )
+    }
+
+    const handleEditProfile = (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
         setIsEditing(true);
-        setEditFirstName(firstName);
-        setEditLastName(lastName);
-        setEditEmail(email);
-        setEditPassword(password);
+
+        setEditFirstName(newFirstName);
+        setEditLastName(newLastName);
+        setEditEmail(newEmail);
+        setEditPassword(newPassword);
+
+        renderProfile();
     }
 
     const handleCancelProfile = () => setIsEditing(false);
 
     const handleSaveProfile = () => {
-        setEditFirstName(editFirstName);
-        setEditLastName(editLastName);
-        setEditEmail(editEmail);
+        setEditFirstName(newFirstName);
+        setEditLastName(newLastName);
+        setEditEmail(newEmail);
 
-        localStorage.setItem('firstName', editFirstName);
-        localStorage.setItem('lastName', editLastName);
-        localStorage.setItem('email', editEmail);
+        localStorage.setItem('firstName', newFirstName);
+        localStorage.setItem('lastName', newLastName);
+        localStorage.setItem('email', newEmail);
+        
         setIsEditing(false);
+        renderProfile();
     }
 
     const handleLogout = () => {
@@ -87,7 +142,6 @@ const Dashboard: React.FC = () => {
         const storedFirstName = localStorage.getItem('firstName');
         const storedLastName = localStorage.getItem('lastName');
         const storedEmail = localStorage.getItem('email');
-        console.log("Email fetched from localStorage: ", storedEmail);
 
         if (storedFirstName && storedLastName && storedEmail) {
             setFirstName(storedFirstName);
@@ -187,77 +241,9 @@ const Dashboard: React.FC = () => {
                 <div className='actions-section'>
                     <button id="profile-btn" onClick={toggleMenu}>Profile</button>
                     {isMenuOpen && (
-                        // Conditional classNames based on isMenuOpen status                            
-                        <div className={`profile-menu-container ${isMenuOpen ? 'open-menu' : ''}`} id="profile-menu">
-                            
-                            {/* Conditional classNames based on isEditing status */}
-                            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
-                                                             
-                                {isEditing ? (
-                                    <>
-                                        <img src={defaultprofile} alt="Profile Icon" id="profile-icon" />   
-                                        <div id="edit-name">
-                                            <input className="edit-info"
-                                                type="text"
-                                                value={editFirstName}
-                                                onChange={(e) => setEditFirstName(e.target.value)}
-                                                placeholder="First Name"
-                                            />
-                                            <input className="edit-info"
-                                                type="text"
-                                                value={editLastName}
-                                                onChange={(e) => setEditLastName(e.target.value)}
-                                                placeholder="Last Name"
-                                            />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                    <img src={defaultprofile} alt="Profile Icon" id="profile-icon" />
-                                    <div id="name"><h2 id="profile-menu">{firstName} {lastName}</h2></div>
-                                    </> 
-                                )}
-                            </div>
-                            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
-                                <div id="email">
-                                    {isEditing ? (
-                                        <input className="edit-info"
-                                            type="email"
-                                            value={editEmail}
-                                            onChange={(e) => setEditEmail(e.target.value)}
-                                            placeholder="Email"
-                                        />
-                                    ) : (
-                                        email
-                                    )}
-                                </div>
-                            </div>
-                            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
-                                <div id="password">
-                                    {isEditing ? (
-                                        <input className="edit-info"
-                                            type="password"
-                                            value={editPassword}
-                                            onChange={(e) => setEditEmail(e.target.value)}
-                                            placeholder="Password"
-                                        />
-                                    ) : (
-                                        "***********"
-                                    )}
-                                </div>
-                            </div>
-                            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
-                                {isEditing ? (
-                                    <>
-                                        <button id="cancel-btn" onClick={handleCancelProfile}><img src={cancelicon} alt="Cancel" /></button>
-                                        <button id="save-btn" onClick={handleSaveProfile}><img src={saveicon} alt="Save"/></button>
-                                    </>
-                                ) : (
-                                    // <button id="edit-btn" onClick={handleEditProfile}><img src={editicon} alt="Edit" /></button>
-                                    <i id="trip-item-edit-icon" className='fa fa-pen-alt' onClick={handleEditProfile}></i>
-                                )}
-                            </div>
-                        </div>
+                        // Conditional classNames based on isMenuOpen status   
+                        renderProfile()
+                        
                     )}                                                                               
                     <button id="logout-button" onClick={handleLogout}>Logout</button>
                 </div>
