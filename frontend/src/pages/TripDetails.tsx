@@ -10,13 +10,13 @@ import { calculateTripDays } from '../helper-files/calculateTripDays';
 const TripDetails: React.FC = () => {
     const navigate = useNavigate();
 
-       // State variables for flight details
-       const [fromCity, setFromCity] = useState("");
-       const [fromAirport, setFromAirport] = useState("");
-       const [toCity, setToCity] = useState("");
-       const [toAirport, setToAirport] = useState("");
-       const [fromDate, setFromDate] = useState("");
-       const [toDate, setToDate] = useState("");
+    //    // State variables for flight details
+    //    const [fromCity, setFromCity] = useState("");
+    //    const [fromAirport, setFromAirport] = useState("");
+    //    const [toCity, setToCity] = useState("");
+    //    const [toAirport, setToAirport] = useState("");
+    //    const [fromDate, setFromDate] = useState("");
+    //    const [toDate, setToDate] = useState("");
    
 
 
@@ -112,7 +112,10 @@ const TripDetails: React.FC = () => {
                 <p><strong>From:</strong> {flight.fromCity} ({flight.fromAirport})</p>
                 <p><strong>To:</strong> {flight.toCity} ({flight.toAirport})</p>
                 <p><strong>Departure Date:</strong> {flight.fromDate}</p>
-                <p><strong>Arrival Date:</strong> {flight.toDate}</p>
+                <p><strong>Departure Time:</strong> {flight.departureTime}</p>
+                <p><strong>Arrival Date:</strong> {flight.toDate} </p>
+                <p><strong>Arrival Time:</strong> {flight.arrivalTime}</p>    {/* Added time */}
+                
             </div>
         </div>
         )
@@ -152,6 +155,53 @@ const TripDetails: React.FC = () => {
     };
 
 
+ 
+
+    const [flightsList, setFlightsList] = useState<any[]>([]); // State to store the flights
+
+    const fetchFlights = async () => {
+        if(!tripId || !userId){
+            console.error("missing userid or trid id")
+            {
+                return;
+            }
+        }
+
+        console.log("trips ID:", tripId);
+        console.log("User ID:", userId);
+        try {
+
+            const response = await fetch(
+                buildPath(`api/users/${userId}/trips/${tripId}/flights`), 
+                {
+                    method: "GET", 
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+                
+            );
+
+            
+
+            console.log("HERE");
+        
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Fetched flights:", data);
+                setFlightsList(data); 
+            } else {
+                console.error("Failed to fetch flights:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching flights:", error);
+        }
+        
+
+    }
+
+
+
     useEffect(() => {
         // Fetch trip details using the tripId and userId, and calculate days
         const fetchTripDetails = async () => {
@@ -187,7 +237,10 @@ const TripDetails: React.FC = () => {
     
         // Call the function to fetch trip details
         fetchTripDetails();
+        fetchFlights();
     }, [tripId, userId]);
+
+
 
     return (
         <div className="trip-details-page">
@@ -237,14 +290,6 @@ const TripDetails: React.FC = () => {
                                 toggleDropdown('flights')
 
 
-                                // Update state variables independently
-                                setFromCity("London");
-                                setFromAirport("LHR");
-                                setToCity("New York");
-                                setToAirport("JFK");
-                                setFromDate("06/08/2024");
-                                setToDate("06/09/2024");
-
                             } }>
                                 <span className="text">Flights</span>
                                 <span className={`arrow ${flightsOpen ? 'open' : ''}`}>▼</span>
@@ -253,44 +298,53 @@ const TripDetails: React.FC = () => {
                                     <span className="tooltip-text">Add new flight</span>
                                 </div>
                             </div>
-                            {flightsOpen && 
-                            <div className='flights-list' >
-                                <div className='flight-details' 
-                                
-                                onClick={() =>{
-                                    // still hardcoded to variables, will change when api is working
-                                    handleFlightClick({
-                                        fromCity: 'London',
-                                        fromAirport: 'LHR',
-                                        toCity: 'New York',
-                                        toAirport: 'JFK',
-                                        fromDate: '06/08/2024',
-                                        toDate: '06/09/2024',
-                                    })
-                                 } }>
-                                    
+                            {flightsOpen &&
+                        <div className="flights-list">
+                            {flightsList.length > 0 ? (
+                                flightsList.map((flight, index) => (
+                                    <div
+                                        key={index}
+                                        className="flight-details"
+                                        onClick={() => handleFlightClick({
 
-                                    <div className='top-info'>
-                                        <span id='from-airport'>{fromAirport}</span>
-                                        <div className="airport-separation-line">
-                                            <img src={xploraplane} alt="Airplane Icon" className="airplane-icon" />
-                                        </div>                            
-                                        <span id='dest-airport'>{toAirport}</span>         
-                                    </div>
-                                    <div className='bottom-info'>
-                                        <div className='from-info'>
-                                            <span id='from-city'>{fromCity}</span>
-                                            <span id='from-date'>{fromDate}</span>
-                                        </div>
-                                        <div className='dest-info'>
-                                            <span id='dest-city'>{toCity}</span>
-                                            <span id='dest-date'>{toDate}</span>
-                                        </div>
-                                    </div> 
+                                            
+                                            fromCity: flight.departure_city,
+                                            fromAirport: flight.departure_airport,
+                                            toCity: flight.arrival_city,
+                                            toAirport: flight.arrival_airport,
+                                            fromDate: flight.departure_date,
+                                            toDate: flight.arrival_date,
+                                            departureTime: flight.departure_time, 
+                                            arrivalTime: flight.arrival_time, 
+                                            
+                                        })
+                                    }
                                     
-                                </div>
-                            </div>
-                            }
+                                    >
+                                        <div className="top-info">
+                                            <span id="from-airport">{flight.departure_airport}</span>
+                                            <div className="airport-separation-line">
+                                                <img src={xploraplane} alt="Airplane Icon" className="airplane-icon" />
+                                            </div>
+                                            <span id="dest-airport">{flight.arrival_airport}</span>
+                                        </div>
+                                        <div className="bottom-info">
+                                            <div className="from-info">
+                                                <span id="from-city">{flight.departure_city}</span>
+                                                <span id="from-date">{flight.departure_date}</span>
+                                            </div>
+                                            <div className="dest-info">
+                                                <span id="dest-city">{flight.arrival_city}</span>
+                                                <span id="dest-date">{flight.arrival_date}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No flights available, Click the "+" button to add a flight.</p>
+                            )}
+                        </div>
+                    }
                         </div>
 
                         <div className="dropdown-section">
