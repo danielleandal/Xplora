@@ -95,8 +95,6 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
             <div className={`profile-info ${isEditing ? "editing" : ""}`}>
                 {isEditing ? (
                     <>
-                        {/* <button id="cancel-btn" onClick={onCancelProfile}><img src={cancelicon} alt="Cancel" /></button> */}
-                        {/* <button id="save-btn" onClick={handleSaveChange}><img src={saveicon} alt="Save"/></button> */}
                         <i id="profile-cancel-icon" className='fa fa-times-circle' onClick={onCancelProfile}></i>
                         <i id="profile-save-icon" className='fa fa-save' onClick={handleSaveChange}></i>
                     </>

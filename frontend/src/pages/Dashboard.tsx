@@ -34,10 +34,6 @@ const Dashboard: React.FC = () => {
     const [inputValue, setInputValue] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    // const [newFirstName, setEditFirstName] = useState<string>('');
-    // const [newLastName, setEditLastName] = useState<string>('');
-    // const [newEmail, setEditEmail] = useState<string>('');
-    // const [newPassword, setEditPassword] = useState<string>('************');
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -88,19 +84,6 @@ const Dashboard: React.FC = () => {
         setIsEditing(false);
         setIsMenuOpen(false);
     }
-
-    // const handleSaveProfile = (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
-    //     setFirstName(newFirstName);
-    //     setLastName(newLastName);
-    //     setEmail(newEmail);
-
-    //     localStorage.setItem('firstName', newFirstName);
-    //     localStorage.setItem('lastName', newLastName);
-    //     localStorage.setItem('email', newEmail);
-        
-    //     setIsEditing(false);
-    //     renderProfile();
-    // }
 
     const handleSaveProfile = async (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
         try {
