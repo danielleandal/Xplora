@@ -397,7 +397,7 @@ TripDetails.css .tripdetails-logo {
     cursor: pointer;
 }
 
-.dropdown-content {
+.dropdown-section .dropdown-content{
     cursor: pointer;
 }
 

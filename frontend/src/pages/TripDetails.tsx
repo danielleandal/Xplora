@@ -81,12 +81,13 @@ const TripDetails: React.FC = () => {
     }
 
     const handleAccomodationClick = (accommodation: any) => {
-        setSelectedAccomodation(accommodation); // ✅ Correct
+        console.log("Selected Accommodation:", accommodation);
+        setSelectedAccomodation(accommodation);
         setIsAccomodationModalOpen(true);
     };
     
     const handleActivityClick = (activity: any) => {
-        setSelectedActivity(activity); // ✅ Correct
+        setSelectedActivity(activity); 
         setIsActivityModalOpen(true);
     };
 
@@ -107,21 +108,26 @@ const TripDetails: React.FC = () => {
 
         return (
             <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <button className="close-button" onClick={onClose}>✖</button>
-                <h2>Flight Details</h2>
-                <p><strong>From:</strong> {flight.fromCity} ({flight.fromAirport})</p>
-                <p><strong>To:</strong> {flight.toCity} ({flight.toAirport})</p>
-                <p><strong>Departure Date:</strong> {flight.fromDate}</p>
-                <p><strong>Departure Time:</strong> {flight.departureTime}</p>
-                <p><strong>Arrival Date:</strong> {flight.toDate} </p>
-                <p><strong>Arrival Time:</strong> {flight.arrivalTime}</p>    {/* Added time */}
-                
-            </div>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <button className="close-button" onClick={onClose}>✖</button>
+                    <h2>Flight Details</h2>
+                    <p><strong>Flight Number:</strong> {flight.flightNumber}</p>    
+                    <p><strong>Conformation Number:</strong> {flight.flightConformationNumber}</p> 
+                    <p><strong>From:</strong> {flight.fromCity} ({flight.fromAirport})</p>
+                    <p><strong>To:</strong> {flight.toCity} ({flight.toAirport})</p>
+                    <p><strong>Departure Date:</strong> {flight.fromDate}</p>
+                    <p><strong>Departure Time:</strong> {flight.departureTime}</p>
+                    <p><strong>Arrival Date:</strong> {flight.toDate} </p>
+                    <p><strong>Arrival Time:</strong> {flight.arrivalTime}</p>
+                    
+
+                    
+                </div>
         </div>
         )
     }
 
+    //accomodation modal
     const AccommodationDetailsModal: React.FC<{ accommodation: any, onClose: () => void }> = ({ accommodation, onClose }) => {
         if (!accommodation) return null;
     
@@ -132,8 +138,11 @@ const TripDetails: React.FC = () => {
                     <h2>Accommodation Details</h2>
                     <p><strong>Hotel:</strong> {accommodation.name}</p>
                     <p><strong>Location:</strong> {accommodation.location}</p>
-                    <p><strong>Check-in:</strong> {accommodation.checkIn}</p>
-                    <p><strong>Check-out:</strong> {accommodation.checkOut}</p>
+                    <p><strong>Confirmation Number:</strong> {accommodation.confirmationNum}</p>
+                    <p><strong>Check-in Date:</strong> {accommodation.checkInDate}</p>
+                    <p><strong>Check-in Time:</strong> {accommodation.checkIn}</p>
+                    <p><strong>Check-out Time:</strong> {accommodation.checkOut}</p>
+                    <p><strong>Check-out Date:</strong> {accommodation.checkOutDate}</p>
                 </div>
             </div>
         );
@@ -183,9 +192,6 @@ const TripDetails: React.FC = () => {
                 
             );
 
-            
-
-            console.log("HERE");
         
             if (response.ok) {
                 const data = await response.json();
@@ -201,6 +207,37 @@ const TripDetails: React.FC = () => {
 
     }
 
+
+    const [accomodationList, setAccomodationList] = useState<any[]>([]);
+    const fetchAccomodation = async () =>{
+        if(!tripId || !userId){
+            console.error("missing userid or trid id")
+            {
+                return;
+            }
+        }
+        try{
+
+            const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}/accommodations`),{
+                method : "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+            );
+
+            if (response.ok){
+                const data = await response.json();
+                console.log("Fetched Accomodation", data);
+                setAccomodationList(data)
+            }
+            else{
+                console.error("Failed to fetch accomodation:", response.statusText);
+            }
+        }catch(error){
+            console.error("Error fethching accomodations", error)
+        }
+    }
 
 
     useEffect(() => {
@@ -239,6 +276,7 @@ const TripDetails: React.FC = () => {
         // Call the function to fetch trip details
         fetchTripDetails();
         fetchFlights();
+        fetchAccomodation();
     }, [tripId, userId]);
 
 
@@ -317,6 +355,8 @@ const TripDetails: React.FC = () => {
                                             toDate: flight.arrival_date,
                                             departureTime: flight.departure_time, 
                                             arrivalTime: flight.arrival_time, 
+                                            flightNumber: flight.flight_num                                            ,
+                                            flightConformationNumber: flight.confirmation_num,
                                             
                                         })
                                     }
@@ -435,6 +475,7 @@ const TripDetails: React.FC = () => {
                 <AccommodationDetailsModal 
                     accommodation={selectedAccomodation}
                     onClose={() =>{
+                        console.log("Closing modal only");
                         setAccommodationsOpen(false);
                         setSelectedAccomodation(null);
                     }}
