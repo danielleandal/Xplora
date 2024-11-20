@@ -81,7 +81,7 @@ const TripDetails: React.FC = () => {
     }
 
     const handleAccomodationClick = (accommodation: any) => {
-        console.log("Selected Accommodation:", accommodation);
+  
         setSelectedAccomodation(accommodation);
         setIsAccomodationModalOpen(true);
     };
@@ -249,13 +249,13 @@ const TripDetails: React.FC = () => {
             }
             try {
                     const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}`)); // it wont connect to database, unsure if the api only gets infomartion or also takes info from database
-                    console.log('Response:', response);
+                    //console.log('Response:', response);
                     if (response.ok) {
                         const data = await response.json();
                         
                         // Set the fetched data into state
                         setTripName(data.name);
-                        console.log('Fetched tripName:', data.name);
+                        //console.log('Fetched tripName:', data.name);
                         setCity(data.city);
                         setStartDate(data.start_date);
                         setEndDate(data.end_date);
@@ -273,7 +273,7 @@ const TripDetails: React.FC = () => {
                 }
         };
     
-        // Call the function to fetch trip details
+        // Call the function to fetch trip details/flight/accomodation
         fetchTripDetails();
         fetchFlights();
         fetchAccomodation();
@@ -355,7 +355,7 @@ const TripDetails: React.FC = () => {
                                             toDate: flight.arrival_date,
                                             departureTime: flight.departure_time, 
                                             arrivalTime: flight.arrival_time, 
-                                            flightNumber: flight.flight_num                                            ,
+                                            flightNumber: flight.flight_num,
                                             flightConformationNumber: flight.confirmation_num,
                                             
                                         })
@@ -397,42 +397,62 @@ const TripDetails: React.FC = () => {
                                     <span className="tooltip-text">Add new accommodation</span>
                                 </div>
                             </div>
-                            {accommodationsOpen &&
-                                <div className='accommodations-list'>
-                                    <div className='accommodation-details'
-                                        onClick={() => handleAccomodationClick({
-                                            name: 'Hilton Hotel',
-                                            location: 'New York',
-                                            checkIn: '06/08/2024',
-                                            checkOut: '06/12/2024'
-                                        })}>
-                                        <div className='top-acc-info'>
-                                            <div>
-                                                <img src={hotel} alt="Accommodation Icon" className="accommodation-icon" />
-                                            </div>
-                                            <div className='accommodation-title'>
-                                                <span className='your-stay-at'>Your stay at <span className='accommodation-name'> AccommodationName </span> </span>
-                                            </div>
-                                        </div>
-                                        <div className='from-dest-deets'>
-                                            <span id='from-deets'>Check-In</span>
-                                            <span id='dest-deets'>Check-Out</span>
-                                        </div>
-                                        <div className='bottom-acc-info'>
-                                            <div className='from-acc-info'>
-                                                <span id='accommodation-from-date'>06/08/2024</span>
-                                                <span id='accommodation-from-time'>10:00am</span>
-                                            </div>
-                                            <div className='dest-acc-info'>
-                                                <span id='accommodation-destination-date'>06/09/2024</span>
-                                                <span id='accommodation-destination-time'>10:00am</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
 
+                            {/* Conditionally render dropdown content */}
+                            {accommodationsOpen && (
+                                accomodationList.length > 0 ? (
+                                    <div className="accommodations-list">
+                                        {accomodationList.map((accommodation, index) => (
+                                            <div
+                                                key={index}
+                                                className="accommodation-details"
+                                                onClick={() =>
+                                                    handleAccomodationClick({
+                                                        name: accommodation.name,
+                                                        location: accommodation.address,
+                                                        checkIn: accommodation.checkin_time,
+                                                        checkOut: accommodation.checkout_time,
+                                                        checkOutDate: accommodation.checkout_date,
+                                                        checkInDate: accommodation.checkin_date,
+                                                        confirmationNum: accommodation.confirmation_num,
+                                                    })
+                                                }
+                                            >
+                                                <div className="top-acc-info">
+                                                    <div>
+                                                        <img src={hotel} alt="Accommodation Icon" className="accommodation-icon" />
+                                                    </div>
+                                                    <div className="accommodation-title">
+                                                        <span className="your-stay-at">
+                                                            Your stay at{' '}
+                                                            <span className="accommodation-name">{accommodation.name}</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="from-dest-deets">
+                                                    <span id="from-deets">Check-In</span>
+                                                    <span id="dest-deets">Check-Out</span>
+                                                </div>
+                                                <div className="bottom-acc-info">
+                                                    <div className="from-acc-info">
+                                                        <span id="accommodation-from-date">{accommodation.checkin_date}</span>
+                                                        <span id="accommodation-from-time">{accommodation.checkin_time}</span>
+                                                    </div>
+                                                    <div className="dest-acc-info">
+                                                        <span id="accommodation-destination-date">{accommodation.checkout_date}</span>
+                                                        <span id="accommodation-destination-time">{accommodation.checkout_time}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="dropdown-accommodation-empty">
+                                        No accommodations available, Click the "+" button to add one.
+                                    </p>
+                                )
+                            )}
+                        </div>
 
 
                         <div className="dropdown-section">
@@ -475,8 +495,7 @@ const TripDetails: React.FC = () => {
                 <AccommodationDetailsModal 
                     accommodation={selectedAccomodation}
                     onClose={() =>{
-                        console.log("Closing modal only");
-                        setAccommodationsOpen(false);
+                        setIsAccomodationModalOpen(false); 
                         setSelectedAccomodation(null);
                     }}
                 />

@@ -325,6 +325,7 @@ TripDetails.css .tripdetails-logo {
 }
 
 .accommodation-details {
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -336,6 +337,7 @@ TripDetails.css .tripdetails-logo {
 }
 
 .top-acc-info {
+
     font-family: Poppins, sans-serif;
     display: grid;
     flex-direction: row;
