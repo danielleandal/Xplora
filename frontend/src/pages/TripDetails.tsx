@@ -207,7 +207,48 @@ const TripDetails: React.FC = () => {
 
     }
 
+    const [activitiesList, setActivitiesList] = useState<any[]>([]);
 
+    const fetchActivities = async () =>{
+        if(!tripId || !userId){
+            console.error("missing userid or trid id")
+            {
+                return;
+            }
+        }
+
+        // connect to the api, and store response
+        try{
+            const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}/activities`),
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type" : "application/json",
+                },
+            }
+
+        );
+
+        // if response is ok, put the data into a varariable state
+        if(response.ok){
+            const data = await response.json();
+            console.log("Fetch Activities", data);
+            setActivitiesList(data);
+
+        }
+        // else, error, fun...
+        else{
+            console.error("Error fetching activities:", response.statusText);
+        }
+        
+
+        }catch(error){
+            console.error("Error fetching activities:", error);
+        }
+    }
+
+
+    // fetch accomodation list 
     const [accomodationList, setAccomodationList] = useState<any[]>([]);
     const fetchAccomodation = async () =>{
         if(!tripId || !userId){
@@ -238,6 +279,10 @@ const TripDetails: React.FC = () => {
             console.error("Error fethching accomodations", error)
         }
     }
+
+    // fetch Activities list 
+
+
 
 
     useEffect(() => {
@@ -277,6 +322,7 @@ const TripDetails: React.FC = () => {
         fetchTripDetails();
         fetchFlights();
         fetchAccomodation();
+        fetchActivities();
     }, [tripId, userId]);
 
 
@@ -345,8 +391,6 @@ const TripDetails: React.FC = () => {
                                         key={index}
                                         className="flight-details"
                                         onClick={() => handleFlightClick({
-
-                                            
                                             fromCity: flight.departure_city,
                                             fromAirport: flight.departure_airport,
                                             toCity: flight.arrival_city,
@@ -464,16 +508,31 @@ const TripDetails: React.FC = () => {
                                     <span className="tooltip-text">Add new activity</span>
                                 </div>
                             </div>
-                            {activitiesOpen && <div className="dropdown-content"
-                                 
-                                 onClick={() => handleActivityClick({
-                                    name: 'Statue of Liberty Tour',
-                                    location: 'New York',
-                                    date: '06/09/2024'
-                                })}
-    
-
-                            >Activity details here</div>}
+                            {activitiesOpen && (
+                                <div className="activities-list">
+                                    {activitiesList.length > 0 ? (
+                                        activitiesList.map((activity, index) => (
+                                            <div
+                                                key={index}
+                                                className="activity-details"
+                                                onClick={() =>
+                                                    handleActivityClick({
+                                                        name: activity.name,
+                                                        location: activity.location,
+                                                        date: activity.date,
+                                                    })
+                                                }
+                                            >
+                                                <p><strong>Activity:</strong> {activity.name}</p>
+                                                <p><strong>Location:</strong> {activity.location}</p>
+                                                <p><strong>Date:</strong> {activity.date}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No activities available, click "+" to add one.</p>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -505,7 +564,7 @@ const TripDetails: React.FC = () => {
                 <ActivityDetailsModal
                     activity={selectedActivity}
                     onClose={() =>{
-                        setActivitiesOpen(false);
+                        setIsActivityModalOpen(false);
                         setSelectedActivity(null);
                     }}
                 />
