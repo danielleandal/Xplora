@@ -305,6 +305,7 @@
     height: 100%;
     border-radius: 23px;
     margin-right: 25px;
+    width: 140px;
 }
 
 .trip-details{
@@ -357,4 +358,11 @@
     font-size: 1rem;
     color: gray;
     margin-top: 20px;
+}
+
+.trip-link {
+    font-family: Poppins, sans-serif;
+    text-decoration: none;
+    color: #551A8B;
+    font-weight: bold;
 }

@@ -216,7 +216,11 @@ const Dashboard: React.FC = () => {
                 return filteredTrip.map((trip) => (
                     <TripListItem
                         key={trip._id}
-                        title={trip.name}
+                        title={
+                            <Link to={`/trip-details/${trip._id}`} className='trip-link'>
+                                {trip.name}
+                             </Link>
+                        }
                         location={trip.city}
                         dates={`${trip.start_date} - ${trip.end_date}`}
                         onDelete={() => handleDeleteTrip(trip._id)}
@@ -233,7 +237,7 @@ const Dashboard: React.FC = () => {
         <div className="dashboard">
             <div className='dashboard-header'>
                 <div className='logo-welcome-section'>
-                    <Link to="/">
+                    <Link to="/dashboard">
                         <img src={iconlogo} alt="Xplora Logo" id="dashboard-logo" />
                     </Link>
                     <span id='welcome-text'>Welcome, {firstName} {lastName}!</span>
