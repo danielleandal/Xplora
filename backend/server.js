@@ -93,6 +93,47 @@ app.post('/api/register', async (req, res, next) => {
     }
 });
 
+// Update User API
+app.put('/api/users/:id', async (req, res, next) => {
+    let error = '';
+    const { id } = req.params;
+    const { first_name, last_name, email, password } = req.body;
+
+    console.log(`${first_name} ${last_name} ${email} ${password}`);
+
+    try {
+        const db = client.db('xplora');
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid user ID' });
+        }
+
+        const updateFields = {};
+        if (first_name) updateFields.first_name = first_name;
+        if (last_name) updateFields.last_name = last_name;
+        if (email) updateFields.email = email;
+        if (password) updateFields.password = password;
+
+        // Update the user document in the database
+        const result = await db.collection('users').updateOne(
+            { _id: new ObjectId(id) },
+            { $set: updateFields }
+        );
+
+        if (result.modifiedCount > 0) {
+            res.status(200).json({ message: 'User information updated successfully' });
+        } else {
+            res.status(200).json({ message: 'No changes made' });
+        }
+
+    } catch (err) {
+        error = 'An error occurred while updating the user information';
+        res.status(500).json({ error });
+    } finally {
+        console.log(`${first_name} ${last_name} ${email} ${password}`);
+    }
+});
+
 //--------------------------------
 // TRIPS -- POST to add a new trip
 app.post('/api/users/:userId/trips', async (req, res) => {
@@ -681,7 +722,7 @@ app.delete('/api/users/:userId/trips/:tripId/accommodations/:accommodationId', a
 });
 
 //------------------
-//PASWORD RESET APIs
+//PASSWORD RESET APIs
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 

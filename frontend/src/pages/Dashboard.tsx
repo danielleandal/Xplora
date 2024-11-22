@@ -87,38 +87,40 @@ const Dashboard: React.FC = () => {
 
     const handleSaveProfile = async (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
         try {
-            // Update local state
             setFirstName(newFirstName);
             setLastName(newLastName);
             setEmail(newEmail);
     
-            // Sync with localStorage
             localStorage.setItem('firstName', newFirstName);
             localStorage.setItem('lastName', newLastName);
             localStorage.setItem('email', newEmail);
             
-    
-            // Save to backend
             const userId = localStorage.getItem('ID');
             const response = await fetch(buildPath(`api/users/${userId}`), {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    firstName: newFirstName,
-                    lastName: newLastName,
+                    first_name: newFirstName,
+                    last_name: newLastName,
                     email: newEmail,
                     password: newPassword,
                 }),
+
+                
             });
     
-            if (!response.ok) throw new Error('Failed to save profile');
+            if (!response.ok) {
+                throw new Error('Failed to save profile');
+            }
     
             setIsEditing(false);
+            console.log('Profile updated successfully');
+
         } catch (error) {
             console.error('Error saving profile:', error);
-        } finally {
-            setIsEditing(false);
+        
         }
+
         renderProfile();
     };
     

@@ -19,7 +19,7 @@
     position: absolute;
     top: 100%;
     right: 10%;
-    width: 320px;
+    /* width: 320px; */
     max-height: 0px;
     overflow: hidden;
     visibility: hidden;
@@ -35,16 +35,16 @@
     position:absolute;
     
     transform: translateY(0); 
+    transition: max-height 1.5s ease, opacity 1.5s ease, transform 1.5s ease; 
     visibility: visible;
     /* z-index: 10; */
-
+    width:280px;
     min-height: 350px;
     max-height: fit-content;
-    overflow: visible;
+    overflow:visible;
     padding: 10px;
     border: 1px solid #6A0DAD;
     border-radius: 24px;
-    box-sizing: inherit;
     
     background: white;
     opacity: 1; 
@@ -54,7 +54,9 @@
     display: flex;
     flex-direction: column; 
     align-items: center;      
-    justify-content: center;
+    justify-content: space-around;
+
+    /* font-size: clamp(8px, 2vw, 24px); */
     /* flex-wrap: wrap; */
 }
 
@@ -76,16 +78,19 @@
 .profile-img-container > *{
     grid-column: 1;
     grid-row: 1;
-
-    margin: 20px;
-    margin-left: auto;
-    border-radius: 50%;
 }
 
-#profile-icon{
-    border: solid black;
+.img-name{
+    margin: 8px;
+}
+
+.profile-menu-container img{
+    border: solid gray;
     width: 80px;
     height: 80px;
+    border-radius: 50%;
+
+    /* margin-left: auto; */
 }
 
 #edit-profile-img-icon{
@@ -141,45 +146,33 @@
 }
 
 .profile-info{
+    position:relative;
+    width: 90%;
     border-radius: 20px;
-    padding: 4px;
-    /* margin: 15px; */
     font-weight: 300;
-    font-size: 20px;
+    /* font-size: 20px; */
     display: flex;
-    /* justify-content: center; */
+    justify-content: space-between;
     align-items: center;
 }
 
-/* .profile-info input{
-    border: 1px solid black;;
-    border-radius: 10px;
-    padding: 5px;
-    margin: 15px;
-    font-weight: 300;
-    font-size: 20px;
-    width: 100%;
-    align-items: center;
-} */
 
 #profile-menu h2{
-    font-weight: 1000;
-    font-size: 30px;
+    font-weight: 300;
+    font-size: clamp(23px, 3vw, 114px);
 }
 
-/* .profile-info.editing input.edit-info{ */
-.edit-info input{
+.edit-info input, .profile-info input{
     position:relative;
-
-    /* border: 1px solid gray; */
+    border: none;
     background-color: rgb(235, 235, 235);
     color: black;
     border-radius: 10px;
-    padding: 10px;
+    padding: 12px 38.8% 10px 10px;
+    margin: 7px 0px 7px;
     /* margin: 15px; */
-    max-width: 90%;
+    width: 90%;
     font-weight: 300;
-    font-size: 20px;
 }
 
 .profile-actions-section{

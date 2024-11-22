@@ -33,16 +33,15 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
         <div className={`profile-menu-container ${isMenuOpen ? 'open-menu' : ''}`} id="profile-menu">
             
             {/* Conditional classNames based on isEditing status */}
-            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
-                                                
+            <div className={`profile-info ${isEditing ? "editing" : ""}`}>                           
                 {isEditing ? (
                     <>
                         <div className="profile-img-container">
-                            <img src={defaultprofile} alt="Profile Icon" id="profile-icon" />  
+                            <img src={defaultprofile} alt="Profile Icon"/>  
                             <i id="edit-profile-img-icon" className="fa fa-pen"></i>
                         </div>
                         <div className="edit-info">
-                            <input id="edit-name"
+                            <input id="edit-first-name"
                                 type="text"
                                 value={newFirstName}
                                 onChange={
@@ -50,7 +49,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                                 }
                                 placeholder="First Name"
                             />
-                            <input id="edit-name"
+                            <input id="edit-last-name"
                                 type="text"
                                 value={newLastName}
                                 onChange={
@@ -62,63 +61,74 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                     </>
                 ) : (
                     <>
-                        <div className="profile-img-container">
-                            <img src={defaultprofile} alt="Profile Icon" id="profile-icon" />
-                            <div id="name"><h2 id="profile-menu">{firstName} {lastName}</h2></div>
-                        </div>
+                        {/* <div className="profile-img-container"> */}
+                            <img className="img-name" src={defaultprofile} alt="Profile Icon"/>
+                            <div className="img-name" id="name"><h2 id="profile-menu">{firstName} {lastName}</h2></div>
+                        {/* </div> */}
                     </> 
                 )}
             </div>
             <div className={`profile-info ${isEditing ? "editing" : ""}`}>
-                <div className="edit-info">
-                    {isEditing ? (
-                        <input id="email"
-                            type="email"
-                            value={newEmail}
-                            onChange={(e) => setNewEmail(e.target.value)}
-                            placeholder="Email"
-                        />
-                    ) : (
-                        email
-                    )}
-                </div>
-            </div>
-            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
-                <div className="edit-info">
                     {isEditing ? (
                         <>
-                            <input id="current-password"
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                placeholder="Current Password"
-                            />
-                            
-                            <input id="new-password"
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                placeholder="New Password"
-                            />
+                            <div className='edit-info'>
+                                <input id="email"
+                                    type="email"
+                                    value={newEmail}
+                                    onChange={(e) => setNewEmail(e.target.value)}
+                                    placeholder="Email"
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <div className="edit-info">{email}</div>
+                    )}
+            </div>
+            <div className={`profile-info ${isEditing ? "editing" : ""}`}>
+                    {isEditing ? (
+                        <>
+                            <div className="edit-info">
+                                <div className="password-field">
+                                    <input id="current-password"
+                                        type="password"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        placeholder="Current Password"
+                                    />
+                                </div>
+                                
+                                <div className="password-field">
+                                    <input id="new-password"
+                                        type="password"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        placeholder="New Password"
+                                    />
+                                </div>
 
-                            <input id="confirm-new-password"
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                placeholder="Confirm New Password"
-                            />
+                                <div className="password-field">
+                                    <input id="confirm-new-password"
+                                        type="password"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        placeholder="Confirm New Password"
+                                    />
+                                </div>
+                            </div>
                         </>
 
                     ) : (
-                        password
+                        <>
+                            <div className="edit-info">{password}</div>
+                        </>
+
                     )}
-                </div>
             </div>
             <div className={`profile-info ${isEditing ? "editing" : ""}`}>
                 {isEditing ? (
                     <>
-                        <i id="profile-cancel-icon" className='fa fa-times-circle' onClick={onCancelProfile}></i>
-                        <i id="profile-save-icon" className='fa fa-check-circle' onClick={handleSaveChange}></i>
+                        <i id="profile-cancel-icon" className='far fa-times-circle' onClick={onCancelProfile}></i>
+                        <i id="profile-save-icon" className='far fa-check-circle' onClick={handleSaveChange}></i>
                     </>
                 ) : (
                     <>
