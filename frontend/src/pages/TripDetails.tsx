@@ -359,12 +359,12 @@ const TripDetails: React.FC = () => {
                             </div>
 
                             <div className="tripdetails-image-container">
-                                <img src={pictureUrl || tripdefault } alt="New York City" className="tripdetails-image" />
+                                <img src={pictureUrl || tripdefault } alt="Image Trip" className="tripdetails-image" />
                             </div>
                         </div>
 
                         <div className="note-box">
-                            <p>{notes || 'No additional notes'}</p>
+                            <p className='notes-styling'>{notes || 'No additional notes'}</p>
                         </div>
                     </div>
 
@@ -426,7 +426,7 @@ const TripDetails: React.FC = () => {
                                     </div>
                                 ))
                             ) : (
-                                <p>No flights available, Click the "+" button to add a flight.</p>
+                                            <p className='dropdown-accommodation-empty'>No flights yet! Click <span className='plus'>+</span> button to add a flight.</p>
                             )}
                         </div>
                     }
@@ -492,7 +492,7 @@ const TripDetails: React.FC = () => {
                                     </div>
                                 ) : (
                                     <p className="dropdown-accommodation-empty">
-                                        No accommodations available, Click the "+" button to add one.
+                                            No accommodations yet! Click <span className='plus'>+</span> button to add an accommodation.
                                     </p>
                                 )
                             )}
@@ -529,7 +529,7 @@ const TripDetails: React.FC = () => {
                                             </div>
                                         ))
                                     ) : (
-                                        <p>No activities available, click "+" to add one.</p>
+                                            <p className='dropdown-accommodation-empty'>No activities yet! Click <span className='plus'>+</span> button to add an activity.</p>
                                     )}
                                 </div>
                             )}
