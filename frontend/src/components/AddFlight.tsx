@@ -6,7 +6,7 @@ interface AddFlightProps {
     apiEndpoint: string; // API endpoint for saving the flight
 }
 
-const AddFlight: React.FC<AddFlightProps> = ({ onClose, apiEndpoint }) => {
+const AddFlight: React.FC<AddFlightProps> = ({ onClose,onSave, apiEndpoint }) => {
     const [flightDetails, setFlightDetails] = useState({
         departureCity: '',
         departureAirport: '',
@@ -54,7 +54,9 @@ const AddFlight: React.FC<AddFlightProps> = ({ onClose, apiEndpoint }) => {
                 console.log('Flight added successfully');
                 alert("flight added!");
                // Refresh the page
-                location.reload();
+               onSave();
+               onClose();
+               // location.reload();
             } else {
                 const errorData = await response.json();
                 console.error('Error adding flight:', errorData.error);

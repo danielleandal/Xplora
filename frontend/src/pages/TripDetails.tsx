@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate,useParams  } from 'react-router-dom';
+import { Link,useParams  } from 'react-router-dom';
 import './TripDetails.css';
 import logo from '../images/logo.png';
 import xploraplane from '../images/xplora-plane.png';
@@ -7,10 +7,12 @@ import hotel from '../images/accommodation_placeholder.png';
 import tripdefault from '../images/trip_default.png';
 // import test from '../images/test.jpg';
 import { calculateTripDays } from '../helper-files/calculateTripDays';
-import AddFlight from './AddFlight';
+import AddFlight from '../components/AddFlight';
+import AddAccommodation from '../components/AddAccomodation';
+import AddActivity from '../components/AddActivity';
 
 const TripDetails: React.FC = () => {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     //    // State variables for flight details
     //    const [fromCity, setFromCity] = useState("");
@@ -54,11 +56,11 @@ const TripDetails: React.FC = () => {
         if (dropdownType === 'activities') setActivitiesOpen(!activitiesOpen);
     };
 
-    const handleAdd = (type: string) => {
-        if (type === 'flight') navigate('/add-flight');
-        if (type === 'accommodation') navigate('/add-accommodation');
-        if (type === 'activity') navigate('/add-activity');
-    };
+    // const handleAdd = (type: string) => {
+    //     if (type === 'flight') navigate('/add-flight');
+    //     if (type === 'accommodation') navigate('/add-accommodation');
+    //     if (type === 'activity') navigate('/add-activity');
+    // };
 
     // more vairables 
     const [daysCount, setDaysCount] = useState<number | null>(null);
@@ -281,9 +283,52 @@ const TripDetails: React.FC = () => {
         }
     }
 
-    // fetch Activities list 
 
 
+    ////// ADDS DETAILS MODAL//////////
+
+
+    //flight
+    const [isAddFlightModalOpen, setIsAddFlightModalOpen] = useState(false);
+    const openAddFlightModal = () => setIsAddFlightModalOpen(true);
+    const closeAddFlightModal = () => setIsAddFlightModalOpen(false);
+
+    const refreshFlightList = async () => {
+        await fetchFlights(); // Fetch the updated flight list
+    };
+    const addFlightApiEndpoint = buildPath(`api/users/${userId}/trips/${tripId}/flights`);
+
+
+    //accomodation
+    const [isAddAccommodationModalOpen, setIsAddAccommodationModalOpen] = useState(false);
+
+    const openAddAccommodationModal = () => setIsAddAccommodationModalOpen(true);
+    const closeAddAccommodationModal = () => setIsAddAccommodationModalOpen(false);
+
+    const refreshAccomocationList = async () =>{
+        await fetchAccomodation();
+    };
+
+    const addAccomodationApiEndpoint = buildPath(`api/users/${userId}/trips/${tripId}/accommodations`);
+
+
+    //activty
+
+    const [isAddActivityModal, setAddActivityModal] = useState(false);
+
+    const openAddActivityModal = () =>{
+        setAddActivityModal(true);
+    };
+
+    const closeAddActivityModal = () => {
+        setAddActivityModal(false);
+    }
+
+    const refreshActivityList = async () =>{
+        await fetchActivities();
+    };
+
+    const addActivityApiEndppoint = buildPath(`api/users/${userId}/trips/${tripId}/activities`)
 
 
     useEffect(() => {
@@ -328,18 +373,6 @@ const TripDetails: React.FC = () => {
 
 
 
-
-
-    const [isAddFlightModalOpen, setIsAddFlightModalOpen] = useState(false);
-
-     
-    const openAddFlightModal = () => setIsAddFlightModalOpen(true);
-    const closeAddFlightModal = () => setIsAddFlightModalOpen(false);
-    
-    const refreshFlightList = async () => {
-        await fetchFlights(); // Fetch the updated flight list
-    };
-    const addFlightApiEndpoint = buildPath(`api/users/${userId}/trips/${tripId}/flights`);
 
 
 
@@ -395,7 +428,13 @@ const TripDetails: React.FC = () => {
                                 <span className="text">Flights</span>
                                 <span className={`arrow ${flightsOpen ? 'open' : ''}`}>▼</span>
                                 <div className="tooltip-container">
-                                    <button className="add-button" onClick={() => openAddFlightModal()}>+</button>
+                                    <button
+                                        className="add-button"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent dropdown toggle
+                                            openAddFlightModal(); // Open add flight modal
+                                        }}
+                                    >+</button>
                                     <span className="tooltip-text">Add new flight</span>
                                 </div>
                             </div>
@@ -442,7 +481,7 @@ const TripDetails: React.FC = () => {
                                     </div>
                                 ))
                             ) : (
-                                            <p className='dropdown-accommodation-empty'>No flights yet! Click <span className='plus'>+</span> button to add a flight.</p>
+                            <p className='dropdown-accommodation-empty'>No flights yet! Click <span className='plus'>+</span> button to add a flight.</p>
                             )}
                         </div>
                     }
@@ -453,7 +492,12 @@ const TripDetails: React.FC = () => {
                                 <span className="text">Accommodations</span>
                                 <span className={`arrow ${accommodationsOpen ? 'open' : ''}`}>▼</span>
                                 <div className="tooltip-container">
-                                    <button className="add-button" onClick={() => handleAdd('accommodation')}>+</button>
+                                    <button className="add-button"
+                                       onClick={(e) => {
+                                        e.stopPropagation(); // Prevent dropdown toggle
+                                        openAddAccommodationModal(); // Open add flight modal
+                                    }}
+                                     >+</button>
                                     <span className="tooltip-text">Add new accommodation</span>
                                 </div>
                             </div>
@@ -520,7 +564,12 @@ const TripDetails: React.FC = () => {
                                 <span className="text">Activities</span>
                                 <span className={`arrow ${activitiesOpen ? 'open' : ''}`}>▼</span>
                                 <div className="tooltip-container">
-                                    <button className="add-button" onClick={() => handleAdd('activity')}>+</button>
+                                    <button className="add-button"
+                                      onClick={(e) => {
+                                        e.stopPropagation(); // Prevent dropdown toggle
+                                        openAddActivityModal(); // Open add flight modal
+                                      }}
+                                        >+</button>
                                     <span className="tooltip-text">Add new activity</span>
                                 </div>
                             </div>
@@ -587,6 +636,7 @@ const TripDetails: React.FC = () => {
             )}
 
 
+            {/*Interface */}
             {isAddFlightModalOpen && (
                 <AddFlight
                     onClose={closeAddFlightModal}
@@ -595,7 +645,23 @@ const TripDetails: React.FC = () => {
                 />
             )}
 
-            
+           
+            {isAddAccommodationModalOpen && (
+                <AddAccommodation
+                    onClose={closeAddAccommodationModal} 
+                    onSave={refreshAccomocationList} 
+                    apiEndpoint={addAccomodationApiEndpoint}
+                />
+            )}
+
+            {isAddActivityModal && (
+                <AddActivity
+                onClose = {closeAddActivityModal}
+                onSave = {refreshActivityList}
+                apiEndpoint={addActivityApiEndppoint}
+                />
+            )}
+                        
         </div>
     );
 };
