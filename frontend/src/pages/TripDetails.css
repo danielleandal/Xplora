@@ -97,7 +97,7 @@ TripDetails.css .tripdetails-logo {
 
 .trip-location {
     color: #666;
-    font-size: 1.6rem;
+    font-size: 1.9rem;
     text-align: left;
     font-family: Poppins, sans-serif;
 }
@@ -509,3 +509,21 @@ TripDetails.css .tripdetails-logo {
     color: #555;
 }
 
+.dropdown-accommodation-empty {
+    font-family: Poppins, sans-serif;
+    font-style: italic;
+    color: #5d5c5cdb;
+    font-size: small;
+}
+
+.plus {
+    font-weight: bold;
+    font-size: medium;
+}
+
+.notes-styling {
+    font-family: Poppins, sans-serif;
+    color: #3c3b3bdb;
+    font-size: 14px;
+    text-align: left;
+}
