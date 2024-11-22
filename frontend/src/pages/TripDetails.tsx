@@ -7,6 +7,7 @@ import hotel from '../images/accommodation_placeholder.png';
 import tripdefault from '../images/trip_default.png';
 // import test from '../images/test.jpg';
 import { calculateTripDays } from '../helper-files/calculateTripDays';
+import AddFlight from './AddFlight';
 
 const TripDetails: React.FC = () => {
     const navigate = useNavigate();
@@ -293,7 +294,7 @@ const TripDetails: React.FC = () => {
                 return;
             }
             try {
-                    const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}`)); // it wont connect to database, unsure if the api only gets infomartion or also takes info from database
+                    const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}`)); 
                     //console.log('Response:', response);
                     if (response.ok) {
                         const data = await response.json();
@@ -324,6 +325,21 @@ const TripDetails: React.FC = () => {
         fetchAccomodation();
         fetchActivities();
     }, [tripId, userId]);
+
+
+
+
+
+    const [isAddFlightModalOpen, setIsAddFlightModalOpen] = useState(false);
+
+     
+    const openAddFlightModal = () => setIsAddFlightModalOpen(true);
+    const closeAddFlightModal = () => setIsAddFlightModalOpen(false);
+    
+    const refreshFlightList = async () => {
+        await fetchFlights(); // Fetch the updated flight list
+    };
+    const addFlightApiEndpoint = buildPath(`api/users/${userId}/trips/${tripId}/flights`);
 
 
 
@@ -379,7 +395,7 @@ const TripDetails: React.FC = () => {
                                 <span className="text">Flights</span>
                                 <span className={`arrow ${flightsOpen ? 'open' : ''}`}>▼</span>
                                 <div className="tooltip-container">
-                                    <button className="add-button" onClick={() => handleAdd('flight')}>+</button>
+                                    <button className="add-button" onClick={() => openAddFlightModal()}>+</button>
                                     <span className="tooltip-text">Add new flight</span>
                                 </div>
                             </div>
@@ -567,6 +583,15 @@ const TripDetails: React.FC = () => {
                         setIsActivityModalOpen(false);
                         setSelectedActivity(null);
                     }}
+                />
+            )}
+
+
+            {isAddFlightModalOpen && (
+                <AddFlight
+                    onClose={closeAddFlightModal}
+                    onSave={refreshFlightList}
+                    apiEndpoint={addFlightApiEndpoint}
                 />
             )}
 
