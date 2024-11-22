@@ -37,7 +37,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                                                 
                 {isEditing ? (
                     <>
-                        <img src={defaultprofile} alt="Profile Icon" id="profile-icon" />   
+                        <div className="profile-img-container">
+                            <img src={defaultprofile} alt="Profile Icon" id="profile-icon" />  
+                            <i id="edit-profile-img-icon" className="fa fa-pen"></i>
+                        </div>
                         <div id="edit-name">
                             <input className="edit-info"
                                 type="text"
@@ -79,14 +82,31 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                 </div>
             </div>
             <div className={`profile-info ${isEditing ? "editing" : ""}`}>
-                <div id="password">
+                <div id="current-password">
                     {isEditing ? (
-                        <input className="edit-info"
-                            type="password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            placeholder="Password"
-                        />
+                        <>
+                            <input className="edit-info"
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                placeholder="Current Password"
+                            />
+                            
+                            <input className="edit-info"
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                placeholder="New Password"
+                            />
+
+                            <input className="edit-info"
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                placeholder="Confirm New Password"
+                            />
+                        </>
+
                     ) : (
                         password
                     )}
@@ -96,12 +116,12 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                 {isEditing ? (
                     <>
                         <i id="profile-cancel-icon" className='fa fa-times-circle' onClick={onCancelProfile}></i>
-                        <i id="profile-save-icon" className='fa fa-save' onClick={handleSaveChange}></i>
+                        <i id="profile-save-icon" className='fa fa-check-circle' onClick={handleSaveChange}></i>
                     </>
                 ) : (
                     <>
-                        <i id="profile-cancel-icon" className='fa fa-times-circle' onClick={onCancelProfile}></i>
-                        <i id="trip-item-edit-icon" className='fa fa-pen-alt' onClick={onEditProfile}></i>
+                        <i id="profile-cancel-icon" className='far fa-times-circle' onClick={onCancelProfile}></i>
+                        <i id="profile-edit-icon" className='fa fa-edit' onClick={onEditProfile}></i>
                     </>
                 )}
             </div>
