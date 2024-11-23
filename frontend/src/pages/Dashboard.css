@@ -152,8 +152,22 @@
     font-weight: 300;
     /* font-size: 20px; */
     display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-info-editing{
+    position:relative;
+    width: 90%;
+    border-radius: 20px;
+    font-weight: 300;
+    /* font-size: 20px; */
+    display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
+    overflow:hidden;
 }
 
 
@@ -162,16 +176,22 @@
     font-size: clamp(23px, 3vw, 114px);
 }
 
+.edit-info{
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .edit-info input, .profile-info input{
     position:relative;
     border: none;
     background-color: rgb(235, 235, 235);
     color: black;
     border-radius: 10px;
-    padding: 12px 38.8% 10px 10px;
-    margin: 7px 0px 7px;
+    padding: 10px 10px 10px 10px;
+    /* margin: 7px 0px 7px; */
+    margin-bottom: 15px;
     /* margin: 15px; */
-    width: 90%;
+    width: 92%;
     font-weight: 300;
 }
 
