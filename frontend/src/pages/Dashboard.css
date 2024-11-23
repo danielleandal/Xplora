@@ -210,8 +210,8 @@
 
 
 #profile-menu h2{
-    font-weight: 300;
-    font-size: clamp(23px, 3vw, 114px);
+    font-weight: 500;
+    font-size: clamp(23px, 2vw, 24px);
 }
 
 .edit-info{
