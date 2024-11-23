@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as yup from 'yup';
 import '../pages/Dashboard.css'
 import defaultprofile from '../images/default_profile.png';
 
@@ -17,20 +18,70 @@ interface ProfileDropdownProps {
     isMenuOpen: boolean;
 }
 
+const passwordChangeSchema = yup.object().shape({
+    currentPassword: yup.string().required('Current password is required'),
+    newPassword: yup
+        .string()
+        .required('New password is required')
+        .min(8, 'Password must be at least 8 characters')
+        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .matches(/[0-9]/, 'Password must contain at least one number')
+        .matches(/[\W_]/, 'Password must contain at least one special character'),
+    confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('newPassword')], 'Passwords must match')
+        .required('Confirm password is required'),
+});
+
+
 
 
 const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, email, password, onEditProfile, onSaveProfile, onCancelProfile, isEditing, isMenuOpen }) => {
     const [newFirstName, setNewFirstName] = useState<string>(firstName);
     const [newLastName, setNewLastName] = useState<string>(lastName);
     const [newEmail, setNewEmail] = useState<string>(email);
+    const [currentPassword, setCurrentPassword] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<string | null>(null); 
+    
 
-    const handleSaveChange = () => {
-        onSaveProfile(newFirstName, newLastName, newEmail, newPassword);
+    const handleSaveChange = async () => {
+        const passwordData = {
+            currentPassword: currentPassword, 
+            newPassword: newPassword,
+            confirmPassword: confirmPassword
+        };
+    
+        const actualPassword = password;
+    
+        try {
+            await passwordChangeSchema.validate(passwordData, { abortEarly: false });
+    
+            if (currentPassword !== actualPassword) {
+                // alert("Current password is incorrect.");
+                setErrorMessage("Current password is incorrect.");
+                return;
+            }
+    
+            onSaveProfile(newFirstName, newLastName, newEmail, newPassword);
+
+            setErrorMessage(null);
+        } catch (error) {
+            if (error instanceof yup.ValidationError) {
+                const validationErrors = error.inner.map((err) => err.message);
+                // console.error("Validation errors:", validationErrors);
+                setErrorMessage(validationErrors.join("\n"));
+            }
+        }
     };
     
     return(
         <div className={`profile-menu-container ${isMenuOpen ? 'open-menu' : ''}`} id="profile-menu">
+            <div className={`error-flag ${errorMessage ? 'show' : ''}`}>
+                <span>{errorMessage}</span>
+            </div>
             
             {/* Conditional classNames based on isEditing status */}
             <div className={`profile-info ${isEditing ? "editing" : ""}`}>                           
@@ -91,8 +142,8 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                                 <div className="password-field">
                                     <input id="current-password"
                                         type="password"
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        value={currentPassword}
+                                        onChange={(e) => setCurrentPassword(e.target.value)}
                                         placeholder="Current Password"
                                     />
                                 </div>
@@ -109,8 +160,8 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ firstName, lastName, 
                                 <div className="password-field">
                                     <input id="confirm-new-password"
                                         type="password"
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
                                         placeholder="Confirm New Password"
                                     />
                                 </div>

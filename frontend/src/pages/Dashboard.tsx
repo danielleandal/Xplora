@@ -29,51 +29,51 @@ const Dashboard: React.FC = () => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
-    const [password] = useState<string>('');
+    const [password, setPassword] = useState<string>('**********');
     const [trips, setTrips] = useState<any[]>([]);
     const [inputValue, setInputValue] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const toggleMenu = () => {
+        setIsMenuOpen(prev => !prev);
+    }
 
     const renderProfile = () => {
         
         if (isEditing) {
             return (
                 <ProfileDropdown
-                    firstName = {firstName}
-                    lastName = {lastName}
-                    email = {email}
-                    password = {''}
-
-                    onEditProfile={() => handleEditProfile()} 
-                    onSaveProfile={() => handleSaveProfile(firstName, lastName, email, password)}
+                    firstName={firstName}
+                    lastName={lastName}
+                    email={email}
+                    password={password}
+                    onEditProfile={() => handleEditProfile()}
+                    onSaveProfile={(newFirstName, newLastName, newEmail, newPassword) =>
+                        handleSaveProfile(newFirstName, newLastName, newEmail, newPassword)
+                    }
                     onCancelProfile={() => handleCancelProfile()}
-
                     isEditing={true}
                     isMenuOpen={true}
                 />
-            )
+            );
         }
         
         return (
             <ProfileDropdown
-                firstName = {firstName}
-                lastName = {lastName}
-                email = {email}
-                password = {'*************'}
-
-                onEditProfile={() => handleEditProfile()} 
-                onSaveProfile={ (newFirstName, newLastName, newEmail, newPassword) =>
+                firstName={firstName}
+                lastName={lastName}
+                email={email}
+                password={'*************'}
+                onEditProfile={() => handleEditProfile()}
+                onSaveProfile={(newFirstName, newLastName, newEmail, newPassword) =>
                     handleSaveProfile(newFirstName, newLastName, newEmail, newPassword)
                 }
                 onCancelProfile={() => handleCancelProfile()}
-
                 isEditing={false}
                 isMenuOpen={true}
             />
-        )
+        );
     }
 
     const handleEditProfile = () => {
@@ -85,11 +85,15 @@ const Dashboard: React.FC = () => {
         setIsMenuOpen(false);
     }
 
+    // const handleGetPassword = async () => {
+    // };
+
     const handleSaveProfile = async (newFirstName: string, newLastName: string, newEmail: string, newPassword: string) => {
         try {
             setFirstName(newFirstName);
             setLastName(newLastName);
             setEmail(newEmail);
+            setPassword(newPassword)
     
             localStorage.setItem('firstName', newFirstName);
             localStorage.setItem('lastName', newLastName);
@@ -150,6 +154,7 @@ const Dashboard: React.FC = () => {
             setFirstName(storedFirstName);
             setLastName(storedLastName);
             setEmail(storedEmail);
+            // handleGetPassword();
         } else {
             navigate('/login');
         }
@@ -257,7 +262,7 @@ const Dashboard: React.FC = () => {
                         onSaveProfile={handleSaveProfile}
                         onCancelProfile={handleCancelProfile}
                         isEditing={isEditing}
-                        isMenuOpen={true}
+                        isMenuOpen={isMenuOpen}
                         />  
                     )}
                                                                                                   
