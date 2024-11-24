@@ -33,7 +33,9 @@ const AddAccommodation: React.FC<AddAccommodationProps> = ({ onClose, onSave, ap
 
 
     const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
+        
 
         if (!name || !address || !checkInDate || !checkOutDate || !confirmationNum) {
             setError("All fields are required");

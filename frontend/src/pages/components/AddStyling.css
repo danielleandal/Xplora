@@ -1,4 +1,6 @@
 
+
+
 .modal-overlay-alert {
     position: fixed;
     top: 0;
@@ -43,3 +45,18 @@
     font-size: 16px;
     resize: vertical;
 }
+
+ .modal-content .error-message{
+    color: rgb(251, 85, 85);
+}
+
+input[type="time"] {
+    width: 100%; /* Full width */
+    padding: 8px 10px; /* Add padding for better UX */
+    font-size: 14px; /* Consistent font size */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    box-sizing: border-box; /* Ensure padding is included in width */
+    transition: border-color 0.3s ease; /* Smooth hover/focus effect */
+}
+
