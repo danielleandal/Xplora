@@ -6,6 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import LocationSearch from '../helper-files/LocationSearch';
 
 
 const validationSchema = Yup.object({
@@ -135,8 +136,11 @@ const AddTrip: React.FC = () => {
                                     </div>
 
                                     <div className="form-group">
-                                        <label htmlFor="location">Location</label>
-                                        <Field type="text" id="location" name="location" className="input-field" />
+                                        <label htmlFor="location">Location <span className='location-format'>City, State, Country</span></label>
+                                        <Field
+                                            name='location'
+                                            component={LocationSearch}
+                                        />
                                         <ErrorMessage name="location" component="div" className="error" />
                                     </div>
 
