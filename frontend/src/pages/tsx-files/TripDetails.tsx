@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link,useParams  } from 'react-router-dom';
-import './TripDetails.css';
+import '../css-files/TripDetails.css';
 import logo from '../images/logo.png';
 import xploraplane from '../images/xplora-plane.png';
 import hotel from '../images/accommodation_placeholder.png';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './HomePage.css';
+import '../css-files/HomePage.css';
 import logo from '../images/logo.png';
 import mapimg from '../images/map.png'
 import purplepin from '../images/purplepin.png'

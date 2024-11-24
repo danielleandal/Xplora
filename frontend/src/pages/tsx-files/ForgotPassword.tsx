@@ -1,6 +1,6 @@
 import React from 'react';
 import './HowItWorks.css';
-import './ForgotPassword.css';
+import '../css-files/ForgotPassword.css';
 import logo from '../images/logo.png';
 
 import * as Yup from 'yup';
