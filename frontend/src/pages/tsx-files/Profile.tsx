@@ -6,8 +6,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import '../css-files/HowItWorks.css'; // Create this CSS file for styling
 import '../css-files/Profile.css';
 
-import logo from '../images/logo.png';
-import image1 from '../images/image1.png';
+import logo from '../../images/logo.png';
+import image1 from '../../images/image1.png';
 
 const ProfilePage: React.FC = () => { 
     const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link,useParams  } from 'react-router-dom';
 import '../css-files/TripDetails.css';
-import logo from '../images/logo.png';
-import xploraplane from '../images/xplora-plane.png';
-import hotel from '../images/accommodation_placeholder.png';
-import tripdefault from '../images/trip_default.png';
+import logo from '../../images/logo.png';
+import xploraplane from '../../images/xplora-plane.png';
+import hotel from '../../images/accommodation_placeholder.png';
+import tripdefault from '../../images/trip_default.png';
 // import test from '../images/test.jpg';
 import { calculateTripDays } from '../helper-files/calculateTripDays';
 import AddFlight from '../components/AddFlight';

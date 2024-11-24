@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css-files/Login.css';
-import logo from '../images/logo.png'; // Replace with actual path
+import logo from '../../images/logo.png'; // Replace with actual path
 
 interface LoginFormValues {
     email: string;

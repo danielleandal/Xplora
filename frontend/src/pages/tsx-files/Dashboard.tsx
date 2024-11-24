@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../css-files/Dashboard.css';
 import TripListItem from '../components/TripListItem';
 import ProfileDropdown from '../components/ProfileDropdown'
-import iconlogo from '../images/xplora-icon.png';
+import iconlogo from '../../images/xplora-icon.png';
 
 
 export const handleLogout = () => {
