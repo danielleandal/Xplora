@@ -131,24 +131,28 @@ textarea.input-field {
     cursor: pointer;
     width: 100%;
     max-width: 200px;
-    color: white;
     box-sizing: border-box;
+    background-color: #f9f9f9;
+    border: none;
 }
 
 .upload-btn {
-    background-color: #6a1b9a;
     margin-bottom: 20px;
 }
 
-.save-btn {
-    background-color: #bffb86;
-    color: #000000;
-    margin-top: 10px;
+.upload-btn:hover {
+    background-color: #cab1f4;
+    border: none;
 }
 
-.cancel-btn {
-    background-color: #ff9a9a;
-    color: #000000;
+.save-btn:hover {
+    background-color: #c8f4b1;
+    border: none;
+}
+
+.cancel-btn:hover {
+    background-color: #f56a6586;
+    border: none;
 }
 
 /* Error styling */
@@ -206,32 +210,4 @@ input:-webkit-autofill:active {
 .add-trip-header {
     font-size: 2em;
     color: #6a1b9a;
-}
-
-.suggestions-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border: 1px solid #cbbaf3;
-    border-radius: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-    background: #fff;
-    position:relative;
-    z-index: 1000;
-    width: 100%;
-    font-family: 'Poppins', sans-serif;
-}
-
-.suggestions-list li {
-    padding: 6px;
-    cursor: pointer;
-}
-
-.suggestions-list li:hover {
-    background: #f0f0f0;
-}
-
-.location-format {
-    font-size: 10px;
 }
