@@ -5,7 +5,7 @@ import logo from '../../images/logo.png';
 import xploraplane from '../../images/xplora-plane.png';
 import hotel from '../../images/accommodation_placeholder.png';
 import tripdefault from '../../images/trip_default.png';
-// import test from '../images/test.jpg';
+// import test from '../../images/test.jpg';
 import { calculateTripDays } from '../helper-files/calculateTripDays';
 import AddFlight from '../components/AddFlight';
 import AddAccommodation from '../components/AddAccomodation';
