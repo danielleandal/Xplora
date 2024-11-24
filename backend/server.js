@@ -98,6 +98,7 @@ app.put('/api/users/:id', async (req, res, next) => {
     let error = '';
     const { id } = req.params;
     const { first_name, last_name, email, password } = req.body;
+    const objectId = new ObjectId(String(id));
 
     console.log(`${first_name} ${last_name} ${email} ${password}`);
 
@@ -116,7 +117,7 @@ app.put('/api/users/:id', async (req, res, next) => {
 
         // Update the user document in the database
         const result = await db.collection('users').updateOne(
-            { _id: new ObjectId(id) },
+            { _id: objectId },
             { $set: updateFields }
         );
 
