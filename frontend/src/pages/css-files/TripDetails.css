@@ -456,27 +456,24 @@ TripDetails.css .tripdetails-logo {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    /* Semi-transparent black background */
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    /* Ensure it's above all other elements */
 }
 
 /* Modal Content */
 .modal-content {
     background: #fff;
-    /* White background */
     padding: 20px;
     border-radius: 8px;
-    max-width: 500px;
-    /* Limit the width */
-    width: 90%;
-    /* Responsive width */
-    position: relative;
-    /* For positioning the close button */
+    max-width: 90%;
+    width: 500px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    font-family: Poppins, sans-serif;
 }
 
 /* Close Button */
@@ -489,7 +486,6 @@ TripDetails.css .tripdetails-logo {
     font-size: 1.5rem;
     cursor: pointer;
     color: #333;
-    /* Dark gray */
     transition: color 0.2s;
 }
 

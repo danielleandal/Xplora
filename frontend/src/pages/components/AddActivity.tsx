@@ -116,12 +116,13 @@ const AddActivity: React.FC<AddActivityProps> = ({ onClose, onSave, apiEndpoint 
                     <div className="form-group">
                         <label>Notes (Optional):</label>
                         <textarea
+                        className='notes-textarea'
                             placeholder="Notes"
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                         />
                     </div>
-                    <button type="submit">Save</button>
+                    <button className='submit-activity' type="submit">Save Activity</button>
                 </form>
             </div>
             {isSuccessModalOpen && <SuccessModal onClose={() => {

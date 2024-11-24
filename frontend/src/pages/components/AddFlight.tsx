@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../components/AddFlight.css';
+import '../components/AddStyling.css';
 
 interface AddFlightProps {
     onClose: () => void; // Function to close the modal
@@ -177,7 +177,7 @@ const AddFlight: React.FC<AddFlightProps> = ({ onClose,onSave, apiEndpoint }) =>
                             onChange={handleChange}
                         />
                     </div>
-                    <button type="button" onClick={handleSubmit} disabled={isSaving}>
+                    <button className='submit-flight' type="button" onClick={handleSubmit} disabled={isSaving}>
                         {isSaving ? 'Saving...' : 'Save Flight'}
                     </button>
                 </form>

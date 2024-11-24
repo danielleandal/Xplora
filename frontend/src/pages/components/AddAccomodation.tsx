@@ -143,7 +143,7 @@ const AddAccommodation: React.FC<AddAccommodationProps> = ({ onClose, onSave, ap
                             onChange={(e) => setConfirmationNum(e.target.value)}
                         />
                     </div>
-                    <button type="submit">Save Accommodation</button>
+                    <button className='submit-accommodation' type="submit">Save Accommodation</button>
                 </form>
             </div>
 
