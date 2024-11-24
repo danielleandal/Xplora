@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../components/AddFlight.css';
 
 interface AddFlightProps {
     onClose: () => void; // Function to close the modal
@@ -21,11 +22,25 @@ const AddFlight: React.FC<AddFlightProps> = ({ onClose,onSave, apiEndpoint }) =>
     });
 
     const [isSaving] = useState(false); // Loading indicator
+    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+    const SuccessModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+        return (
+            <div className="modal-overlay-alert" onClick={onClose}>
+                <div className="modal-content-alert" onClick={(e) => e.stopPropagation()}>
+                    <h2>Success</h2>
+                    <p>Your flight has been added successfully!</p>
+                    <button onClick={onClose}>OK</button>
+                </div>
+            </div>
+        );
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFlightDetails({ ...flightDetails, [name]: value });
     };
+
 
     const handleSubmit = async () => {
         const payload = {
@@ -52,10 +67,9 @@ const AddFlight: React.FC<AddFlightProps> = ({ onClose,onSave, apiEndpoint }) =>
     
             if (response.ok) {
                 console.log('Flight added successfully');
-                alert("flight added!");
-               // Refresh the page
-               onSave();
-               onClose();
+                setIsSuccessModalOpen(true); // Open the success modal
+                onSave(); // Refresh the parent list
+               //onClose();
                // location.reload();
             } else {
                 const errorData = await response.json();
@@ -168,7 +182,14 @@ const AddFlight: React.FC<AddFlightProps> = ({ onClose,onSave, apiEndpoint }) =>
                     </button>
                 </form>
             </div>
+
+                {isSuccessModalOpen && <SuccessModal onClose={() => {
+                    setIsSuccessModalOpen(false); 
+                    onClose(); // Close the main modal
+                }} />}
         </div>
+
+        
     );
 };
 

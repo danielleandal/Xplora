@@ -529,3 +529,17 @@ TripDetails.css .tripdetails-logo {
     font-size: 14px;
     text-align: left;
 }
+
+.delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.delete-button:hover {
+    background-color: #ff1a1a;
+}
