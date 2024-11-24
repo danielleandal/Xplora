@@ -100,6 +100,7 @@ TripDetails.css .tripdetails-logo {
     font-size: 1.9rem;
     text-align: left;
     font-family: Poppins, sans-serif;
+    max-width: 400px;
 }
 
 .dropdown-section {
@@ -185,6 +186,9 @@ TripDetails.css .tripdetails-logo {
     height: 200px;
     border-radius: 20px;
     margin-top: 15px;
+    object-fit: cover;
+    max-width: 400px;
+    max-height: 200px;
 }
 
 .tripdetails-image-container {
@@ -210,14 +214,13 @@ TripDetails.css .tripdetails-logo {
 
 .deets-and-photo {
     display: flex;
-    gap: 200px;
 }
 
 .td-trip-details {
     display: flex;
     flex-direction: column;
     flex-grow: 0.7;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
     text-align: left;
     margin-left: 50px;

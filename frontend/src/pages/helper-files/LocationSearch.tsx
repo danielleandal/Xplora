@@ -2,20 +2,16 @@ import React, { useState } from "react";
 import { FieldProps } from "formik";
 import axios from "axios";
 import '../css-files/AddTrip.css';
-
-interface LocationSearchProps extends FieldProps { } 
-
+interface LocationSearchProps extends FieldProps { }
 const LocationSearch: React.FC<LocationSearchProps> = ({ field, form }) => {
     const [query, setQuery] = useState(field.value || "");
     const [suggestions, setSuggestions] = useState<string[]>([]); // Suggestions from API
     const [error, setError] = useState<string | null>(null); // Error handling
 
-    
     const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setQuery(value);
         form.setFieldValue(field.name, value); // Update Formik's value
-
         // Fetch suggestions if input is not empty
         if (value) {
             try {
@@ -31,13 +27,11 @@ const LocationSearch: React.FC<LocationSearchProps> = ({ field, form }) => {
                         },
                     }
                 );
-                
+
                 console.log("API Response:", response.data);
                 console.log("Field:", field);
                 console.log("Form:", form);
-
                 const locations = response.data.results.map((result: any) => result.formatted);
-
                 setSuggestions(locations);
                 setError(null); // Clear any existing errors
             } catch (err) {
@@ -47,7 +41,6 @@ const LocationSearch: React.FC<LocationSearchProps> = ({ field, form }) => {
             setSuggestions([]); // Clear suggestions if input is empty
         }
     };
-
     return (
         <div className="form-group">
             <input
@@ -60,7 +53,6 @@ const LocationSearch: React.FC<LocationSearchProps> = ({ field, form }) => {
                 placeholder="Start typing a location..."
             />
             {error && <div className="error">{error}</div>}
-
             {/* Show suggestions */}
             {suggestions.length > 0 && (
                 <ul className="suggestions-list">
@@ -81,5 +73,4 @@ const LocationSearch: React.FC<LocationSearchProps> = ({ field, form }) => {
         </div>
     );
 };
-
 export default LocationSearch;
