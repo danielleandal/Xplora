@@ -42,7 +42,15 @@ const AddFlight: React.FC<AddFlightProps> = ({ onClose,onSave, apiEndpoint }) =>
     };
 
 
+    const [error, setError] = useState('');
     const handleSubmit = async () => {
+
+        if(!flightDetails.departureCity || !flightDetails.departureAirport || !flightDetails.arrivalCity || !flightDetails.arrivalAirport || !!flightDetails.departureDate
+            || !flightDetails.departureTime || !flightDetails.arrivalDate || !flightDetails.arrivalTime || !flightDetails.flightNumber ||!flightDetails.confirmationNumber
+        ){
+            setError("All fields are required");
+            return;
+        }
         const payload = {
             confirmation_num: flightDetails.confirmationNumber,
             flight_num: flightDetails.flightNumber,
@@ -81,12 +89,14 @@ const AddFlight: React.FC<AddFlightProps> = ({ onClose,onSave, apiEndpoint }) =>
     };
 
 
+
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <button className="close-button" onClick={onClose}>✖</button>
                 <h2>Add New Flight</h2>
                 <form>
+                {error && <p className="error-message">{error}</p>}
                     <div className="form-group">
                         <label>Departure City:</label>
                         <input
@@ -194,3 +204,4 @@ const AddFlight: React.FC<AddFlightProps> = ({ onClose,onSave, apiEndpoint }) =>
 };
 
 export default AddFlight;
+
