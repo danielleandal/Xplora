@@ -436,9 +436,9 @@
 
 .trip-details #trip-dates-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-grow: 1;
-    gap: 20px;
+    gap: 2px;
     font-size: 0.8rem;
 }
 
