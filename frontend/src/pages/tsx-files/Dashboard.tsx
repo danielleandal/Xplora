@@ -5,7 +5,6 @@ import TripListItem from '../components/TripListItem';
 import ProfileDropdown from '../components/ProfileDropdown'
 import iconlogo from '../../images/xplora-icon.png';
 
-
 export const handleLogout = () => {
     const navigate = useNavigate();
     localStorage.removeItem('firstName');
@@ -167,6 +166,7 @@ const Dashboard: React.FC = () => {
                 if (response.ok) {
                     const data = await response.json();
                     setTrips(data);
+                    console.log('Fetched trips:', data);
                 } else {
                     console.error('Failed to fetch trips:', response.statusText);
                 }
@@ -223,11 +223,8 @@ const Dashboard: React.FC = () => {
                 return filteredTrip.map((trip) => (
                     <TripListItem
                         key={trip._id}
-                        title={
-                            <Link to={`/trip-details/${trip._id}`} className='trip-link'>
-                                {trip.name}
-                             </Link>
-                        }
+                        id={String(trip._id)}
+                        title={String(trip.name)}
                         location={trip.city}
                         dates={`${trip.start_date} - ${trip.end_date}`}
                         onDelete={() => handleDeleteTrip(trip._id)}
