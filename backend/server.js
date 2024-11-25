@@ -204,7 +204,7 @@ app.get('/api/users/:id/password', async (req, res) => {
 
 //--------------------------------
 // TRIPS -- POST to add a new trip
-app.post('/api/:userId/trips', uploadTripPic.single('photo'), async (req, res) => {
+app.post('/api/users/:userId/trips', uploadTripPic.single('photo'), async (req, res) => {
     const { userId } = req.params;
     const { name, city, start_date, end_date, notes } = req.body;
 
