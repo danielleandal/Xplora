@@ -1069,6 +1069,7 @@ const FlightDetailsModal: React.FC<{ flight: any, onClose: () => void }> = ({ fl
                                                         location: activity.location,
                                                         date: activity.date,
                                                         id: activity._id,
+                                                        notes:activity.notes
                                                     })
                                                 }
                                             >
