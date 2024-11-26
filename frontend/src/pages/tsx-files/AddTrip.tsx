@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css-files/AddTrip.css';
 import logo from '../../images/logo.png';
@@ -33,11 +33,39 @@ function buildPath(route: string): string {
 
 const AddTrip: React.FC = () => {
     const navigate = useNavigate();
+    const [photo, setPhoto] = useState<File | null>(null);
+
+    const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]){
+            setPhoto(event.target.files[0]);
+        }
+    }
 
     // async await to wait for asynchronous operations, like fetching data from server
     // setSubmitting and setErrors are formik helpers
     const handleSubmit = async (values: any, { setSubmitting, setErrors }: any) => {
 
+        const formatDate = (date: Date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        const formData = new FormData;
+        formData.append('name', values.tripName);
+        formData.append('city', values.location);
+        formData.append('start_date', formatDate(values.startDate));
+        formData.append('end_date', formatDate(values.endDate));
+        formData.append('notes', values.notes || '');
+        if (photo) {
+            formData.append('photo', photo);
+        }
+
+
+        const apiUrl = buildPath(`api/users/${values.userId}/trips`);
+        console.log('Submitting to URL:', apiUrl);
+        console.log('FormData content:', Array.from(formData.entries()));
 
         const userId = localStorage.getItem('ID'); // Get user ID from localStorage
     
@@ -52,21 +80,8 @@ const AddTrip: React.FC = () => {
         try {
             // Construct the API endpoint URL
             const response = await fetch(buildPath(`api/users/${userId}/trips`), {
-                method: 'POST', // create new data in the server
-                // tells the server were sending a json data 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                // converts data into json that server.js can understand 
-
-                // values. are the data entered from the form (formik)
-                body: JSON.stringify({
-                    name: values.tripName,
-                    city: values.location,
-                    start_date: values.startDate?.toISOString().split('T')[0],
-                    end_date: values.endDate?.toISOString().split('T')[0],
-                    notes: values.notes,
-                }),
+                method: 'POST',
+                body: formData,
             });
     
             // after the server processes the request, it sends back a response.
@@ -88,13 +103,6 @@ const AddTrip: React.FC = () => {
         } finally {
             setSubmitting(false);
         }
-    };
-
-
-
-    const handlePhotoSubmit = (values: any) => {
-        console.log('Photo data:', values.photo);
-        alert('Photo uploaded successfully!');
     };
 
     return (
@@ -185,45 +193,17 @@ const AddTrip: React.FC = () => {
                                             {isSubmitting ? 'Saving...' : 'Save'}
                                         </button>
                                     </div>
+                                   
                                 </Form>
                             )}
                         </Formik>
                     </div>
-
-                    {/* Separate form for photo upload */}
                     <div className="photo-upload-container">
                         <h2>Upload Photo</h2>
-                        <Formik
-                            initialValues={{ photo: null }}
-                            onSubmit={handlePhotoSubmit}
-                        >
-                            {({ setFieldValue }) => (
-                                <Form className="photo-upload-form">
-                                    <div className="form-group">
-                                        <label htmlFor="photo">Change Photo</label>
-                                        <input
-                                            type="file"
-                                            id="photo"
-                                            name="photo"
-                                            accept="image/*"
-                                            onChange={(event) =>
-                                                setFieldValue('photo', event.currentTarget.files?.[0])
-                                            }
-                                            className="input-field"
-                                        />
-                                    </div>
-                                    <div className="button-group">
-                                        <button type="submit" className="upload-btn">Upload Photo</button>
-                                    </div>
-                                </Form>
-                            )}
-                        </Formik>
-                        
-                        <div className="button-group">
-                            <button type="button" className="cancel-btn" onClick={() => navigate('/dashboard')}>
-                                Cancel
-                            </button>
-                        </div>
+                        <input type="file" name="photo" className='choose-file' onChange={handlePhotoChange} />
+                        <button type="button" className="cancel-btn" onClick={() => navigate('/dashboard')}>
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </main>
