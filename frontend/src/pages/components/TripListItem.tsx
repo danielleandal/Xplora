@@ -25,14 +25,6 @@ const TripListItem: React.FC<TripListItemProps> = ({ id, title, location, dates,
         setIsEditModalOpen(true);
     };
 
-    if (isEditModalOpen && selectedEdit) {
-        console.log('API Endpoint for EditTrip:', `/api/users/${localStorage.getItem('ID')}/trips/${selectedEdit?.id}`);
-        console.log('Selected Edit Data:', selectedEdit);
-        console.log('Selected Trip ID:', selectedEdit?.id);
-    }
-    // <Link to={`/trip-details/${trip._id}`} className='trip-link'>
-    //     {trip.name}
-    // </Link>
     return (
         <div className='trip-list-item'>
             <img src={tripdefault} alt='trip picture' className='trip-image' />

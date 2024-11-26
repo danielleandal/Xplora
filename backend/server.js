@@ -32,7 +32,7 @@ const storageTrips = multer.diskStorage({
     }
 });
 
-const uploadTripPic = multer({ storageTrips });
+const uploadTripPic = multer({ storage: storageTrips }); 
 
 client.connect();
 
