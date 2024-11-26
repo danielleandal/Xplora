@@ -558,3 +558,18 @@ TripDetails.css .tripdetails-logo {
     background-color: #ff1a1a;
 }
 
+
+
+.form-group textarea {
+    width: 90%; 
+    height: 120px; 
+    padding: 10px; 
+    font-size: 14px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    background-color: #f9f9f9;
+    color: #333; 
+    resize: vertical; 
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease
+}

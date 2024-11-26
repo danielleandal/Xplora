@@ -106,82 +106,450 @@ const TripDetails: React.FC = () => {
     // functions for the html details that will be printed in the modals
 
     // flight modal
-    const FlightDetailsModal: React.FC <{flight:any, onClose:() => void}> = ({flight, onClose}) =>{
-        if(!flight) return null;
-        
-       // console.log("Flight ID:", flight);
-        return (
-            <div className="modal-overlay" onClick={onClose}>
-                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                    <button className="close-button" onClick={onClose}>✖</button>
-                    <h2>Flight Details</h2>
-                    <p><strong>Flight Number:</strong> {flight.flightNumber}</p>    
-                    <p><strong>Conformation Number:</strong> {flight.flightConformationNumber}</p> 
-                    <p><strong>From:</strong> {flight.fromCity} ({flight.fromAirport})</p>
-                    <p><strong>To:</strong> {flight.toCity} ({flight.toAirport})</p>
-                    <p><strong>Departure Date:</strong> {flight.fromDate}</p>
-                    <p><strong>Departure Time:</strong> {flight.departureTime}</p>
-                    <p><strong>Arrival Date:</strong> {flight.toDate} </p>
-                    <p><strong>Arrival Time:</strong> {flight.arrivalTime}</p>
-                    <button
-                    className="delete-button"
-                    onClick={() => handleDeleteFlight(flight.flightId)}
-                    >
-                        Delete Flight
-                    </button>
+    // Updated FlightDetailsModal with Edit functionality
+const FlightDetailsModal: React.FC<{ flight: any, onClose: () => void }> = ({ flight, onClose }) => {
+    const [isEditing, setIsEditing] = useState(false);
 
-                </div>
+    // State for editing flight details
+    const [editDetails, setEditDetails] = useState({
+        flightNumber: flight.flightNumber,
+        flightConformationNumber: flight.flightConformationNumber,
+        fromCity: flight.fromCity,
+        fromAirport: flight.fromAirport,
+        toCity: flight.toCity,
+        toAirport: flight.toAirport,
+        fromDate: flight.fromDate,
+        toDate: flight.toDate,
+        departureTime: flight.departureTime,
+        arrivalTime: flight.arrivalTime,
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setEditDetails({ ...editDetails, [name]: value });
+    };
+
+    const handleEdit = async () => {
+        const payload = {
+            flight_num: editDetails.flightNumber,
+            confirmation_num: editDetails.flightConformationNumber,
+            departure_airport: editDetails.fromAirport,
+            arrival_airport: editDetails.toAirport,
+            departure_time: editDetails.departureTime,
+            arrival_time: editDetails.arrivalTime,
+            departure_date: editDetails.fromDate,
+            arrival_date: editDetails.toDate,
+        };
+
+        try {
+            const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}/flights/${flight.flightId}`), {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+               // alert('Flight updated successfully!');
+                setIsEditing(false); // Exit edit mode
+                refreshFlightList(); // Refresh flight list
+               onClose(); // Close modal
+            } else {
+                const errorData = await response.json();
+                console.error('Error updating flight:', errorData.error);
+            }
+        } catch (error) {
+            console.error('Unexpected error while updating flight:', error);
+        }
+    };
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+               
+                {isEditing ? (
+                    <>
+                       
+                        <h2>Edit Flight</h2>
+                        <form>
+                            <div className="form-group">
+                                <label>Flight Number:</label>
+                                <input
+                                    type="text"
+                                    name="flightNumber"
+                                    value={editDetails.flightNumber}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Confirmation Number:</label>
+                                <input
+                                    type="text"
+                                    name="flightConformationNumber"
+                                    value={editDetails.flightConformationNumber}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>From Airport:</label>
+                                <input
+                                    type="text"
+                                    name="fromAirport"
+                                    value={editDetails.fromAirport}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>To Airport:</label>
+                                <input
+                                    type="text"
+                                    name="toAirport"
+                                    value={editDetails.toAirport}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Departure Date:</label>
+                                <input
+                                    type="date"
+                                    name="fromDate"
+                                    value={editDetails.fromDate}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Departure Time:</label>
+                                <input
+                                    type="time"
+                                    name="departureTime"
+                                    value={editDetails.departureTime}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Arrival Date:</label>
+                                <input
+                                    type="date"
+                                    name="toDate"
+                                    value={editDetails.toDate}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Arrival Time:</label>
+                                <input
+                                    type="time"
+                                    name="arrivalTime"
+                                    value={editDetails.arrivalTime}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <button type="button" onClick={handleEdit}>
+                                Save Changes
+                            </button>
+                            <button type="button" onClick={() => setIsEditing(false)}>
+                                Cancel
+                            </button>
+                        </form>
+                    </>
+                ) : (
+                    <>
+                      <button className="close-button" onClick={onClose}>✖</button>
+                        <h2>Flight Details</h2>
+                        <p><strong>Flight Number:</strong> {flight.flightNumber}</p>
+                        <p><strong>Confirmation Number:</strong> {flight.flightConformationNumber}</p>
+                        <p><strong>From:</strong> {flight.fromCity} ({flight.fromAirport})</p>
+                        <p><strong>To:</strong> {flight.toCity} ({flight.toAirport})</p>
+                        <p><strong>Departure Date:</strong> {flight.fromDate}</p>
+                        <p><strong>Departure Time:</strong> {flight.departureTime}</p>
+                        <p><strong>Arrival Date:</strong> {flight.toDate}</p>
+                        <p><strong>Arrival Time:</strong> {flight.arrivalTime}</p>
+                        <button className="edit-button" onClick={() => setIsEditing(true)}>
+                            Edit Flight
+                        </button>
+                        <button
+                            className="delete-button"
+                            onClick={() => handleDeleteFlight(flight.flightId)}
+                        >
+                            Delete Flight
+                        </button>
+                    </>
+                )}
+            </div>
         </div>
-        )
-    }
+    );
+};
 
     //accomodation modal
     const AccommodationDetailsModal: React.FC<{ accommodation: any, onClose: () => void }> = ({ accommodation, onClose }) => {
-        if (!accommodation) return null;
-       // console.log("Accomodation ID:", accommodation.accommodationId);
+        const [isEditing, setIsEditing] = useState(false);
+    
+        const [editDetails, setEditDetails] = useState({
+            name: accommodation.name,
+            location: accommodation.location,
+            confirmationNum: accommodation.confirmationNum,
+            checkInDate: accommodation.checkInDate,
+            checkInTime: accommodation.checkIn,
+            checkOutDate: accommodation.checkOutDate,
+            checkOutTime: accommodation.checkOut,
+        });
+    
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const { name, value } = e.target;
+            setEditDetails({ ...editDetails, [name]: value });
+        };
+    
+        const handleEdit = async () => {
+            const payload = {
+                name: editDetails.name,
+                address: editDetails.location,
+                confirmation_num: editDetails.confirmationNum,
+                checkin_date: editDetails.checkInDate,
+                checkin_time: editDetails.checkInTime,
+                checkout_date: editDetails.checkOutDate,
+                checkout_time: editDetails.checkOutTime,
+            };
+    
+            try {
+                const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}/accommodations/${accommodation.accommodationId}`), {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+    
+                if (response.ok) {
+                    //alert('Accommodation updated successfully!');
+                    setIsEditing(false); // Exit edit mode
+                    refreshAccomocationList(); // Refresh accommodation list
+                    onClose();
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error updating accommodation:', errorData.error);
+                }
+            } catch (error) {
+                console.error('Unexpected error while updating accommodation:', error);
+            }
+        };
+    
         return (
             <div className="modal-overlay" onClick={onClose}>
                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                    <button className="close-button" onClick={onClose}>✖</button>
-                    <h2>Accommodation Details</h2>
-                    <p><strong>Hotel:</strong> {accommodation.name}</p>
-                    <p><strong>Location:</strong> {accommodation.location}</p>
-                    <p><strong>Confirmation Number:</strong> {accommodation.confirmationNum}</p>
-                    <p><strong>Check-in Date:</strong> {accommodation.checkInDate}</p>
-                    <p><strong>Check-in Time:</strong> {accommodation.checkIn}</p>
-                    <p><strong>Check-out Time:</strong> {accommodation.checkOut}</p>
-                    <p><strong>Check-out Date:</strong> {accommodation.checkOutDate}</p>
-                    <button className="delete-button"
-                      onClick = { () => handleDeleteAccomodation(accommodation.accommodationId)}
-                      >
-                      Delete Accommodation
-                    </button>
-
+                    {isEditing ? (
+                        <>
+                            <h2>Edit Accommodation</h2>
+                            <form>
+                                <div className="form-group">
+                                    <label>Name:</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={editDetails.name}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Location:</label>
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={editDetails.location}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Confirmation Number:</label>
+                                    <input
+                                        type="text"
+                                        name="confirmationNum"
+                                        value={editDetails.confirmationNum}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Check-in Date:</label>
+                                    <input
+                                        type="date"
+                                        name="checkInDate"
+                                        value={editDetails.checkInDate}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Check-in Time:</label>
+                                    <input
+                                        type="time"
+                                        name="checkInTime"
+                                        value={editDetails.checkInTime}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Check-out Date:</label>
+                                    <input
+                                        type="date"
+                                        name="checkOutDate"
+                                        value={editDetails.checkOutDate}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Check-out Time:</label>
+                                    <input
+                                        type="time"
+                                        name="checkOutTime"
+                                        value={editDetails.checkOutTime}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <button type="button" onClick={handleEdit}>
+                                    Save Changes
+                                </button>
+                                <button type="button" onClick={() => setIsEditing(false)}>
+                                    Cancel
+                                </button>
+                            </form>
+                        </>
+                    ) : (
+                        <>
+                            <button className="close-button" onClick={onClose}>✖</button>
+                            <h2>Accommodation Details</h2>
+                            <p><strong>Hotel:</strong> {accommodation.name}</p>
+                            <p><strong>Location:</strong> {accommodation.location}</p>
+                            <p><strong>Confirmation Number:</strong> {accommodation.confirmationNum}</p>
+                            <p><strong>Check-in Date:</strong> {accommodation.checkInDate}</p>
+                            <p><strong>Check-in Time:</strong> {accommodation.checkIn}</p>
+                            <p><strong>Check-out Time:</strong> {accommodation.checkOut}</p>
+                            <p><strong>Check-out Date:</strong> {accommodation.checkOutDate}</p>
+                            <button className="edit-button" onClick={() => setIsEditing(true)}>
+                                Edit Accommodation
+                            </button>
+                            <button className="delete-button" onClick={() => handleDeleteAccomodation(accommodation.accommodationId)}>
+                                Delete Accommodation
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
         );
     };
 
     const ActivityDetailsModal: React.FC<{ activity: any, onClose: () => void }> = ({ activity, onClose }) => {
-        if (!activity) return null;
-
-        //console.log(activity);
+        const [isEditing, setIsEditing] = useState(false);
+    
+        const [editDetails, setEditDetails] = useState({
+            name: activity.name,
+            location: activity.location,
+            date: activity.date,
+            notes: activity.notes,
+        });
+    
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+            const { name, value } = e.target;
+            setEditDetails({ ...editDetails, [name]: value });
+        };
+    
+        const handleEdit = async () => {
+            const payload = {
+                name: editDetails.name,
+                location: editDetails.location,
+                date: editDetails.date,
+                notes: editDetails.notes,
+            };
+    
+            try {
+                const response = await fetch(buildPath(`api/users/${userId}/trips/${tripId}/activities/${activity.id}`), {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+    
+                if (response.ok) {
+                   // alert('Activity updated successfully!');
+                    setIsEditing(false); // Exit edit mode
+                    refreshActivityList(); // Refresh activity list
+                    onClose();
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error updating activity:', errorData.error);
+                }
+            } catch (error) {
+                console.error('Unexpected error while updating activity:', error);
+            }
+        };
     
         return (
             <div className="modal-overlay" onClick={onClose}>
                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                    <button className="close-button" onClick={onClose}>✖</button>
-                    <h2>Activity Details</h2>
-                    <p><strong>Activity:</strong> {activity.name}</p>
-                    <p><strong>Location:</strong> {activity.location}</p>
-                    <p><strong>Date:</strong> {activity.date}</p>
-
-
-                <button className='delete-button' onClick = {() => handleDeleteActivity(activity.id)}> 
-                    Delete Activiy
-                </button>
+                    {isEditing ? (
+                        <>
+                            <h2>Edit Activity</h2>
+                            <form>
+                                <div className="form-group">
+                                    <label>Name:</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={editDetails.name}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Location:</label>
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={editDetails.location}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Date:</label>
+                                    <input
+                                        type="date"
+                                        name="date"
+                                        value={editDetails.date}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Notes:</label>
+                                    <textarea
+                                    placeholder='Optional'
+                                        name="notes"
+                                        value={editDetails.notes}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <button type="button" onClick={handleEdit}>
+                                    Save Changes
+                                </button>
+                                <button type="button" onClick={() => setIsEditing(false)}>
+                                    Cancel
+                                </button>
+                            </form>
+                        </>
+                    ) : (
+                        <>
+                            <button className="close-button" onClick={onClose}>✖</button>
+                            <h2>Activity Details</h2>
+                            <p><strong>Name:</strong> {activity.name}</p>
+                            <p><strong>Location:</strong> {activity.location}</p>
+                            <p><strong>Date:</strong> {activity.date}</p>
+                            <p><strong>Notes:</strong> {activity.notes}</p>
+                            <button className="edit-button" onClick={() => setIsEditing(true)}>
+                                Edit Activity
+                            </button>
+                            <button className="delete-button" onClick={() => handleDeleteActivity(activity.id)}>
+                                Delete Activity
+                            </button>
+                        </>
+                    )}
                 </div>
-
             </div>
         );
     };
@@ -351,7 +719,6 @@ const TripDetails: React.FC = () => {
 
 
     //DELETE DETAILS
-
     const handleDeleteFlight = async (flightId: string) =>{
         try{
             if(!tripId && !userId ){
